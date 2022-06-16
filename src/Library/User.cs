@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace NavalBattle
-{
+{ 
     public class User   //Esta clase va a manejar un nickname del usuario y la funcionalidad de MatchMaking
     {
         //se crea la clase User, se agrega el atributo de NickName y el metodo MatchMaking()
 
-        public string NickName      //apodo del usuario
+        public string NickName
         {
             get
             {
@@ -20,7 +16,7 @@ namespace NavalBattle
             }
         }
 
-        public User(string nickName)    //constructor de la clase User, solo tiene nickname como parametro
+        public User(string nickName)
         {
             this.NickName = nickName;
         }
