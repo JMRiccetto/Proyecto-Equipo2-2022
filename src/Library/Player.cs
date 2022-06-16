@@ -10,7 +10,7 @@ namespace NavalBattle
         {
             this.user = user;
             Gameboard gameboard = new Gameboard(gameboardSize);
-            this.turn = false;
+            this.turn = false; 
         }
 
         public bool Turn

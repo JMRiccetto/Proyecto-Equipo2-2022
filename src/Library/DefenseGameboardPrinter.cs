@@ -4,14 +4,16 @@ using System.Text;
 namespace NavalBattle
 {
     public class DefenseGameboardPrinter : IPrinter
-    {
+    { 
         public void PrintGameboard(IGameboardContent gameboardContent)
         {
             StringBuilder s = new StringBuilder();
 
             string[,] gameboard = gameboardContent.GetGameboardToPrint();
 
-            int lenght = gameboard.GetLength(0);
+            int lenght;
+            
+            lenght= gameboard.GetLength(0);
 
             for (int i = 0; i < lenght; i++)
             {
@@ -35,4 +37,4 @@ namespace NavalBattle
             Console.WriteLine(s.ToString());
         }
     }
-}
+} 
