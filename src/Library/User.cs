@@ -1,5 +1,5 @@
 namespace NavalBattle
-{
+{ 
     public class User   //Esta clase va a manejar un nickname del usuario y la funcionalidad de MatchMaking
     {
         //se crea la clase User, se agrega el atributo de NickName y el metodo MatchMaking()
