@@ -6,13 +6,11 @@ namespace Test.Library
     public class UserTests
     {
         User user;
-        Player player;
 
         [SetUp]
         public void Setup()
         {
-            this.user = new User("Juan");
-            this.player = new Player(this.user, 7);
+            this.user = new User("Juan", 7);
         }
 
         [Test]
@@ -22,15 +20,24 @@ namespace Test.Library
         }
 
         [Test]
-        public void NullNameTest()
+        public void NullOrEmptyNameTest()
         {
-            Assert.AreEqual(null, user.NickName);
+            
+            Assert.False(null, user.NickName);
+        }
+
+        [Test]
+        public void NewPlayerTest()
+        {
+            User Fernando = new User("Fernando", 7);
+            Assert.AreEqual("Fernando", Fernando.NickName);
+            //Assert.AreEqual(7, Fernando.gameboard.Size);
         }
 
         [Test]
         public void MatchMakingTest()
         {
-            //Assert.AreEqual(null, user.MatchMaking());
+            //logica del match
         }
 
 
