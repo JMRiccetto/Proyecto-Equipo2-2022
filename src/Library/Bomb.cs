@@ -4,9 +4,9 @@ namespace NavalBattle
 {
     public class Bomb
     {
-        private string coord;
+        private Coords coord;
 
-        public string Coords
+        public Coords Coord
         {
             get
             {
@@ -14,7 +14,7 @@ namespace NavalBattle
             }
         }
 
-        public Bomb (string coord)
+        public Bomb (Coords coord)
         {
             this.coord = coord;
         }
