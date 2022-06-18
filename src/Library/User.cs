@@ -3,6 +3,8 @@ namespace NavalBattle
     public class User   //Esta clase va a manejar un nickname del usuario y la funcionalidad de MatchMaking
     {
         //se crea la clase User, se agrega el atributo de NickName y el metodo MatchMaking()
+        private string nickName;
+        private Gameboard gameboard { get; set; }
 
         public string NickName
         {
@@ -16,14 +18,14 @@ namespace NavalBattle
             }
         }
 
-        public User(string nickName)
+        public User(string nickName, int gameboardSize)
         {
             this.NickName = nickName;
+            Gameboard gameboard = new Gameboard(gameboardSize);
         }
 
-        public void MatchMaking() //hay que ver exactamente que hace esta funcion
+        public void MatchMaking(User user,User user1) //hay que definir un tamaño desde el handler
         {
-            //generar codigo para que el otro usuario se conecte a una partida
         }
     }
 }
