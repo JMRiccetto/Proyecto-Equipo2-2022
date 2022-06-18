@@ -11,7 +11,7 @@ namespace Test.Library
     {
         User user;
         Gameboard gameboard;
-        
+
         [SetUp]
         public void Setup()
         {

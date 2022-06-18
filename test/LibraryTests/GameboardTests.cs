@@ -8,16 +8,16 @@ namespace Tests
     [TestFixture]
     public class GameboardTest
     {
-        private Gameboard gameboard;
-        private Ship ship;
-        private Bomb bomb;
-        private List<Ship> ships;
-        private List<Bomb> bombs;
-        private int side = 7;
-        private int length = 2;
-        private string initialCoord = "a4";
-        private string direction = "S";
-        private string coord = "b6";
+        Gameboard gameboard;
+        Ship ship;
+        Bomb bomb;
+        List<Ship> ships;
+        List<Bomb> bombs;
+        int side = 7;
+        int length = 2;
+        string initialCoord = "a4";
+        string direction = "S";
+        string coord = "b6";
 
         [SetUp]
         public void Setup()
@@ -52,7 +52,7 @@ namespace Tests
         [Test]
         public void addBombTest()
         {
-            this.gameboard.AddBomb();
+            this.gameboard.AddBombs();
             Assert.IsNotEmpty(this.bombs);
         }
     }
