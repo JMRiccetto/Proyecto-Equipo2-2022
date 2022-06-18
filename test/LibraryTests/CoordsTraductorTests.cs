@@ -10,9 +10,8 @@ namespace Test.Library
     public class CoordsTranslateTests
     {
         User user;
-        Player player;
         Gameboard gameboard;
-
+        
         [SetUp]
         public void Setup()
         {

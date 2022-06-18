@@ -39,8 +39,5 @@ namespace Test.Library
         {
             //logica del match
         }
-
-
- 
     }
 }
