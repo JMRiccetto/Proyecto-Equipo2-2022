@@ -3,7 +3,7 @@ using System;
 
 namespace NavalBattle
 {
-    public class  CoordsTranslate
+    public class CoordsTranslate
     {
 
         private string CoordsX { get; set; }

@@ -10,7 +10,6 @@ namespace Test.Library
     public class CoordsTranslateTests
     {
         User user;
-        Player player;
         Gameboard gameboard;
 
         [SetUp]
@@ -23,7 +22,7 @@ namespace Test.Library
         public void TranslateCoordsTest()
         {
             string aCoordsLocation = "C5";
-            Assert.AreEqual("24", this.CoordsTranslate.Translate(aCoordsLocation));
+            Assert.AreEqual("24", CoordsTranslate.Translate(aCoordsLocation));
         }
 
         [Test]
