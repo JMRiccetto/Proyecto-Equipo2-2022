@@ -3,6 +3,9 @@ using System.Text;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// Imprime el tablero de manera que se puede visualizar la posicion de los barcos y si fueron tocados o no.
+    /// </summary>
     public class DefenseGameboardPrinter : IPrinter
     { 
         public void PrintGameboard(IGameboardContent gameboardContent)

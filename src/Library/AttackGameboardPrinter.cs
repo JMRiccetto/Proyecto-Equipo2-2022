@@ -3,6 +3,9 @@ using System.Text;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// Imprime el tablero de manera que se puede visualizar donde se efectuaron los ataques y si algun barco fue tocado.
+    /// </summary>
     public class AttackGameboardPrinter : IPrinter
     {
         public void PrintGameboard(IGameboardContent gameboardContent)

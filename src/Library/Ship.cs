@@ -30,14 +30,19 @@ namespace NavalBattle
             this.coords = new List<Coords>();
         }
 
-        //Añade una coordenada al barco.
+        /// <summary>
+        /// //Añade una coordenada al barco.
+        /// </summary>
+        /// <param name="coord"></param>
         public void AddShipCoord(Coords coord)
         {
-            //Coords coord = new Coords(coordString);
             this.coords.Add(coord);
         }
 
-        //Metodo que devuelve si el barco esta hundido o no.
+        /// <summary>
+        /// //Metodo que devuelve si el barco esta hundido o no.
+        /// </summary>
+        /// <returns></returns>
         public bool IsSunk()
         {
             int sunkChecker = 0;
@@ -49,8 +54,39 @@ namespace NavalBattle
                     sunkChecker += 1;
                 }
             }
-
             return (sunkChecker == 0);
+        }
+
+        /// <summary>
+        /// Devuelve true si el barco contiene la coordenada pasada por parametro.
+        /// </summary>
+        /// <param name="coord"></param>
+        /// <returns></returns>
+        public bool ShipContainCoord(Coords coord)
+        {
+            foreach(Coords shipCoord in coords)
+            {
+                if (shipCoord.CoordsEquals(coord))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Cambia el estado de la coordenada del barco que fue atacada.
+        /// </summary>
+        /// <param name="coord"></param>
+        public void RecieveDamage(Coords coord)
+        {
+            foreach(Coords shipCoord in this.coords)
+            {
+                if (shipCoord.CoordsEquals(coord))
+                {
+                    shipCoord.ChangeCoordState();
+                }
+            }
         }
     }
 }
