@@ -9,8 +9,12 @@ namespace Test.Library
     /// No hice test de OutOfRange porque no deberian llegar a esta instancia.
     public class CoordsTranslateTests
     {
+        /// <summary>
+        /// se que hay atributos que no uso, pero son para poder arreglar en un fututo los test, no se como realziarlos exactamente
+        /// </summary>
         User user;
         Gameboard gameboard;
+        Coords coords;
 
         [SetUp]
         public void Setup()
@@ -18,6 +22,9 @@ namespace Test.Library
             this.gameboard = new Gameboard(7);
         }
 
+        /// <summary>
+        /// se prueba que el metodo traduce una coordenada a un numero
+        /// </summary>
         [Test]
         public void TranslateCoordsTest()
         {
@@ -25,6 +32,9 @@ namespace Test.Library
             Assert.AreEqual("24", CoordsTranslate.Translate(aCoordsLocation));
         }
 
+        /// <summary>
+        /// se prueba que el metodo traduce una coordenada a un numero en el limite de superior de un tablero de 7
+        /// </summary>
         [Test]
         public void TranslateCoordOnLimiteRangeTest()
         {
@@ -32,6 +42,9 @@ namespace Test.Library
             Assert.AreEqual("66", CoordsTranslate.Translate(aCoordsLocation));
         }
 
+        /// <summary>
+        /// se prueba que el metodo traduce una coordenada a un numero en el limite de inferior de un tablero
+        /// </summary>
         [Test]
         public void TranslateCoordOnLimiteRangeTest2()
         {
