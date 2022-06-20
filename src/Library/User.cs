@@ -8,6 +8,10 @@ namespace NavalBattle
 
         private Gameboard gameboard;
 
+        /// <summary>
+        /// verifico que el nombre no sea nulo o vacio
+        /// </summary>
+        /// <value></value>
         public string NickName
         {
             get
@@ -31,15 +35,23 @@ namespace NavalBattle
                 this.gameboard = Gameboard;
             }
         }
-
-        public User(string nickName)
+        /// <summary>
+        /// es el constructor de la clase User, se le pasa el nombre del usuario y el tamanio del tablero
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <param name="gameboardSize"></param>
+        public User(string nickName, int gameboardSize)
         {
             this.NickName = nickName;
+            Gameboard gameboard = new Gameboard(gameboardSize);
         }
-
-        public void MatchMaking() //hay que ver exactamente que hace esta funcion
+        /// <summary>
+        /// seguramente sea para colocar a un user en una sala de espera segun las preferencias del usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="user1"></param>
+        public void MatchMaking(User user,User user1) //hay que definir un tamaño desde el handler
         {
-            //generar codigo para que el otro usuario se conecte a una partida
         }
 
         public string ConvertToJson(JsonSerializerOptions options)
