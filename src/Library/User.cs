@@ -1,18 +1,34 @@
+﻿using System.Text.Json;
+
 namespace NavalBattle
-{ 
-    public class User   //Esta clase va a manejar un nickname del usuario y la funcionalidad de MatchMaking
+{
+    public class User : IJsonConvertible
     {
-        //se crea la clase User, se agrega el atributo de NickName y el metodo MatchMaking()
+        private string nickName;
+
+        private Gameboard gameboard;
 
         public string NickName
         {
             get
             {
-                return this.NickName;
+                return this.nickName;
             }
             private set
             {
-                this.NickName = NickName != null ? NickName : value;
+                this.nickName = this.NickName != null ? this.NickName : value;
+            }
+        }
+
+        public Gameboard Gameboard
+        {
+            get
+            {
+                return this.gameboard;
+            }
+            set
+            {
+                this.gameboard = Gameboard;
             }
         }
 
@@ -24,6 +40,17 @@ namespace NavalBattle
         public void MatchMaking() //hay que ver exactamente que hace esta funcion
         {
             //generar codigo para que el otro usuario se conecte a una partida
+        }
+
+        public string ConvertToJson(JsonSerializerOptions options)
+        {
+            JsonSerializerOptions option = new ()
+            {
+                ReferenceHandler = MyReferenceHandler.Instance,
+                WriteIndented = true
+            };
+
+            return JsonSerializer.Serialize(this, option);
         }
     }
 }
