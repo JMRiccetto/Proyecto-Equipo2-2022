@@ -1,4 +1,4 @@
-/* using NUnit.Framework;
+using NUnit.Framework;
 using NavalBattle;
 using System;
 
@@ -217,4 +217,4 @@ namespace NavalBattle.Test
             Assert.AreEqual("No estan todos los barcos posicionados.", ex.Message);
         }
     }
-} */
+}
