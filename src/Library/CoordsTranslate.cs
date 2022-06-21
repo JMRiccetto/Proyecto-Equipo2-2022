@@ -9,10 +9,6 @@ namespace NavalBattle
     /// </summary>
     public class CoordsTranslate
     {
-
-        private string CoordsX { get; set; }
-        private string CoordsY { get; set; }
-
         /// <summary>
         /// transforma un mensaje B2 a 11, A1 a 00
         /// </summary>
@@ -20,6 +16,9 @@ namespace NavalBattle
         /// <returns></returns>
         public string Translate(string aCoordsLocation) //Juan, cambia esto porque no se cual es la variante de la coordenada.
         {
+            string CoordsX;
+            string CoordsY;
+
             string Coords = aCoordsLocation.ToUpper(); // A1 //Juan, cambia esto porque no se cual es la variante de la coordenada.
 
             /// <summary>
