@@ -337,7 +337,7 @@ namespace NavalBattle
             {
                 throw new InvalidCoordException("Coordenada no valida");
             }
- 
+
             string res = "Agua";
 
             foreach (Ship placedShip in ships)
@@ -369,8 +369,8 @@ namespace NavalBattle
             {
                 if (coord.CoordsEquals(bomb.Coord))
                 {
-                   Kaboom(coord); 
-                   res = "Bomba";
+                    Kaboom(coord); 
+                    res = "Bomba";
                 }
             }
             return res;
