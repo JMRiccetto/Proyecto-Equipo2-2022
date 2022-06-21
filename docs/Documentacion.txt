@@ -90,6 +90,10 @@ Coords:
     Las clase coord tiene un string "coordsLocation" el cual representa la coordenada en si y un bool "hasBeenAttacked" el 
     cual indica el estado de la coordenada (si fue atacada o no).
 
+CoordsTranslate:
+
+    Traduce las coordenadas ingresadas por el usuario para poder ser utilizadas por el programa. Por ejemplo, si ingresamos una coordenada "A1" la convierte en "00".
+
 Ship: 
     
     Para crear un ship se decide una coordenada inicial, un largo y la dirección a la que se va a extender el barco. 
@@ -99,6 +103,11 @@ Bomb:
     
     Bomb posee una única coordenada donde está situada. 
     Su método “Kaboom” ataca las 8 casillas a su alrededor.
+
+IGameboardContent:
+
+    Interfaz que utiliza la clase Gameboard con el objetivo de aplicar DIP. Basicamente prepara el tablero para luego ser impreso.
+
 
 Gameboard: 
     
@@ -111,6 +120,16 @@ Gameboard:
     -Añade las bombas.
     -Genera la matriz a imprimir.
     -Devuelve el resultado de un ataque.
+
+DefenseGameboardPrinter:
+
+    Imprime el tablero de manera que se puedan visualizar los barcos del usuario.
+
+
+AttackGameboardPrinter:
+
+    Imprime el tablero de manera que se puedan visualizar los ataques que realizo el usuario y sus estados (agua, tocado o hundido ).
+
 
 IPrinter: 
   
