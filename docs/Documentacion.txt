@@ -22,6 +22,66 @@ tamaño adaptable:
     El usuario podra eleguir un tamaño de tablero (6x6, 7x7 y 8x8)
 
 
+Roles de las clases:
+
+Coords: Information holder, Coordinator
+
+    Contiene informacion de las coordenadas del tablero, cambia de estado de las mismas, sabe si estas fueron atacadas, efectua cambios
+    dependiendo del resto de cambios, ademas proporciona esta informacion a las mismas.
+
+Ship: Information holder, Structurer
+
+    Contiene informacion sobre sus objetos, utiliza los objetos de Coords, realizando acciones en consecuencia,
+    y proporciona su informacion a otras clases.
+
+Bomb: Information holder
+
+    Contiene informacion sobre sus objetos, utiliza los objetos de Coords, y proporciona informacion a otras clases.
+
+Gameboard: Information holder, Controller
+
+    Contiene informacion sobre sus objetos, utiliza los objetos de Coords, bomb y ships, controla la creacion de los mismos y su uso, y proporciona su informacion a otras clases.
+
+IPrinter: Interfacer
+
+    Se implementa en clases de impresion, transformando los datos a una impresion.
+
+IGameboardContent: Interfacer
+
+    Se implementa en clases que van a imprimirse, es un colaborador de la interfaz de IPrinter.
+
+Menu: Service provider
+
+    Redirige los "comandos" del usuario hasta una funcionalidad
+
+User: Information holder
+
+    Contiene la informacion del usuario (nickName y Gameboard) y la proporciona al resto de clases.
+
+CoordsTranslate: Service provider
+
+    Traduce las coordenadas que ingresa el usuario, para ser utilizables por el programa
+
+DefenseGameboardPrinter y AttackGameboardPrinter: Service provider
+
+    se encarga de imprimir el gameboard del usuario (ataque y defensa)
+
+
+
+invalidCoordsException: A confirmar
+
+Match: A confirmar
+
+MatchLogic: A confirmar
+
+Admin: A confirmar
+
+
+
+    
+
+
+
 
 Informe del UML
 
