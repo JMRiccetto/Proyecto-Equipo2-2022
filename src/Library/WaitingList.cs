@@ -1,23 +1,25 @@
+using System.Collections.Generic;
+
 namespace NavalBattle
 {
-    public static class WaitingList
+    public class WaitingList
     {
-        private static List<User> noBombsNoDoubleAttackSize6;
-        private static List<User> noBombsNoDoubleAttackSize7;
-        private static List<User> noBombsNoDoubleAttackSize8;
-        private static List<User> noBombsDoubleAttackSize6;
-        private static List<User> noBombsDoubleAttackSize7;
-        private static List<User> noBombsDoubleAttackSize8;
-        private static List<User> bombsNoDoubleAttackSize6;
-        private static List<User> bombsNoDoubleAttackSize7;
-        private static List<User> bombsNoDoubleAttackSize8;
-        private static List<User> bombsDoubleAttackSize6;
-        private static List<User> bombsDoubleAttackSize7;
-        private static List<User> bombsDoubleAttackSize8;
+        private static List<GameUser> noBombsNoDoubleAttackSize6 = new List<GameUser>();
+        private static List<GameUser> noBombsNoDoubleAttackSize7;
+        private static List<GameUser> noBombsNoDoubleAttackSize8;
+        private static List<GameUser> noBombsDoubleAttackSize6;
+        private static List<GameUser> noBombsDoubleAttackSize7;
+        private static List<GameUser> noBombsDoubleAttackSize8;
+        private static List<GameUser> bombsNoDoubleAttackSize6;
+        private static List<GameUser> bombsNoDoubleAttackSize7;
+        private static List<GameUser> bombsNoDoubleAttackSize8;
+        private static List<GameUser> bombsDoubleAttackSize6 = new List<GameUser>();
+        private static List<GameUser> bombsDoubleAttackSize7;
+        private static List<GameUser> bombsDoubleAttackSize8;
 
 
 
-        public static List<User> NoBombsNoDoubleAttackSize6
+        public static List<GameUser> NoBombsNoDoubleAttackSize6
         {
             get
             {
@@ -29,7 +31,7 @@ namespace NavalBattle
                 noBombsNoDoubleAttackSize6 = value;
             }
         }
-        public static List<User> NoBombsNoDoubleAttackSize7
+        public static List<GameUser> NoBombsNoDoubleAttackSize7
         {
             get
             {
@@ -41,7 +43,7 @@ namespace NavalBattle
                 noBombsNoDoubleAttackSize7 = value;
             }
         }
-        public static List<User> NoBombsNoDoubleAttackSize8
+        public static List<GameUser> NoBombsNoDoubleAttackSize8
         {
             get
             {
@@ -53,7 +55,7 @@ namespace NavalBattle
                 noBombsNoDoubleAttackSize8 = value;
             }
         }
-        public static List<User> NoBombsDoubleAttackSize6
+        public static List<GameUser> NoBombsDoubleAttackSize6
         {
             get
             {
@@ -65,7 +67,7 @@ namespace NavalBattle
                 noBombsDoubleAttackSize6 = value;
             }
         }
-        public static List<User> NoBombsDoubleAttackSize7
+        public static List<GameUser> NoBombsDoubleAttackSize7
         {
             get
             {
@@ -77,7 +79,7 @@ namespace NavalBattle
                 noBombsDoubleAttackSize7 = value;
             }
         }
-        public static List<User> NoBombsDoubleAttackSize8
+        public static List<GameUser> NoBombsDoubleAttackSize8
         {
             get
             {
@@ -89,7 +91,7 @@ namespace NavalBattle
                 noBombsDoubleAttackSize8 = value;
             }
         }
-        public static List<User> BombsNoDoubleAttackSize6
+        public static List<GameUser> BombsNoDoubleAttackSize6
         {
             get
             {
@@ -101,7 +103,7 @@ namespace NavalBattle
                 bombsNoDoubleAttackSize6 = value;
             }
         }
-        public static List<User> BombsNoDoubleAttackSize7
+        public static List<GameUser> BombsNoDoubleAttackSize7
         {
             get
             {
@@ -113,7 +115,7 @@ namespace NavalBattle
                 bombsNoDoubleAttackSize7 = value;
             }
         }
-        public static List<User> BombsNoDoubleAttackSize8
+        public static List<GameUser> BombsNoDoubleAttackSize8
         {
             get
             {
@@ -125,7 +127,7 @@ namespace NavalBattle
                 bombsNoDoubleAttackSize8 = value;
             }
         }
-        public static List<User> BombsDoubleAttackSize6
+        public static List<GameUser> BombsDoubleAttackSize6
         {
             get
             {
@@ -137,7 +139,7 @@ namespace NavalBattle
                 bombsDoubleAttackSize6 = value;
             }
         }
-        public static List<User> BombsDoubleAttackSize7
+        public static List<GameUser> BombsDoubleAttackSize7
         {
             get
             {
@@ -149,7 +151,7 @@ namespace NavalBattle
                 bombsDoubleAttackSize7 = value;
             }
         }
-        public static List<User> BombsDoubleAttackSize8
+        public static List<GameUser> BombsDoubleAttackSize8
         {
             get
             {
@@ -160,6 +162,21 @@ namespace NavalBattle
             {
                 bombsDoubleAttackSize8 = value;
             }
+        }
+
+        public WaitingList()
+        {
+            noBombsNoDoubleAttackSize6 = new List<GameUser>();
+            noBombsNoDoubleAttackSize7 = new List<GameUser>();
+            noBombsNoDoubleAttackSize8 = new List<GameUser>();
+            noBombsDoubleAttackSize6 = new List<GameUser>();
+            noBombsDoubleAttackSize7 = new List<GameUser>();
+            noBombsDoubleAttackSize8 = new List<GameUser>();
+            bombsNoDoubleAttackSize6 = new List<GameUser>();
+            BombsNoDoubleAttackSize7 = new List<GameUser>();
+            bombsNoDoubleAttackSize8 = new List<GameUser>();
+            bombsDoubleAttackSize7 = new List<GameUser>();
+            bombsDoubleAttackSize8 = new List<GameUser>();
         }
     }
 }

@@ -2,14 +2,12 @@ namespace NavalBattle
 {
     public class Match
     {
-        protected internal Player[] players = new Player[2];
+        public readonly GameUser[] Users = new GameUser[2];
 
-        public void AddPlayers(User user1, User user2)
+        public void AddPlayers(GameUser user1, GameUser user2)
         {
-            Player player1 = new Player(user1, 7);
-            Player player2 = new Player(user2, 7);
-            players[0] = player1;
-            players[1] = player2;
+            Users[0] = user1;
+            Users[1] = user2;
         }
     }
 }

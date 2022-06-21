@@ -18,11 +18,9 @@ namespace NavalBattle
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public UserRegisterHandler(string[] keywords, BaseHandler next) : base(next)
+        public UserRegisterHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = keywords;
-            this.State = UserRegisterState.Start;
-            this.Next = next;
+            this.Keywords = new string[] {"/start"};
         }
 
         /// <summary>
@@ -33,58 +31,28 @@ namespace NavalBattle
         /// <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         protected override bool InternalHandle(Message message, out string response)
         {
-            try
-            {
-                if (this.State == UserRegisterState.Start)
-                {
-                    StringBuilder newUser = new StringBuilder("Bienvenido capitán! Te estábamos esperando.\n")
-                                                .Append("Antes de poder acceder a tu perfil debes elegir un nombre con el que registrarte,\n")
-                                                .Append("asegúrate que sea el mismo que tu user de Telegram.");
-                    this.State = UserRegisterState.NickName;
-                    response = newUser.ToString();
-                    return true;
-                }
-                else if(this.State == UserRegisterState.NickName)
-                {
-                    this.Data.NickName = message.Text;
-                    this.State = UserRegisterState.Start;
-                    UserRegister.Instance.CreateUser(this.Data.NickName);
-                    response = "Registro completado, que la suerte esté de tu lado.";
-                    return true;
-                }
-                response = "";
-                return false;
-            }
-            
-            catch (Exception e)
-            {
-                Cancel();
-                response = e.Message;
-                return true;
-            }
-        }
-
-        public IHandler Handle(Message message, out string response)
-        {
             if (this.CanHandle(message))
             {
-                this.InternalHandle(message, out response);
-                return this;
+                StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
+                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                {
+                    UserRegister.Instance.CreateUser(message.From.FirstName);
+                }
+                start.Append("¿Qué deseas hacer?\n")
+                    .Append("/jugarconelbot\n")
+                    .Append("/cambiartablero\n")
+                    .Append("/bombas\n")
+                    .Append("/ataquedoble\n")
+                    .Append("/buscarpartida");
+                response = start.ToString();
+                return true;
             }
-            else if (this.Next != null)
-            {
-                return this.Next.Handle(message, out response);
-            }
-            else
-            {
-                response = string.Empty;
-                return null;
-            }
+            response = string.Empty;
+            return false;
         }
 
         protected override void InternalCancel()
         {
-            this.State = UserRegisterState.Start;
             this.Data = new UserRegisterData();
         }
 
@@ -104,9 +72,7 @@ namespace NavalBattle
 
         public enum UserRegisterState
         {
-            Start,
 
-            NickName,
         }
 
         public class UserRegisterData

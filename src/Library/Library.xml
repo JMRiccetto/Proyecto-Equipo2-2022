@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Library</name>
+    </assembly>
+    <members>
+        <member name="T:NavalBattle.AttackGameboardPrinter">
+            <summary>
+            Imprime el tablero de manera que se puede visualizar donde se efectuaron los ataques y si algun barco fue tocado.
+            </summary>
+        </member>
+        <member name="F:NavalBattle.Coords.coordsLocation">
+            <summary>
+            String de la coordenada.
+            </summary>
+        </member>
+        <member name="F:NavalBattle.Coords.hasBeenAttacked">
+            <summary>
+            Estado de la coordenada.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Coords.CoordsEquals(NavalBattle.Coords)">
+            <summary>
+            Devuelve true si dos coordenadas son iguales.
+            </summary>
+            <param name="coord"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Coords.ChangeCoordState">
+            <summary>
+            Cambia el estado de una coordena que fue atacada.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.DefenseGameboardPrinter">
+            <summary>
+            Imprime el tablero de manera que se puede visualizar la posicion de los barcos y si fueron tocados o no.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Gameboard.IsValidCoord(NavalBattle.Coords)">
+            <summary>
+            Devuelve true si la coordenada se encuentra en el tablero.
+            </summary>
+            <param name="coord"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Gameboard.AddShip(System.Int32,System.String,System.String)">
+            <summary>
+            Metodo que añade barcos al tablero. Los Ship se crean en Gameboard porque los contiene (Creator).
+            </summary>
+            <param name="length"></param>
+            <param name="initialCoord"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="M:NavalBattle.Gameboard.AddWater">
+            <summary>
+            Añade las coordenadas donde no se posicionaron barcos a water.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Gameboard.AddBombs">
+            <summary>
+            Metodo que añade bombas al tablero.
+            Se Crean y añaden en Gameboard por creator.
+            Precondiciones: 
+                Solo se añaden tres bombas cualquiera sea el tamaño del tablero.
+                No puede haber dos bombas a menos de dos "casilleros" de distancia.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Gameboard.GetGameboardToPrint">
+            <summary>
+            Metodo de la interfaz IGameboardContent que implementa Gameboard.
+            Se aplica DIP para para imprimir los tableros de diferentes maneras dependiendo 
+            de que jugador es, y quien lo quiere visualizar.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Gameboard.RecieveAttack(NavalBattle.Coords)">
+            <summary>
+            Metodo donde se ataca a una coordenada del tablero.
+            Devuelve el resultado del ataque.
+            Se implementa en Gameboard ya que es la clase experta que contiene los datos.
+            </summary>
+            <param name="coord"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Gameboard.Kaboom(NavalBattle.Coords)">
+            <summary>
+            Metodo que se ejecuta cuando el tablero recibe un ataque en la coordenada donde se encuentra una bomba.
+            Ataca a todas las coordenadas adyacentes a ella.
+            Los condicionales del metodo checkean que no se ataque a una coordenada que no existe
+            en caso que la bomba se encuentre en una posicion al "borde" del tablero.
+            </summary>
+            <param name="coord"></param>
+        </member>
+        <member name="M:NavalBattle.Gameboard.IsMatchFinished">
+            <summary>
+            Devuelve true si todos los barcos del tablero fueron hundidos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NavalBattle.BaseHandler">
+            <summary>
+            Clase base para implementar el patrón Chain of Responsibility. En ese patrón se pasa un mensaje a través de una
+            cadena de "handlers" que pueden procesar o no el mensaje. Cada "handler" decide si procesa el mensaje, o si se lo
+            pasa al siguiente. Esta clase base implmementa la responsabilidad de recibir el mensaje y pasarlo al siguiente
+            "handler" en caso que el mensaje no sea procesado. La responsabilidad de decidir si el mensaje se procesa o no, y
+            de procesarlo, se delega a las clases sucesoras de esta clase base.
+            </summary>
+        </member>
+        <member name="P:NavalBattle.BaseHandler.Next">
+            <summary>
+            Obtiene el próximo "handler".
+            </summary>
+            <value>El "handler" que será invocado si este "handler" no procesa el mensaje.</value>
+        </member>
+        <member name="P:NavalBattle.BaseHandler.Keywords">
+            <summary>
+            Obtiene o asigna el conjunto de palabras clave que este "handler" puede procesar.
+            </summary>
+            <value>Un array de palabras clave.</value>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.#ctor(NavalBattle.IHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="T:NavalBattle.BaseHandler"/>.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.#ctor(System.String[],NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="T:NavalBattle.BaseHandler"/> con una lista de comandos.
+            </summary>
+            <param name="keywords">La lista de comandos.</param>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Este método debe ser sobreescrito por las clases sucesores. La clase sucesora procesa el mensaje y retorna
+            true o no lo procesa y retorna false.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario</returns>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.InternalCancel">
+            <summary>
+            Este método puede ser sobreescrito en las clases sucesores que procesan varios mensajes cambiando de estado
+            entre mensajes deben sobreescribir este método para volver al estado inicial. En la clase base no hace nada.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.CanHandle(Telegram.Bot.Types.Message)">
+            <summary>
+            Determina si este "handler" puede procesar el mensaje. En la clase base se utiliza el array
+            <see cref="P:NavalBattle.BaseHandler.Keywords"/> para buscar el texto en el mensaje ignorando mayúsculas y minúsculas. Las
+            clases sucesores pueden sobreescribir este método para proveer otro mecanismo para determina si procesan o no
+            un mensaje.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <returns>true si el mensaje puede ser pocesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.Handle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje o la pasa al siguiente "handler" si existe.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>El "handler" que procesó el mensaje si el mensaje fue procesado; null en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.BaseHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.GameStartHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.GameStartHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.GameStartHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.GameStartHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:NavalBattle.IHandler" -->
+        <member name="P:NavalBattle.IHandler.Next">
+            <summary>
+            Obtiene el próximo "handler".
+            </summary>
+            <value>El "handler" que será invocado si este "handler" no procesa el mensaje.</value>
+        </member>
+        <member name="M:NavalBattle.IHandler.Handle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje o la pasa al siguiente "handler" si existe.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>El "handler" que procesó el mensaje si el mensaje fue procesado; null en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.IHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial y cancela el próximo "handler" si existe. Es utilizado para que los
+            "handlers" que procesan varios mensajes cambiando de estado entre mensajes puedan volver al estado inicial en
+            caso de error por ejemplo.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.MatchLogicHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.MatchLogicHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.MatchLogicHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.MenuHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.MenuHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.MenuHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.MenuHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.UserRegisterHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.UserRegisterHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.UserRegisterHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.UserRegisterHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.IGameboardContent">
+            <summary>
+            Interfaz que implementa la clase Gameboard con el objetivo de aplicar DIP.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Ship.AddShipCoord(NavalBattle.Coords)">
+            <summary>
+            //Añade una coordenada al barco.
+            </summary>
+            <param name="coord"></param>
+        </member>
+        <member name="M:NavalBattle.Ship.IsSunk">
+            <summary>
+            //Metodo que devuelve si el barco esta hundido o no.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Ship.ShipContainCoord(NavalBattle.Coords)">
+            <summary>
+            Devuelve true si el barco contiene la coordenada pasada por parametro.
+            </summary>
+            <param name="coord"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Ship.RecieveDamage(NavalBattle.Coords)">
+            <summary>
+            Cambia el estado de la coordenada del barco que fue atacada.
+            </summary>
+            <param name="coord"></param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LibraryTests</name>
+    </assembly>
+    <members>
+        <member name="T:Test.Library.GameStartHandlerTest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Test.Library.MenuHandlerTest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Test.Library.MenuHandlerTest.DefenseGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el DefenseGameboard
+            </summary>
+        </member>
+        <member name="M:Test.Library.MenuHandlerTest.AttackGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el AttackGameboard
+            </summary>
+        </member>
+        <member name="T:Test.Library.PrintTests">
+            <summary>
+            esta clase prueba que las clases que implementen las interface de IPrinter (y como arraste IGameboardContent)
+            </summary>
+        </member>
+        <member name="M:Test.Library.PrintTests.DefenseGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el DefenseGameboard
+            </summary>
+        </member>
+        <member name="M:Test.Library.PrintTests.AttackGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el AttackGameboard
+            </summary>
+        </member>
+        <member name="T:Test.Library.UserRegisterTest">
+            <summary>
+            Test que demuestra que se pueden registrar usuarios.
+            </summary>
+        </member>
+        <member name="M:Test.Library.UserRegisterTest.EmptyListTest">
+            <summary>
+            Verifica que la lista esta vacía al empezar el programa.
+            </summary>
+        </member>
+        <member name="M:Test.Library.UserRegisterTest.UnregisteredUserTest">
+            <summary>
+            Verifica si el usuario no esta registrado y lo registra.
+            </summary>
+        </member>
+    </members>
+</doc>

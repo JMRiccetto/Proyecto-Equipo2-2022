@@ -15,6 +15,10 @@ namespace NavalBattle
             {
                 return this.side;
             }
+            set
+            {
+                this.side = value;
+            }
         }
 
         private List<Ship> ships = new List<Ship>();
@@ -45,13 +49,39 @@ namespace NavalBattle
                 return this.water;
             }
         }
-        private bool bombsSwitch;
+        private bool bombSwitch;
         
-
-        public Gameboard (int side)
+        public bool BombSwitch
         {
-            this.side = side;
+            get
+            {
+                return this.bombSwitch;
+            }
+            set
+            {
+                this.bombSwitch = value;
+            }
+        }
 
+        private bool doubleAttackSwitch;
+
+        public bool DoubleAttackSwitch
+        {
+            get
+            {
+                return this.doubleAttackSwitch;
+            }
+            set
+            {
+                this.doubleAttackSwitch = value;
+            }
+        }
+
+        public Gameboard ()
+        {
+            this.side = 6;
+            this.bombSwitch = false;
+            this.doubleAttackSwitch = false;
             //this.gameboard = new string[side,side];
         }   
 
@@ -60,7 +90,7 @@ namespace NavalBattle
         /// </summary>
         /// <param name="coord"></param>
         /// <returns></returns>
-        public bool isValidCoord(Coords coord)
+        public bool IsValidCoord(Coords coord)
         {
             int coordX = (int)Char.GetNumericValue(coord.CoordsLocation[0]);
             int coordY = (int)Char.GetNumericValue(coord.CoordsLocation[1]);
@@ -78,7 +108,7 @@ namespace NavalBattle
         {
             Coords initialCoord = new Coords(initialCoordStr);
 
-            if (!isValidCoord(initialCoord))
+            if (!IsValidCoord(initialCoord))
             {
                 throw new InvalidCoordException("Coordenada no valida.");
             }
@@ -160,6 +190,10 @@ namespace NavalBattle
                 //Si ya fueron posicionados los tres barcos, el resto de las coordenadas se agregan a water.
                 if (this.ships.Count == 3)
                 {
+                    if (this.bombSwitch)
+                    {
+                        AddBombs();
+                    }
                     AddWater();
                 }
             }
@@ -333,7 +367,7 @@ namespace NavalBattle
                 throw new Exception("No estan todos los barcos posicionados.");
             }
             
-            if(!isValidCoord(coord))
+            if(!IsValidCoord(coord))
             {
                 throw new InvalidCoordException("Coordenada no valida");
             }
@@ -418,7 +452,7 @@ namespace NavalBattle
         /// Devuelve true si todos los barcos del tablero fueron hundidos.
         /// </summary>
         /// <returns></returns>
-        public bool isMatchFinished()
+        public bool IsMatchFinished()
         {
             int finishMatchChecker = 0;
 

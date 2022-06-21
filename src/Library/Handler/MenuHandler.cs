@@ -13,20 +13,19 @@ namespace NavalBattle
     {
         public MenuState State;
 
-        public User User;
+        public GameUser User;
 
-        ITelegramBotClient telegramBotClient = new TelegramBotClient(null);
+        public MenuHandlerData Data;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public MenuHandler(string[] keywords, BaseHandler next) : base(next)
+        public MenuHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = keywords;
+            this.Keywords = new string[] {"/menu", "/cambiartablero", "/bombas", "/ataquedoble"};
             this.State = MenuState.Start;
-            this.Next = next;
             this.User = null;
         }
 
@@ -40,21 +39,10 @@ namespace NavalBattle
         {
             try
             {
-                if (this.State == MenuState.Start)
+                if (this.State == MenuState.Start && this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message);
-                    StringBuilder menu = new StringBuilder("¿Qué deseas hacer jugador?")
-                                                        .Append("/jugarconelbot\n")
-                                                        .Append("/cambiartablero\n")
-                                                        .Append("/bombas\n")
-                                                        .Append("/ataquedoble\n");
-                    response = menu.ToString();
-                    if (message.Text.ToLower().Trim() == "/jugarconelbot")
-                    {
-                        this.State = MenuState.BotGame;
-                        return true;
-                    }
-                    else if (message.Text.ToLower().Trim() == "/cambiartablero")
+                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    if (message.Text.ToLower().Trim() == "/cambiartablero")
                     {
                         this.State = MenuState.Gameboard;
                         response = "Introduce un tamaño para el tablero entre 6-8.";
@@ -63,14 +51,15 @@ namespace NavalBattle
                     else if (message.Text.ToLower().Trim() == "/bombas")
                     {
                         this.State = MenuState.Bomb;
+                        response = "/on\n" + "/off";
                         return true;
                     }
                     else if (message.Text.ToLower().Trim() == "/ataquedoble")
                     {
-                        this.State = MenuState.DoubleAttack;
+                        this.State = MenuState.DoubleAttack;    
+                        response = "ataquedoble cambiado";
                         return true;
                     }
-                    return true;
                 }
                 else if (this.State == MenuState.Gameboard)
                 {
@@ -87,6 +76,7 @@ namespace NavalBattle
                         this.User.Gameboard.Side = 7;
                         this.State = MenuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 7.";
+                        Console.WriteLine($"{this.User.Gameboard.Side}");
                         return true;
                     }
                     else if (message.Text.Trim() == "8")
@@ -96,21 +86,37 @@ namespace NavalBattle
                         response = "El tamaño de tu tablero ha sido restablecido a 8.";
                         return true;
                     }
+                    else
+                    {
+                        this.User.Gameboard.Side = 6;
+                        this.State = MenuState.Start;
+                        response = "No se pudo registrar tu mensaje, el tamaño del tablero será cambiado a 6";
+                        Console.WriteLine($"{this.User.Gameboard.Side}");
+                        return true;
+                    }
                 }
                 else if (this.State == MenuState.Bomb)
                 {
-                    if (this.User.Gameboard.BombSwitch)
+                    if (message.Text.ToLower().Trim() == "/off")
                     {
-
                         this.User.Gameboard.BombSwitch = false;
                         this.State = MenuState.Start;
                         response = "Las bombas han sido desactivadas.";
                         return true;
                     }
-                    this.User.Gameboard.BombSwitch = true;
-                    this.State = MenuState.Start;
-                    response = "Las bombas han sido activadas.";
-                    return true;
+                    else if (message.Text.ToLower().Trim() == "/on")
+                    {
+                        this.User.Gameboard.BombSwitch = true;
+                        this.State = MenuState.Start;
+                        response = "Las bombas han sido activadas.";
+                        return true;
+                    }
+                    else
+                    {
+                        this.State = MenuState.Start;
+                        response = "No se pudo registrar su mensaje, el estado de las bombas sigue igual";
+                        return true;
+                    }
                 }
                 else if (this.State == MenuState.DoubleAttack)
                 {
@@ -137,27 +143,10 @@ namespace NavalBattle
             }
         }
 
-        public IHandler Handle(Message message, out string response)
-        {
-            if (this.CanHandle(message))
-            {
-                this.InternalHandle(message, out response);
-                return this;
-            }
-            else if (this.Next != null)
-            {
-                return this.Next.Handle(message, out response);
-            }
-            else
-            {
-                response = string.Empty;
-                return null;
-            }
-        }
-
         protected override void InternalCancel()
         {
             this.State = MenuState.Start;
+            this.Data = new MenuHandlerData();
         }
 
         /// <summary>
@@ -181,6 +170,11 @@ namespace NavalBattle
             Gameboard,
             Bomb,
             DoubleAttack,
+        }
+
+        public class MenuHandlerData
+        {
+
         }
     }
 }

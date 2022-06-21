@@ -1,19 +1,29 @@
 using NUnit.Framework;
+using Telegram.Bot.Types;
 using NavalBattle;
 
 namespace Test.Library
 {
     /// <summary>
-    /// esta clase prueba que las clases que implementen las interface de IPrinter (y como arraste IGameboardContent)
+    /// 
     /// </summary>
-    public class PrintTests
+    public class MenuHandlerTest
     {
-        GameUser user;
+        Message message;
+
+        MenuHandler handler;
+
+        private GameUser user1;
+
+        private GameUser user2;
 
         [SetUp]
         public void Setup()
         {
-            this.user = new GameUser("Juan");
+            /* this.message.Text = new string("");
+            this.user1 = new GameUser("Juan");
+            this.user2 = new GameUser("Maria");
+            this.handler = new MenuHandler(null); */
         }
 
         /// <summary>
