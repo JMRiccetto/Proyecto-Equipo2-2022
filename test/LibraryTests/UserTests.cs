@@ -16,7 +16,7 @@ namespace Test.Library
         [SetUp]
         public void Setup()
         {
-            User user = new User("Juan", 7);
+            User user = new User("Juan");
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Test.Library
         [Test]
         public void NewPlayerTest()
         {
-            User Fernando = new User("Fernando", 7);
+            User Fernando = new User("Fernando");
             Assert.AreEqual("Fernando", Fernando.NickName);
             //Assert.AreEqual(7, Fernando.gameboard.Size);
         }

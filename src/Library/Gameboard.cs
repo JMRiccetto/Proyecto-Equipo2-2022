@@ -15,6 +15,11 @@ namespace NavalBattle
             {
                 return this.side;
             }
+
+            set
+            {
+                side = value;
+            }
         }
 
         private List<Ship> ships = new List<Ship>();
@@ -45,8 +50,33 @@ namespace NavalBattle
                 return this.water;
             }
         }
-        private bool bombsSwitch;
+        private bool bombSwitch;
+
+        public bool BombSwitch
+        {
+            get
+            {
+                return bombSwitch;
+            }
+            set
+            {
+                bombSwitch = value;
+            }
+        }
         
+        private bool doubleAttackSwitch;
+
+        public bool DoubleAttackSwitch
+        {
+            get
+            {
+                return doubleAttackSwitch;
+            }
+            set
+            {
+                doubleAttackSwitch = value;
+            }
+        }
 
         public Gameboard (int side)
         {
@@ -418,7 +448,7 @@ namespace NavalBattle
         /// Devuelve true si todos los barcos del tablero fueron hundidos.
         /// </summary>
         /// <returns></returns>
-        public bool isMatchFinished()
+        public bool IsMatchFinished()
         {
             int finishMatchChecker = 0;
 
