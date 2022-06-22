@@ -15,10 +15,9 @@ namespace NavalBattle
             {
                 return this.side;
             }
-
             set
             {
-                side = value;
+                this.side = value;
             }
         }
 
@@ -63,26 +62,24 @@ namespace NavalBattle
                 bombSwitch = value;
             }
         }
-        
+
         private bool doubleAttackSwitch;
 
         public bool DoubleAttackSwitch
         {
             get
             {
-                return doubleAttackSwitch;
+                return this.doubleAttackSwitch;
             }
             set
             {
-                doubleAttackSwitch = value;
+                this.doubleAttackSwitch = value;
             }
         }
 
         public Gameboard (int side)
         {
             this.side = side;
-
-            //this.gameboard = new string[side,side];
         }   
 
         /// <summary>
@@ -90,7 +87,7 @@ namespace NavalBattle
         /// </summary>
         /// <param name="coord"></param>
         /// <returns></returns>
-        public bool isValidCoord(Coords coord)
+        public bool IsValidCoord(Coords coord)
         {
             int coordX = (int)Char.GetNumericValue(coord.CoordsLocation[0]);
             int coordY = (int)Char.GetNumericValue(coord.CoordsLocation[1]);
@@ -108,7 +105,7 @@ namespace NavalBattle
         {
             Coords initialCoord = new Coords(initialCoordStr);
 
-            if (!isValidCoord(initialCoord))
+            if (!IsValidCoord(initialCoord))
             {
                 throw new InvalidCoordException("Coordenada no valida.");
             }
@@ -190,6 +187,10 @@ namespace NavalBattle
                 //Si ya fueron posicionados los tres barcos, el resto de las coordenadas se agregan a water.
                 if (this.ships.Count == 3)
                 {
+                    if (this.bombSwitch)
+                    {
+                        AddBombs();
+                    }
                     AddWater();
                 }
             }
@@ -363,7 +364,7 @@ namespace NavalBattle
                 throw new Exception("No estan todos los barcos posicionados.");
             }
             
-            if(!isValidCoord(coord))
+            if(!IsValidCoord(coord))
             {
                 throw new InvalidCoordException("Coordenada no valida");
             }

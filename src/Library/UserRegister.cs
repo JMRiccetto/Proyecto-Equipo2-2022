@@ -8,10 +8,10 @@ namespace NavalBattle
 {
      public class UserRegister : IJsonConvertible
     {
-          private List<User> userData = new List<User>();
+          private List<GameUser> userData = new List<GameUser>();
 
           [JsonInclude]
-          public List<User> UserData
+          public List<GameUser> UserData
           {
                get
                {
@@ -41,30 +41,39 @@ namespace NavalBattle
 
           public void SetUp()
           {
-               this.userData = new List<User>();
+               this.userData = new List<GameUser>();
           }
 
           public void CreateUser(string nickName)
           {
-               User user = new User(nickName);
-               this.UserData.Add(user);
+               GameUser user = new GameUser(nickName);
+               this.userData.Add(user);
           }
 
-          public void RemoveUser(User user)
+          /// <summary>
+          /// Remueve un usuario de la lista de usuarios.
+          /// </summary>
+          /// <param name="user"></param>
+          public void RemoveUser(GameUser user)
           {
                if (this.UserData.Contains(user))
                {
                     throw new Exception();
                }
-               this.UserData.Remove(user);
+               this.userData.Remove(user);
           }
 
-          public User GetUserByNickName(Message userMessage)
+          /// <summary>
+          /// Encuentra un User en la lista de Users por su nombre.
+          /// </summary>
+          /// <param name="nickName"></param>
+          /// <returns></returns>
+          public GameUser GetUserByNickName(string nickName)
           {
-               User outcome = null;
-               if (this.UserData.Exists(user => user.NickName == userMessage.From.FirstName))
+               GameUser outcome = null;
+               if (this.userData.Exists(user => nickName == user.NickName))
                {
-                    outcome = this.UserData.Find(user => user.NickName == userMessage.From.FirstName);
+                    outcome = this.userData.Find(user => nickName == user.NickName);
                }
                return outcome;
           }
@@ -77,14 +86,14 @@ namespace NavalBattle
           public void LoadFromJson(string json)
           {
                this.SetUp();
-               User user = JsonSerializer.Deserialize<User>(json);
+               GameUser user = JsonSerializer.Deserialize<GameUser>(json);
                JsonSerializerOptions options = new()
                {
                     ReferenceHandler = MyReferenceHandler.Instance,
                     WriteIndented = true,
                };
 
-               user = JsonSerializer.Deserialize<User>(json, options);
+               user = JsonSerializer.Deserialize<GameUser>(json, options);
           }
     }
 }

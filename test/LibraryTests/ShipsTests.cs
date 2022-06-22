@@ -1,4 +1,4 @@
-using NUnit.Framework;
+/* using NUnit.Framework;
 using NavalBattle;
 
 namespace Test.Library
@@ -96,8 +96,8 @@ namespace Test.Library
         {
             Coords coords2 = new Coords("A2");
             ship.RecieveDamage(coords2);
-            Assert.AreEqual(null, coords2.HasBeenAttacked); //???????
+            Assert.AreEqual(null, coords2.HasBeenAttacked);
 
         }
     }
-}
+} */

@@ -4,7 +4,7 @@ Bombas:
     
     Las bombas es una modalidad de juego que los jugadores pueden elegir, en la cual en los tableros de ambos jugadores se
     colocan aleatoriamente 3 bombas. Esto significa que si un jugador ataca al tablero en la coordenada donde se encuentra 
-    una bomba, las 8 posiciones al rededor de esa coordenada tambien seran atacadas.
+    una bomba, las 8 posiciones alrededor de esa coordenada también serán atacadas.
 
     Los jugadores no pueden visualizar las bombas de ninguno de los tableros.
 
@@ -14,31 +14,92 @@ Bombas:
 
 2 tiros por turno: 
     
-    Si un usuario falla varios tiros consecutivos (no le acierta ningun barco enemigo en una cantidad de turnos) se le otorgara 
+    Si un usuario falla varios tiros consecutivos (no le acierta ningún barco enemigo en una cantidad de turnos) se le otorgara 
     2 tiros en el mismo turno.
 
 tamaño adaptable: 
 
-    El usuario podra eleguir un tamaño de tablero (6x6, 7x7 y 8x8)
+    El usuario podrá elegir un tamaño de tablero (6x6, 7x7 y 8x8)
 
+Menu: 
+
+    La última funcionalidad se encarga de administrar las otras tres existentes, para las bombas y los dos tiros por turno se activan y desactivan por medio de booleanos y el tamaño del tablero se decide por el mensaje que pasa el usuario en un handler específico.
+
+
+Roles de las clases:
+
+Coords: Information holder, Coordinator
+
+    Contiene información de las coordenadas del tablero, cambia de estado de las mismas, sabe si estas fueron atacadas, efectúa cambios
+    dependiendo del resto de cambios, además proporciona esta información a las mismas.
+
+Ship: Information holder, Structurer
+
+    Contiene información sobre sus objetos, utiliza los objetos de Coords, realizando acciones en consecuencia,
+    y proporciona su información a otras clases.
+
+Bomb: Information holder
+
+    Contiene información sobre sus objetos, utiliza los objetos de Coords, y proporciona información a otras clases.
+
+Gameboard: Information holder, Controller
+
+    Contiene información sobre sus objetos, utiliza los objetos de Coords, bomb y ships, controla la creación de los mismos y su uso, y proporciona su información a otras clases.
+
+IPrinter: Interfacer
+
+    Se implementa en clases de impresión, transformando los datos a una impresión.
+
+IGameboardContent: Interfacer
+
+    Se implementa en clases que van a imprimirse, es un colaborador de la interfaz de IPrinter.
+
+Menu: Service provider
+
+    Redirige los "comandos" del usuario hasta una funcionalidad
+
+User: Information holder
+
+    Contiene la información del usuario (nickName y Gameboard) y la proporciona al resto de clases.
+
+CoordsTranslate: Service provider
+
+    Traduce las coordenadas que ingresa el usuario, para ser utilizables por el programa
+
+DefenseGameboardPrinter y AttackGameboardPrinter: Service provider
+
+    se encarga de imprimir el gameboard del usuario (ataque y defensa)
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 Informe del UML
 
-Coords:
+AttackGameboardPrinter:
 
-    Las clase coord tiene un string "coordsLocation" el cual representa la coordenada en si y un bool "hasBeenAttacked" el 
-    cual indica el estado de la coordenada (si fue atacada o no).
-
-Ship: 
-    
-    Para crear un ship se decide una coordenada inicial, un largo y la dirección a la que se va a extender el barco. 
-    Los largos posibles son de 2, 3 y 4 casillas. 
+    Imprime el tablero de manera que se puedan visualizar los ataques que realizo el usuario y sus estados (agua, tocado o hundido).
 
 Bomb: 
     
     Bomb posee una única coordenada donde está situada. 
     Su método “Kaboom” ataca las 8 casillas a su alrededor.
+
+Admin: 
+
+    Toma el Rol de Bot, ya que realiza todas las funcionalidades esenciales para el funcionamiento del programa. - Registra Users - Crea partidas en base a las opciones dadas por el usuario en el menú - “AttackInfo” recibe la instrucción de atacar de un jugador y se la pasa a otra clase para que la ejecute - “EndGame” termina el juego una vez que todos los barcos de un jugador hayan sido hundidos
+
+Coords:
+
+    La clase Coords tiene un string "coordsLocation" el cual representa la coordenada en sí y un bool "hasBeenAttacked" el cual indica el estado de la coordenada (si fue atacada o no).
+
+CoordsTranslate:
+
+    Traduce las coordenadas ingresadas por el usuario para poder ser utilizadas por el programa. Por ejemplo, si ingresamos una coordenada "A1" la convierte en "00".
+
+DefenseGameboardPrinter:
+
+    Imprime el tablero de manera que se puedan visualizar los barcos del usuario.
 
 Gameboard: 
     
@@ -52,29 +113,83 @@ Gameboard:
     -Genera la matriz a imprimir.
     -Devuelve el resultado de un ataque.
 
+IGameboardContent:
+
+    Interfaz que utiliza la clase Gameboard con el objetivo de aplicar DIP. Básicamente prepara el tablero para luego ser impreso.
+
+invalidCoordsException:
+
+
 IPrinter: 
   
     Imprime los tableros de 2 modos distintos. 
     “PrintDefenseGameboard” imprime el tablero de forma que, se dibujen los barcos del jugador que lo llamo. 
     “PrintAttackGameboard” imprime el tablero con el registro de ataque que el jugador ha realizado sin revelar los barcos de su oponente.
 
-Menu: 
-    
-    Contiene las opciones del juego, que podrán ser cambiadas por el jugador antes de iniciar una partida.
-
-User:
-
-    El usuario contiene un nickName y un tablero.
-
 Match: 
     
     Representa la partida en juego.
+
+Ship: 
     
-Admin: 
+    Para crear un ship se decide una coordenada inicial, un largo y la dirección a la que se va a extender el barco. 
+    Los largos posibles son de 2, 3 y 4 casillas. 
+
+User:
     
-    Toma el Rol de Bot, ya que realiza todas las funcionalidades esenciales para el funcionamiento del programa.
-    Registra Users.
-    Crea partidas en base a las opciones dadas por el usuario en el menú.
+    El user va a tener un nickname por el cual se va a diferenciar del resto. Además se le va a asignar el gamboard.
+
+UserRegister:
+    
+    Se crea el user. Básicamente se configura el user, se le asigna el nickname pero también se puede eliminar. A partir de que se genera un nuevo usuario, los datos de este quedarían guardados. Esto lo hacemos con la clase IJsonConvertible que sirve para serializar información del bot, pero todavía no se implementa.
+
+WaitingList: 
+
+    Es una lista que contiene todos los usuarios que están prontos para jugar una partida. Dependiendo las características que hayan seleccionado (tamaño del tablero, bombas, doble ataque), si hay otro jugador en la lista con la misma configuración de la partida se va a iniciar la partida.
+
+Player:
+
+    El player se crea cuando ocurre un match con otro jugador y se genera la partida, este únicamente contiene el gamboard.
 
 
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+Clases de las que se encargó cada integrante:
+
+Franco Robotti:
+
+    - MatchLogicHandler
+    - MenuHandler
+    - GameStartHandler
+    - ShipTest
+    - CoordsTest
+
+Lucas Benítez:
+
+    - IHandler
+    - BaseHandler
+    - UserRegisterHandler
+    - GameboardTest
+
+Juan Riccetto:
+
+    - Admin
+    - Match
+    - WaitingList
+    - UserRegister
+    - IJsonConvertible
+    - MyReferenceHandler
+
+Juan Tabarez:
+
+    - Gameboard
+    - Bomb
+    - Ship 
+    - IPrinter
+    - IGameboardContent
+    - DefenseGameboardPrinter
+    - AttackGameboardPrinter
+    - invalidCoordsException
+    - Coords
+    - SearchGameTest

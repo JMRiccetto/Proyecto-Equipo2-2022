@@ -216,5 +216,44 @@ namespace NavalBattle.Test
 
             Assert.AreEqual("No estan todos los barcos posicionados.", ex.Message);
         }
+
+        //Testea que cuando se hunden todos los barcos se termina la partida.
+        [Test]
+        public void IsMatchFinishedTest()
+        {
+            gameboard = new Gameboard(6);
+
+            gameboard.AddShip(2, "00", "S");
+
+            gameboard.AddShip(2, "01", "S");
+
+            gameboard.AddShip(2, "02", "S");
+
+            Coords coord1 = new Coords("00");
+
+            Coords coord2 = new Coords("10");
+
+            Coords coord3 = new Coords("01");
+
+            Coords coord4 = new Coords("11");
+
+            Coords coord5 = new Coords("02");
+
+            Coords coord6= new Coords("12");
+
+            gameboard.RecieveAttack(coord1);
+
+            gameboard.RecieveAttack(coord2);
+
+            gameboard.RecieveAttack(coord3);
+
+            gameboard.RecieveAttack(coord4);
+
+            gameboard.RecieveAttack(coord5);
+
+            gameboard.RecieveAttack(coord6);
+
+            Assert.AreEqual(true, gameboard.IsMatchFinished());
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace NavalBattle
                     sunkChecker += 1;
                 }
             }
-            return (sunkChecker == 0);
+            return sunkChecker == 0;
         }
 
         /// <summary>

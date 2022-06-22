@@ -1,12 +1,38 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace NavalBattle
 {
-    public class User : IJsonConvertible
+    public class GameUser : IJsonConvertible
     {
-        private string nickName;
+        private bool bombs;
 
-        private Gameboard gameboard;
+        public bool Bombs
+        {
+            get
+            {
+                return bombs;
+            }
+        }
+
+        private bool doubleAttack;
+
+        public bool DoubleAttack
+        {
+            get
+            {
+                return doubleAttack;
+            }
+        }
+        private int gameboardSide;
+
+        public int GameboardSide
+        {
+            get
+            {
+                return gameboardSide;
+            }
+        }
+        private string nickName;
 
         public string NickName
         {
@@ -20,6 +46,8 @@ namespace NavalBattle
             }
         }
 
+        private Gameboard gameboard;
+
         public Gameboard Gameboard
         {
             get
@@ -32,10 +60,31 @@ namespace NavalBattle
             }
         }
 
-        public User(string nickName)
+        public Player player {get; set;}
+
+
+        public GameUser(string nickName)
         {
             this.NickName = nickName;
         }
+        
+        /// <summary>
+        /// El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
+        /// </summary>
+        /// <param name="gameboardSide"></param>
+        /// <param name="bombs"></param>
+        /// <param name="doubleAttack"></param>
+        public void SearchGame(int gameboardSide, bool bombs, bool doubleAttack) 
+        {
+            this.gameboardSide = gameboardSide;
+
+            this.bombs = bombs;
+
+            this.doubleAttack = doubleAttack;
+
+            Admin.getAdmin().AddToWaitingList(this);
+        }
+
 
         public string ConvertToJson(JsonSerializerOptions options)
         {

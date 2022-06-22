@@ -21,8 +21,6 @@ namespace NavalBattle
         public UserRegisterHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/start"};
-            this.State = UserRegisterState.Start;
-            this.Next = next;
         }
 
         /// <summary>
@@ -36,11 +34,16 @@ namespace NavalBattle
             if (this.CanHandle(message))
             {
                 StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message)))
+                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
                 {
                     UserRegister.Instance.CreateUser(message.From.FirstName);
                 }
-                start.Append("Escriba /menu para ver las opciones disponibles.");
+                start.Append("¿Qué deseas hacer?\n")
+                    .Append("/jugarconelbot\n")
+                    .Append("/cambiartablero\n")
+                    .Append("/bombas\n")
+                    .Append("/ataquedoble\n")
+                    .Append("/buscarpartida");
                 response = start.ToString();
                 return true;
             }
@@ -50,7 +53,6 @@ namespace NavalBattle
 
         protected override void InternalCancel()
         {
-            this.State = UserRegisterState.Start;
             this.Data = new UserRegisterData();
         }
 
@@ -70,9 +72,6 @@ namespace NavalBattle
 
         public enum UserRegisterState
         {
-            Start,
-
-            NickName,
         }
 
         public class UserRegisterData

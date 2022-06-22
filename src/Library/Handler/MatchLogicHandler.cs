@@ -17,9 +17,8 @@ namespace NavalBattle
 
         public MatchLogicHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/start"};
+            this.Keywords = new string[] {"/gamestart"};
             this.State = MatchLogicState.Start;
-            this.Next = next;
             this.ShipLength = 2;
         }
 
@@ -35,15 +34,15 @@ namespace NavalBattle
             {
                 if (this.State == MatchLogicState.Start)
                 {
-                    this.Data.Match = BotUtils.MatchList[0];
+                    /* this.Data.Match = BotUtils.MatchList[0];
                     this.Data.User1 = this.Data.Match.Users[0];
                     this.Data.User2 = this.Data.Match.Users[1];
                     BotUtils.MatchList.Remove(this.Data.Match);
-                    BotUtils.InGameMatchList.Add(this.Data.Match);
+                    BotUtils.InGameMatchList.Add(this.Data.Match); */
                     this.State = MatchLogicState.PlayerOneTurnPlacementCoords;
                     response = "Que empiece el juego! Jugador 1, elija sus coordenadas inciales.";
                 }
-                else if (this.State == MatchLogicState.PlayerOneTurnPlacementCoords)
+                else if (this.State == MatchLogicState.PlayerOneTurnPlacementCoords && message.Text.ToLower().Trim() == "/gamestart")
                 {
                     if (ShipLength <= 4)
                     {   
@@ -64,7 +63,7 @@ namespace NavalBattle
                         return true;
                     }
                 }
-                else if (this.State == MatchLogicState.PlayerOneTurnPlacementDirection)
+                else if (this.State == MatchLogicState.PlayerOneTurnPlacementDirection && message.Text.ToLower().Trim() == "/gamestart")
                 {
                     this.Data.PlayerOnePlacementDirection = message.ToString();
                     this.Data.User1.Gameboard.AddShip(this.ShipLength, this.Data.PlayerOnePlacementCoords, this.Data.PlayerOnePlacementDirection);
@@ -184,9 +183,9 @@ namespace NavalBattle
         {
             public Match Match;
 
-            public User User1;
+            public GameUser User1;
             
-            public User User2;
+            public GameUser User2;
 
             public string PlayerOnePlacementCoords { get; set; }
 
