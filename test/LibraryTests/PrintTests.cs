@@ -8,12 +8,12 @@ namespace Test.Library
     /// </summary>
     public class PrintTests
     {
-        User user;
+        GameUser user;
 
         [SetUp]
         public void Setup()
         {
-            this.user = new User("Juan", 7);
+            this.user = new GameUser("Juan");
         }
 
         /// <summary>

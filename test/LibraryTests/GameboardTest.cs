@@ -17,7 +17,7 @@ namespace NavalBattle.Test
         [Test]
         public void GameboardSideTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
             int expected = 6;
             Assert.AreEqual(expected, gameboard.Side);
         }
@@ -26,7 +26,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddValidShipsTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -43,7 +43,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddNoValidInitialShipCoordTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -60,7 +60,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddNoValidDirectionShipTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -77,7 +77,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddOutOfRangeShipTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -94,7 +94,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddOverlappingShipTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -111,7 +111,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddWaterValidTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -128,7 +128,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddWaterNoValidTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -143,7 +143,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddBombsValidTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddBombs();
 
@@ -156,7 +156,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveValidAttackTest()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
 
@@ -185,7 +185,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveInvalidAttackTest1()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
             
@@ -204,7 +204,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveInvalidAttackTest2()
         {
-            gameboard = new Gameboard(6);
+            gameboard = new Gameboard();
 
             gameboard.AddShip(3, "00", "S");
             

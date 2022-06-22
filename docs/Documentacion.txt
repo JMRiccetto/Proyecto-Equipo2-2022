@@ -141,9 +141,11 @@ Menu:
     
     Contiene las opciones del juego, que podrán ser cambiadas por el jugador antes de iniciar una partida.
 
-User:
+BotUtils: 
+- Toma el Rol de Bot, ya que realiza todas las funcionalidades esenciales para el funcionamiento del programa. - Registra Users - Crea partidas en base a las opciones dadas por el usuario en el menú - “AttackInfo” recibe la instrucción de atacar de un jugador y se la pasa a otra clase para que la ejecute - “EndGame” termina el juego una vez que todos los barcos de un jugador hayan sido hundidos
 
-    El usuario contiene un nickName y un tablero.
+MatchLogic: 
+- Recibe la instrucción de ataque de BotUtils y la ejecuta en la partida. - “Surrender” finaliza la partida en el momento que es llamada por un player. - “PlaceShips” permite al usuario posicionar sus barcos a ambos jugadores antes de empezar la partida. - Update actualiza los tableros después de haber sido atacados y los imprime en pantalla.
 
 Match: 
     

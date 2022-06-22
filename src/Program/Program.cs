@@ -3,14 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Telegram.Bot.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace NavalBattle
 {
@@ -86,7 +86,7 @@ namespace NavalBattle
             var revealer = serviceProvider.GetService<ISecretService>();
             token = revealer.Token;
         }
- 
+
         private static IHandler firstHandler;
 
         /// <summary>
@@ -99,14 +99,11 @@ namespace NavalBattle
             Bot = new TelegramBotClient(token);
 
             firstHandler =
-                new HelloHandler(
-                new NickName(
-                new Menu(
-                new PlayWithBot(
-                new GameboardSize(
-                new Bombs(
-                new DoubleAttack(
-                new Match())))))));
+                new UserRegisterHandler(
+                new MenuHandler(
+                new GameStartHandler(
+                new MatchLogicHandler(null)
+                )));
 
             var cts = new CancellationTokenSource();
 
