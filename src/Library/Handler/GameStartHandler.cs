@@ -1,4 +1,4 @@
-using System;
+/* using System;
 using System.Text;
 using Telegram.Bot.Types;
 
@@ -303,7 +303,6 @@ namespace NavalBattle
 
         public class GameStartData
         {
-
         }
     }
-}
+} */

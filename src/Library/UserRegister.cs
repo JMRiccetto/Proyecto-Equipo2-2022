@@ -50,6 +50,10 @@ namespace NavalBattle
                this.userData.Add(user);
           }
 
+          /// <summary>
+          /// Remueve un usuario de la lista de usuarios.
+          /// </summary>
+          /// <param name="user"></param>
           public void RemoveUser(GameUser user)
           {
                if (this.UserData.Contains(user))
@@ -59,6 +63,11 @@ namespace NavalBattle
                this.userData.Remove(user);
           }
 
+          /// <summary>
+          /// Encuentra un User en la lista de Users por su nombre.
+          /// </summary>
+          /// <param name="nickName"></param>
+          /// <returns></returns>
           public GameUser GetUserByNickName(string nickName)
           {
                GameUser outcome = null;

@@ -4,6 +4,33 @@
         <name>Library</name>
     </assembly>
     <members>
+        <member name="F:NavalBattle.Admin.matchList">
+            <summary>
+            Lista donde se guardan las partidas.
+            </summary>
+            <typeparam name="Match"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:NavalBattle.Admin.admin">
+            <summary>
+            Ser utiliza singleton para admin.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Admin.AddToWaitingList(NavalBattle.GameUser)">
+            <summary>
+            Cuando un User busca partida, si en la WaitingList hay un otro User con las mismas caracteristicas
+            de partida que el, se emparejan en la misma partida.
+            Si no hay otro player disponible para jugar, se agrega a waitingList.
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="M:NavalBattle.Admin.CreateMatch(NavalBattle.GameUser,NavalBattle.GameUser)">
+            <summary>
+            Se crea la partida con los dos Users luego de ser emparejados.
+            </summary>
+            <param name="user1"></param>
+            <param name="user2"></param>
+        </member>
         <member name="T:NavalBattle.AttackGameboardPrinter">
             <summary>
             Imprime el tablero de manera que se puede visualizar donde se efectuaron los ataques y si algun barco fue tocado.
@@ -30,6 +57,19 @@
             <summary>
             Cambia el estado de una coordena que fue atacada.
             </summary>
+        </member>
+        <member name="T:NavalBattle.CoordsTranslate">
+            <summary>
+            esta clase toma un string del usuario y lo convierte en otro preparado para su utilizacion
+            esto lo hace a traves del cambio de string - ascii - string
+            </summary>
+        </member>
+        <member name="M:NavalBattle.CoordsTranslate.Translate(System.String)">
+            <summary>
+            transforma un mensaje B2 a 11, A1 a 00
+            </summary>
+            <param name="aCoordsLocation"></param>
+            <returns></returns>
         </member>
         <member name="T:NavalBattle.DefenseGameboardPrinter">
             <summary>
@@ -171,33 +211,6 @@
             estado inicial.
             </summary>
         </member>
-        <member name="T:NavalBattle.GameStartHandler">
-            <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
-            </summary>
-        </member>
-        <member name="M:NavalBattle.GameStartHandler.#ctor(NavalBattle.BaseHandler)">
-            <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
-            </summary>
-            <param name="next">El próximo "handler".</param>
-        </member>
-        <member name="M:NavalBattle.GameStartHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
-            <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
-            </summary>
-            <param name="message">El mensaje a procesar.</param>
-            <param name="response">La respuesta al mensaje procesado.</param>
-            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
-        </member>
-        <member name="M:NavalBattle.GameStartHandler.Cancel">
-            <summary>
-            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
-            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
-            estado inicial.
-            </summary>
-        </member>
         <!-- Badly formed XML comment ignored for member "T:NavalBattle.IHandler" -->
         <member name="P:NavalBattle.IHandler.Next">
             <summary>
@@ -299,6 +312,11 @@
             Interfaz que implementa la clase Gameboard con el objetivo de aplicar DIP.
             </summary>
         </member>
+        <member name="T:NavalBattle.Player">
+            <summary>
+            Player es una intancia de los usuarios cuando se crea un Match.
+            </summary>
+        </member>
         <member name="M:NavalBattle.Ship.AddShipCoord(NavalBattle.Coords)">
             <summary>
             //Añade una coordenada al barco.
@@ -323,6 +341,32 @@
             Cambia el estado de la coordenada del barco que fue atacada.
             </summary>
             <param name="coord"></param>
+        </member>
+        <member name="M:NavalBattle.GameUser.SearchGame(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
+            </summary>
+            <param name="gameboardSide"></param>
+            <param name="bombs"></param>
+            <param name="doubleAttack"></param>
+        </member>
+        <member name="M:NavalBattle.UserRegister.RemoveUser(NavalBattle.GameUser)">
+            <summary>
+            Remueve un usuario de la lista de usuarios.
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="M:NavalBattle.UserRegister.GetUserByNickName(System.String)">
+            <summary>
+            Encuentra un User en la lista de Users por su nombre.
+            </summary>
+            <param name="nickName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NavalBattle.WaitingList">
+            <summary>
+            Lista donde se agregan los usuarios que estan esperando para jugar.
+            </summary>
         </member>
     </members>
 </doc>

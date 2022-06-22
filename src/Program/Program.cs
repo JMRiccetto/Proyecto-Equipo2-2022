@@ -100,10 +100,9 @@ namespace NavalBattle
 
             firstHandler =
                 new UserRegisterHandler(
-                new MenuHandler(
-                new GameStartHandler(
+                new MenuHandler(     
                 new MatchLogicHandler(null)
-                )));
+                ));
 
             var cts = new CancellationTokenSource();
 

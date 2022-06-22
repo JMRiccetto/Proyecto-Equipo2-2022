@@ -1,5 +1,12 @@
+/* 
+
+No pudimos testear los printer ya que es un void
+
+
 using NUnit.Framework;
 using NavalBattle;
+using System.Text;
+using System;
 
 namespace Test.Library
 {
@@ -8,21 +15,52 @@ namespace Test.Library
     /// </summary>
     public class PrintTests
     {
-        GameUser user;
-
         [SetUp]
         public void Setup()
         {
-            this.user = new GameUser("Juan");
         }
 
-        /// <summary>
-        /// este test deberia probar que se imprima el DefenseGameboard
-        /// </summary>
+
         [Test]
         public void DefenseGameboardPrinter()
         {
+            IPrinter printer = new DefenseGameboardPrinter();
+            
+            Gameboard gameboard = new Gameboard(4);
 
+            gameboard.AddShip(2, "00", "S");
+
+            gameboard.AddShip(2, "01", "S");
+
+            gameboard.AddShip(2, "02", "S");
+
+            Coords coord = new Coords("01");
+
+            gameboard.RecieveAttack(coord);
+
+            StringBuilder s = new StringBuilder();
+
+            s.Append("  0  1  2  3");
+
+            s.Append("\n");
+
+            s.Append("0|o||x||o||~|");
+
+            s.Append("\n");
+
+            s.Append("1|o||o||o||~|");
+
+            s.Append("\n");
+
+            s.Append("2|~||~||~||~|");
+
+            s.Append("\n");
+
+            s.Append("3|~||~||~||~|");
+
+            s.Append("\n");
+
+            Assert.AreEqual(Console.WriteLine(s), printer.PrintGameboard(gameboard))
         }
 
         /// <summary>
@@ -34,4 +72,4 @@ namespace Test.Library
             
         }
     }
-}
+} */
