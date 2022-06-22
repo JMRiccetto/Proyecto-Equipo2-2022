@@ -31,6 +31,19 @@
             Cambia el estado de una coordena que fue atacada.
             </summary>
         </member>
+        <member name="T:NavalBattle.CoordsTranslate">
+            <summary>
+            esta clase toma un string del usuario y lo convierte en otro preparado para su utilizacion
+            esto lo hace a traves del cambio de string - ascii - string
+            </summary>
+        </member>
+        <member name="M:NavalBattle.CoordsTranslate.Translate(System.String)">
+            <summary>
+            transforma un mensaje B2 a 11, A1 a 00
+            </summary>
+            <param name="aCoordsLocation"></param>
+            <returns></returns>
+        </member>
         <member name="T:NavalBattle.DefenseGameboardPrinter">
             <summary>
             Imprime el tablero de manera que se puede visualizar la posicion de los barcos y si fueron tocados o no.
