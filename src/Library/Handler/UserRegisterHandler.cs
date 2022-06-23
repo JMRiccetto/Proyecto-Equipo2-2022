@@ -72,7 +72,6 @@ namespace NavalBattle
 
         public enum UserRegisterState
         {
-
         }
 
         public class UserRegisterData

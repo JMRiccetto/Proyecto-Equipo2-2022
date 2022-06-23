@@ -4,6 +4,7 @@
         <name>LibraryTests</name>
     </assembly>
     <members>
+<<<<<<< HEAD
         <member name="T:Test.Library.PrintTests">
             <summary>
             esta clase prueba que las clases que implementen las interface de IPrinter (y como arraste IGameboardContent)
@@ -68,5 +69,7 @@
             este test prueba lo mismo que el anterior pero debe ser negativo (false)
             </summary>
         </member>
+=======
+>>>>>>> master
     </members>
 </doc>

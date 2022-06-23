@@ -50,16 +50,16 @@ namespace NavalBattle
             }
         }
         private bool bombSwitch;
-        
+
         public bool BombSwitch
         {
             get
             {
-                return this.bombSwitch;
+                return bombSwitch;
             }
             set
             {
-                this.bombSwitch = value;
+                bombSwitch = value;
             }
         }
 
@@ -77,12 +77,9 @@ namespace NavalBattle
             }
         }
 
-        public Gameboard ()
+        public Gameboard (int side)
         {
-            this.side = 6;
-            this.bombSwitch = false;
-            this.doubleAttackSwitch = false;
-            //this.gameboard = new string[side,side];
+            this.side = side;
         }   
 
         /// <summary>

@@ -34,11 +34,11 @@ namespace NavalBattle
             {
                 if (this.State == MatchLogicState.Start)
                 {
-                    this.Data.Match = BotUtils.MatchList[0];
+                    /* this.Data.Match = BotUtils.MatchList[0];
                     this.Data.User1 = this.Data.Match.Users[0];
                     this.Data.User2 = this.Data.Match.Users[1];
                     BotUtils.MatchList.Remove(this.Data.Match);
-                    BotUtils.InGameMatchList.Add(this.Data.Match);
+                    BotUtils.InGameMatchList.Add(this.Data.Match); */
                     this.State = MatchLogicState.PlayerOneTurnPlacementCoords;
                     response = "Que empiece el juego! Jugador 1, elija sus coordenadas inciales.";
                 }

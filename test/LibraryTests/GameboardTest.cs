@@ -17,7 +17,7 @@ namespace NavalBattle.Test
         [Test]
         public void GameboardSideTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
             int expected = 6;
             Assert.AreEqual(expected, gameboard.Side);
         }
@@ -26,7 +26,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddValidShipsTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -43,7 +43,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddNoValidInitialShipCoordTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -60,7 +60,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddNoValidDirectionShipTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -77,7 +77,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddOutOfRangeShipTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -94,7 +94,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddOverlappingShipTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -111,7 +111,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddWaterValidTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -128,7 +128,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddWaterNoValidTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -143,7 +143,7 @@ namespace NavalBattle.Test
         [Test]
         public void AddBombsValidTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddBombs();
 
@@ -156,7 +156,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveValidAttackTest()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
 
@@ -185,7 +185,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveInvalidAttackTest1()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
             
@@ -204,7 +204,7 @@ namespace NavalBattle.Test
         [Test]
         public void RecieveInvalidAttackTest2()
         {
-            gameboard = new Gameboard();
+            gameboard = new Gameboard(6);
 
             gameboard.AddShip(3, "00", "S");
             
@@ -215,6 +215,45 @@ namespace NavalBattle.Test
             Exception ex = Assert.Throws<Exception>(() => gameboard.RecieveAttack(coord1));
 
             Assert.AreEqual("No estan todos los barcos posicionados.", ex.Message);
+        }
+
+        //Testea que cuando se hunden todos los barcos se termina la partida.
+        [Test]
+        public void IsMatchFinishedTest()
+        {
+            gameboard = new Gameboard(6);
+
+            gameboard.AddShip(2, "00", "S");
+
+            gameboard.AddShip(2, "01", "S");
+
+            gameboard.AddShip(2, "02", "S");
+
+            Coords coord1 = new Coords("00");
+
+            Coords coord2 = new Coords("10");
+
+            Coords coord3 = new Coords("01");
+
+            Coords coord4 = new Coords("11");
+
+            Coords coord5 = new Coords("02");
+
+            Coords coord6= new Coords("12");
+
+            gameboard.RecieveAttack(coord1);
+
+            gameboard.RecieveAttack(coord2);
+
+            gameboard.RecieveAttack(coord3);
+
+            gameboard.RecieveAttack(coord4);
+
+            gameboard.RecieveAttack(coord5);
+
+            gameboard.RecieveAttack(coord6);
+
+            Assert.AreEqual(true, gameboard.IsMatchFinished());
         }
     }
 }
