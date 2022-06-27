@@ -7,18 +7,25 @@ namespace NavalBattle
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class UserRegisterHandler : BaseHandler
+    public class PlaceShipHandler : BaseHandler
     {
-        public UserRegisterState State;
+        public MatchState State;
+
+        public GameUser User;
+
+        
+
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public UserRegisterHandler(BaseHandler next) : base(next)
+        public PlaceShipHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/start"};
+            this.Keywords = new string[] {"/posicionar"};
+
+            //this.State = 
         }
 
         /// <summary>
@@ -29,24 +36,30 @@ namespace NavalBattle
         /// <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         protected override bool InternalHandle(Message message, out string response)
         {
-            if (this.CanHandle(message))
+            try
             {
-                StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                if (this.CanHandle(message))
                 {
-                    UserRegister.Instance.CreateUser(message.From.FirstName);
+                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+
+                    if (message.Text.ToLower().Trim() == "/posicionar")
+                    {
+                        response = "ingrese coordenada inicial";
+                        return true;
+                    }
+
                 }
-                start.Append("¿Qué deseas hacer?\n")
-                    .Append("/jugarconelbot\n")
-                    .Append("/cambiartablero\n")
-                    .Append("/bombas\n")
-                    .Append("/ataquedoble\n")
-                    .Append("/buscarpartida");
-                response = start.ToString();
-                return true;
-            }
             response = string.Empty;
             return false;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                Cancel();
+                response = e.Message;
+
+                return true;
+            }
         }
 
         /// <summary>
@@ -70,6 +83,13 @@ namespace NavalBattle
         public class UserRegisterData
         {
             public string NickName { get; set; }
+        }
+
+        public enum MatchState
+        {
+            Start,
+            positioning,
+            InGame,    
         }
     }
 }

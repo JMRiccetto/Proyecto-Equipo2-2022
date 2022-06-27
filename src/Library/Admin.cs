@@ -50,28 +50,20 @@ namespace NavalBattle
         /// </summary>
         /// <param name="user"></param>
         public void AddToWaitingList(GameUser user)
-        {     
-            if (WaitingList.waitingList.Count > 0)
+        {
+            WaitingList.waitingList.Add(user);
+
+            int i = 0;
+
+            while ((i < WaitingList.waitingList.Count - 1) && (WaitingList.waitingList[i].DoubleAttack != user.DoubleAttack || WaitingList.waitingList[i].Bombs != user.Bombs || WaitingList.waitingList[i].GameboardSide != user.GameboardSide))
             {
-                int i = 0;
-                while(i< WaitingList.waitingList.Count &&  WaitingList.waitingList[i].GameboardSide != user.GameboardSide && WaitingList.waitingList[i].Bombs != user.Bombs && WaitingList.waitingList[i].DoubleAttack != user.DoubleAttack)
-                {
-                    i++;
-                }
-                if (i < WaitingList.waitingList.Count)
-                {
-                    CreateMatch(user, WaitingList.waitingList[i]);
-                    WaitingList.waitingList.Remove(user);
-                    WaitingList.waitingList.Remove(WaitingList.waitingList[i]);
-                }
-                else
-                {
-                    WaitingList.waitingList.Add(user);
-                }
-            }
-            else
+                i++;
+            } 
+            if (i < WaitingList.waitingList.Count - 1)
             {
-                WaitingList.waitingList.Add(user);
+                CreateMatch(user, WaitingList.waitingList[i]);
+                WaitingList.waitingList.Remove(user);
+                WaitingList.waitingList.Remove(WaitingList.waitingList[i]);
             }
         }
         

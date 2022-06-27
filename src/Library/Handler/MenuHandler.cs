@@ -17,6 +17,12 @@ namespace NavalBattle
 
         public MenuHandlerData Data;
 
+        public int gameboardSide;
+
+        public bool bombs = false;
+
+        public bool doubleAttack;
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
@@ -66,29 +72,28 @@ namespace NavalBattle
                     //response = "Si deseas cambiar el tamaño de tu tablero, por favor introduce un número entre 6-8.";
                     if (message.Text.Trim() == "6")
                     {
-                        this.User.Gameboard.Side = 6;
+                        this.User.GameboardSide = 6;
                         this.State = MenuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 6.";
                         return true;
                     }
                     else if (message.Text.Trim() == "7")
                     {
-                        this.User.Gameboard.Side = 7;
+                        this.User.GameboardSide = 7;
                         this.State = MenuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 7.";
-                        Console.WriteLine($"{this.User.Gameboard.Side}");
                         return true;
                     }
                     else if (message.Text.Trim() == "8")
                     {
-                        this.User.Gameboard.Side = 8;
+                        this.User.GameboardSide = 8;
                         this.State = MenuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 8.";
                         return true;
                     }
                     else
                     {
-                        this.User.Gameboard.Side = 6;
+                        this.User.GameboardSide = 6;
                         this.State = MenuState.Start;
                         response = "No se pudo registrar tu mensaje, el tamaño del tablero será cambiado a 6";
                         Console.WriteLine($"{this.User.Gameboard.Side}");
@@ -99,14 +104,14 @@ namespace NavalBattle
                 {
                     if (message.Text.ToLower().Trim() == "/off")
                     {
-                        this.User.Gameboard.BombSwitch = false;
+                        this.User.Bombs = false;
                         this.State = MenuState.Start;
                         response = "Las bombas han sido desactivadas.";
                         return true;
                     }
                     else if (message.Text.ToLower().Trim() == "/on")
                     {
-                        this.User.Gameboard.BombSwitch = true;
+                        this.User.Bombs = true;
                         this.State = MenuState.Start;
                         response = "Las bombas han sido activadas.";
                         return true;
@@ -122,12 +127,12 @@ namespace NavalBattle
                 {
                     if (this.User.Gameboard.DoubleAttackSwitch)
                     {
-                        this.User.Gameboard.DoubleAttackSwitch = false;
+                        this.User.DoubleAttack = false;
                         this.State = MenuState.Start;
                         response = "El ataque doble ha sido desactivado.";
                         return true;
                     }
-                    this.User.Gameboard.DoubleAttackSwitch = true;
+                    this.User.DoubleAttack = true;
                     this.State = MenuState.Start;
                     response = "El ataque doble ha sido activado.";
                     return true;

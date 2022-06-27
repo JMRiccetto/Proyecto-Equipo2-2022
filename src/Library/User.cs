@@ -12,6 +12,10 @@ namespace NavalBattle
             {
                 return bombs;
             }
+            set
+            {
+                this.bombs = value;
+            }
         }
 
         private bool doubleAttack;
@@ -22,6 +26,10 @@ namespace NavalBattle
             {
                 return doubleAttack;
             }
+            set
+            {
+                this.doubleAttack = value;
+            }
         }
         private int gameboardSide;
 
@@ -30,6 +38,10 @@ namespace NavalBattle
             get
             {
                 return gameboardSide;
+            }
+            set
+            {
+                this.gameboardSide = value;
             }
         }
         private string nickName;
@@ -74,14 +86,8 @@ namespace NavalBattle
         /// <param name="gameboardSide"></param>
         /// <param name="bombs"></param>
         /// <param name="doubleAttack"></param>
-        public void SearchGame(int gameboardSide, bool bombs, bool doubleAttack) 
+        public void SearchGame() 
         {
-            this.gameboardSide = gameboardSide;
-
-            this.bombs = bombs;
-
-            this.doubleAttack = doubleAttack;
-
             Admin.getAdmin().AddToWaitingList(this);
         }
 
