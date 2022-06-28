@@ -260,26 +260,6 @@
             caso de error por ejemplo.
             </summary>
         </member>
-        <member name="T:NavalBattle.MatchLogicHandler">
-            <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
-            </summary>
-        </member>
-        <member name="M:NavalBattle.MatchLogicHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
-            <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
-            </summary>
-            <param name="message">El mensaje a procesar.</param>
-            <param name="response">La respuesta al mensaje procesado.</param>
-            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
-        </member>
-        <member name="M:NavalBattle.MatchLogicHandler.Cancel">
-            <summary>
-            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
-            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
-            estado inicial.
-            </summary>
-        </member>
         <member name="T:NavalBattle.MenuHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
@@ -301,6 +281,33 @@
             <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         </member>
         <member name="M:NavalBattle.MenuHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.PlaceShipHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.PlaceShipHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.PlaceShipHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.PlaceShipHandler.Cancel">
             <summary>
             Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
             procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al

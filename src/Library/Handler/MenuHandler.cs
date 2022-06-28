@@ -96,7 +96,6 @@ namespace NavalBattle
                         this.User.GameboardSide = 6;
                         this.State = MenuState.Start;
                         response = "No se pudo registrar tu mensaje, el tamaño del tablero será cambiado a 6";
-                        Console.WriteLine($"{this.User.Gameboard.Side}");
                         return true;
                     }
                 }
@@ -125,7 +124,7 @@ namespace NavalBattle
                 }
                 else if (this.State == MenuState.DoubleAttack)
                 {
-                    if (this.User.Gameboard.DoubleAttackSwitch)
+                    if (this.User.DoubleAttack)
                     {
                         this.User.DoubleAttack = false;
                         this.State = MenuState.Start;

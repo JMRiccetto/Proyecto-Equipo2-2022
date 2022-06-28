@@ -102,7 +102,7 @@ namespace NavalBattle
                 new UserRegisterHandler(
                 new MenuHandler(
                 new GameStartHandler(     
-                new MatchLogicHandler(null)
+                new PlaceShipHandler(null)
                 )));
 
             var cts = new CancellationTokenSource();

@@ -9,9 +9,23 @@ namespace NavalBattle
     {  
         private Gameboard gameboard;
 
+        private bool turn;
+
         public Player(int gameboardSide)
         {
             this.gameboard = new Gameboard(gameboardSide);
+        }
+
+        public bool Turn
+        {
+            get
+            {
+                return turn;
+            }
+            set
+            {
+                this.turn = value;
+            }
         }
 
         public Gameboard Gameboard
@@ -20,6 +34,11 @@ namespace NavalBattle
             {
                 return this.gameboard;
             }   
+        }
+
+        public void PlaceShip(int length, string initialCoord, string direction)
+        {
+            gameboard.AddShip(length, initialCoord, direction);
         }
     }
 }

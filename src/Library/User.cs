@@ -58,26 +58,25 @@ namespace NavalBattle
             }
         }
 
-        private Gameboard gameboard;
-
-        public Gameboard Gameboard
-        {
-            get
-            {
-                return this.gameboard;
-            }
-            set
-            {
-                this.gameboard = Gameboard;
-            }
-        }
-
-        public Player player {get; set;}
+        
+        private Player player;
 
 
         public GameUser(string nickName)
         {
             this.NickName = nickName;
+        }
+
+        public Player Player
+        {
+            get
+            {
+                return this.player;
+            }
+            set
+            {
+                this.player = value;
+            }
         }
         
         /// <summary>
