@@ -7,20 +7,24 @@ namespace NavalBattle
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class UserRegisterHandler : BaseHandler
+    public class AttackHandler : BaseHandler
     {
-        public UserRegisterState State;
+        public AttackState State;
 
-        public UserRegisterData Data;
+        public Player Player;
+
+        public Match Match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public UserRegisterHandler(BaseHandler next) : base(next)
+        public AttackHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/start"};
+            this.Keywords = new string[] {"/attack"};
+            this.Player = null;
+            this.Match = null;
         }
 
         /// <summary>
@@ -31,29 +35,17 @@ namespace NavalBattle
         /// <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         protected override bool InternalHandle(Message message, out string response)
         {
-            if (this.CanHandle(message))
+            if (this.CanHandle(message) && this.State == AttackState.Start)
+            {   
+                this.Player = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString()).player;
+                foreach (Match match in )
+            }
+            else if (this.State == AttackState.Attack)
             {
-                StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
-                {
-                    UserRegister.Instance.CreateUser(message.From.FirstName);
-                }
-                start.Append("¿Qué deseas hacer?\n")
-                    .Append("/jugarconelbot\n")
-                    .Append("/cambiartablero\n")
-                    .Append("/bombas\n")
-                    .Append("/ataquedoble\n")
-                    .Append("/buscarpartida");
-                response = start.ToString();
-                return true;
+                foreach (Player player in this.Ma)
             }
             response = string.Empty;
             return false;
-        }
-
-        protected override void InternalCancel()
-        {
-            this.Data = new UserRegisterData();
         }
 
         /// <summary>
@@ -70,8 +62,22 @@ namespace NavalBattle
             }
         }
 
-        public enum UserRegisterState
+        protected virtual bool CanHandle(Message message)
         {
+            // Cuando no hay palabras clave este método debe ser sobreescrito por las clases sucesoras y por lo tanto
+            // este método no debería haberse invocado.
+            if (this.Keywords == null || this.Keywords.Length == 0)
+            {
+                throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
+            }
+
+            return this.Keywords.Any(s => message.Text.Equals(s, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public enum AttackState
+        {
+            Start,
+            Attack,
         }
 
         public class UserRegisterData

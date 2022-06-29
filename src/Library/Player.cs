@@ -21,5 +21,15 @@ namespace NavalBattle
                 return this.gameboard;
             }   
         }
+
+        public void Attack(Coords coord, Gameboard gameboard)
+        {
+            gameboard.RecieveAttack(coord);
+        }
+
+        public void PlaceShip(int length, string initialCoord, string direction)
+        {
+            this.gameboard.AddShip(length, initialCoord, direction);
+        }
     }
 }

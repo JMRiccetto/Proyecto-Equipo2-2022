@@ -38,34 +38,6 @@ namespace NavalBattle
             user1.player = player1;
             user2.player = player2;
         }
-
-        public void Attack(Coords coord)
-        {
-            if (turn == true)
-            {
-                player2.Gameboard.RecieveAttack(coord);
-                turn = false;
-            }
-            else
-            {
-                player1.Gameboard.RecieveAttack(coord);
-                turn = true;
-            }
-        }
-
-        public void PlaceShip(int length, string initialCoord, string direction)
-        {
-            if (turn == true)
-            {
-                player1.Gameboard.AddShip(length, initialCoord, direction);
-                turn = false;
-            }
-            else
-            {
-                player2.Gameboard.AddShip(length, initialCoord, direction);
-                turn = true;
-            }
-        }
     }
 }
 
