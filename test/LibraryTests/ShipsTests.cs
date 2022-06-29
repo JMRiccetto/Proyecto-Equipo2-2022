@@ -8,28 +8,18 @@ namespace Test.Library
     /// </summary>
     public class ShipsTests
     {
-        Ship ship;
-        Coords coords;
-
-
-        /// <summary>
-        /// se ingresa un ship, una coordenada y se agrega al barco
-        /// </summary>
         [SetUp]
         public void Setup()
         {
-            this.ship = new Ship(5, "Sur");
-            this.coords = new Coords("A1");
-
-            ship.AddShipCoord(coords);
         }
         /// <summary>
-        /// este test prueba que la coordenada que se quiera colocar un barco sea la correcta (A1 = 00)
+        /// Testea que las coordenadas se agreguen correctamente al barco.
         /// </summary>
         [Test]
-        public void GetCoordsShipTest()
+        public void AddShipCoordTest()
         {
-            Assert.AreEqual("00", ship.Coords);
+            Ship ship = new Ship(3, "N");
+
         }
         /// <summary>
         /// est test prueba si la coordenada que se se ingreso contiene un barco hundido (debe dar negativo osea 0)
@@ -100,4 +90,4 @@ namespace Test.Library
 
         }
     }
-} */
+}  */

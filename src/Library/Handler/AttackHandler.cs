@@ -9,7 +9,7 @@ namespace NavalBattle
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class PlaceShipHandler : BaseHandler
+    public class AttackHandler : BaseHandler
     {
         public MatchState State;
 
@@ -22,10 +22,9 @@ namespace NavalBattle
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public PlaceShipHandler(BaseHandler next) : base(next)
+        public AttackHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/posicionar"};
-
+            this.Keywords = new string[] {"/atacar"};
         }
 
         /// <summary>
@@ -54,17 +53,24 @@ namespace NavalBattle
                     {
                         string[] input = message.Text.Split(" ");
 
-                        string initialCoord = input[1];
+                        string AttackCoordStr = input[1];
 
-                        string direction = input[2];
+                        string res = "hola";
 
-                        this.User.Player.PlaceShip(initialCoord, direction);
+                        if(Equals(this.User.Player, this.match.Players[0]))
+                        {
+                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[1].Gameboard);
+                        }
+                        else
+                        {
+                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[0].Gameboard);
+                        }
 
                         this.match.Players[0].ChangeTurn();
 
                         this.match.Players[1].ChangeTurn();
                         
-                        response = "Barco posicionado correctamente";
+                        response = res;
 
                         return true;
                     }

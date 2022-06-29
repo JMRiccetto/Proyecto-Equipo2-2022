@@ -31,11 +31,13 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// //Añade una coordenada al barco.
+        /// Añade una coordenada al barco.
+        /// La coordenada a agregar se crea en Ship por creator.
         /// </summary>
-        /// <param name="coord"></param>
-        public void AddShipCoord(Coords coord)
+        /// <param name="stringCoord"></param>
+        public void AddShipCoord(string stringCoord)
         {
+            Coords coord = new Coords(stringCoord);
             this.coords.Add(coord);
         }
 

@@ -50,7 +50,7 @@ namespace NavalBattle
                             response = "Esperando";
                             return true;
                         }
-                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar largo del barco coordenada inicial direccion \n Las direcciones puede ser N S E W";
+                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
                         
                         return true;
                     }

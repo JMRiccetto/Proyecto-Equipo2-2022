@@ -4,6 +4,8 @@ namespace NavalBattle
 {
     public class GameUser : IJsonConvertible
     {
+        private int matchId;
+        
         private bool bombs;
 
         public bool Bombs
@@ -31,7 +33,7 @@ namespace NavalBattle
                 this.doubleAttack = value;
             }
         }
-        private int gameboardSide;
+        private int gameboardSide = 6;
 
         public int GameboardSide
         {
