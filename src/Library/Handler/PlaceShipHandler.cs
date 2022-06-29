@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using Telegram.Bot.Types;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NavalBattle
 {
@@ -13,8 +15,7 @@ namespace NavalBattle
 
         public GameUser User;
 
-        
-
+        public Match match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -25,7 +26,6 @@ namespace NavalBattle
         {
             this.Keywords = new string[] {"/posicionar"};
 
-            //this.State = 
         }
 
         /// <summary>
@@ -44,10 +44,31 @@ namespace NavalBattle
 
                     if (message.Text.ToLower().Trim() == "/posicionar")
                     {
-                        response = "ingrese coordenada inicial";
-                        return true;
-                    }
+                        if (User.Player.Turn)
+                        {
+                            string[] input = message.Text.Split(" ");
 
+                            int length = Int32.Parse(input[1]);
+
+                            string initialCoord = input[2];
+
+                            string direction = input[3];
+
+                            this.User.Player.PlaceShip(length, initialCoord, direction);
+                            
+                            User.Player.Turn = false;
+
+                            response = "Barco posicionado correctamente";
+
+                            return true;
+                        }
+                        else
+                        {
+                            response = "Espere su turno";
+
+                            return true;
+                        }
+                    }
                 }
             response = string.Empty;
             return false;
@@ -57,7 +78,6 @@ namespace NavalBattle
                 System.Console.WriteLine(e.Message);
                 Cancel();
                 response = e.Message;
-
                 return true;
             }
         }
@@ -76,13 +96,21 @@ namespace NavalBattle
             }
         }
 
-        public enum UserRegisterState
+        protected override bool CanHandle(Message message)
         {
-        }
-
-        public class UserRegisterData
-        {
-            public string NickName { get; set; }
+            if (this.Keywords == null || this.Keywords.Length == 0)
+            {
+                throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
+            }
+            
+            string[] input = message.Text.Split(" ");
+            
+            if (this.Keywords.Contains(input[0]))
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         public enum MatchState

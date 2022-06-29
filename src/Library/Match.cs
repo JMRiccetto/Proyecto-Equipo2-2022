@@ -6,20 +6,7 @@ namespace NavalBattle
 
         private Player player2;
 
-        private bool turn = true;
 
-        public bool Turn
-        {
-            get
-            {
-                return turn;
-            }
-
-            set
-            {
-                turn = value;
-            }
-        }
         private int id;
 
         public int Id
@@ -35,9 +22,20 @@ namespace NavalBattle
             this.player1 = new Player(user1.GameboardSide);
             this.player2 = new Player(user2.GameboardSide);
                 
-            user1.player = player1;
-            user2.player = player2;
+            user1.Player = player1;
+            user2.Player = player2;
+
+            player1.Turn = true;
+
+            player2.Turn = false;
         }
+
+        public void Attack(Coords coord, Gameboard gameboard)
+        {
+            gameboard.RecieveAttack(coord);
+        }
+
+        
     }
 }
 
