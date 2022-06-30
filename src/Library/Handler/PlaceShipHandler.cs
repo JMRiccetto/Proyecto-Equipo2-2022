@@ -15,7 +15,7 @@ namespace NavalBattle
 
         public GameUser User;
 
-        public Match match;
+        public Match Match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -25,7 +25,6 @@ namespace NavalBattle
         public PlaceShipHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/posicionar"};
-
         }
 
         /// <summary>
@@ -38,36 +37,65 @@ namespace NavalBattle
         {
             try
             {
-                if (this.CanHandle(message))
+                if (this.CanHandle(message) && this.State = PlaceShipHandler.MatchState.Start)
                 {
                     this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
-                    if (message.Text.ToLower().Trim() == "/posicionar")
+                    foreach (Match match in Admin.getAdmin().MatchList)
                     {
-                        if (User.Player.Turn)
+                        if (match.Players.Contains(this.User.Player))
                         {
-                            string[] input = message.Text.Split(" ");
-
-                            int length = Int32.Parse(input[1]);
-
-                            string initialCoord = input[2];
-
-                            string direction = input[3];
-
-                            this.User.Player.PlaceShip(length, initialCoord, direction);
-                            
-                            User.Player.Turn = false;
-
-                            response = "Barco posicionado correctamente";
-
-                            return true;
+                            this.Match = match;
                         }
-                        else
-                        {
-                            response = "Espere su turno";
+                    }
 
-                            return true;
-                        }
+                    Console.WriteLine($"{this.Match.Players[0].Turn} + {this.Match.Players[1].Turn}");
+                    
+                    if (this.Match.Players[0].Turn && this.User.Player == this.Match.Players[0])
+                    {
+                        string[] input = message.Text.Split(" ");
+
+                        int length = Int32.Parse(input[1]);
+
+                        string initialCoord = input[2];
+
+                        string direction = input[3];
+
+                        this.User.Player.PlaceShip(length, initialCoord, direction);
+                        
+                        Match.Players[0].ChangeTurn();
+
+                        Match.Players[1].ChangeTurn();
+
+                        response = "Barco posicionado correctamente";
+
+                        return true;
+                    }
+                    else if (this.Match.Players[1].Turn && this.User.Player == this.Match.Players[1])
+                    {
+                        string[] input = message.Text.Split(" ");
+
+                        int length = Int32.Parse(input[1]);
+
+                        string initialCoord = input[2];
+
+                        string direction = input[3];
+
+                        this.User.Player.PlaceShip(length, initialCoord, direction);
+                        
+                        Match.Players[0].ChangeTurn();
+
+                        Match.Players[1].ChangeTurn();
+
+                        response = "Barco posicionado correctamente";
+
+                        return true;
+                    }
+                    else
+                    {
+                        response = "Espere su turno";
+
+                        return true;
                     }
                 }
             response = string.Empty;

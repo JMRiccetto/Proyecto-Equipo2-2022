@@ -40,5 +40,17 @@ namespace NavalBattle
         {
             gameboard.AddShip(length, initialCoord, direction);
         }
+
+        public void ChangeTurn()
+        {
+            if(this.turn == true)
+            {
+                this.turn = false;
+            }
+            else
+            {
+                this.turn = true;
+            }
+        }
     }
 }

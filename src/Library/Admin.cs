@@ -10,15 +10,7 @@ namespace NavalBattle
         /// </summary>
         /// <typeparam name="Match"></typeparam>
         /// <returns></returns>
-        List<Match> matchList = new List<Match>();
-
-        public List<Match> MatchList
-        {
-            get
-            {
-                return matchList;
-            }
-        }
+        public readonly List<Match> MatchList = new List<Match>();
 
         List<string> usersRegister = new List<string>();
 
@@ -76,7 +68,7 @@ namespace NavalBattle
         {
             Match match = new Match(user1, user2);
 
-            matchList.Add(match);
+            MatchList.Add(match);
         }
     }
 }

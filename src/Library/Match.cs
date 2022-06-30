@@ -2,10 +2,7 @@ namespace NavalBattle
 {
     public class Match
     { 
-        private Player player1;
-
-        private Player player2;
-
+        public readonly Player[] Players = new Player[2];
 
         private int id;
 
@@ -19,23 +16,21 @@ namespace NavalBattle
         
         public Match(GameUser user1, GameUser user2)
         { 
-            this.player1 = new Player(user1.GameboardSide);
-            this.player2 = new Player(user2.GameboardSide);
+            this.Players[0] = new Player(user1.GameboardSide);
+            this.Players[1] = new Player(user2.GameboardSide);
                 
-            user1.Player = player1;
-            user2.Player = player2;
+            Players[0].Turn = true;
 
-            player1.Turn = true;
+            Players[1].Turn = false;
 
-            player2.Turn = false;
+            user1.Player = this.Players[0];
+            user2.Player = this.Players[1];
         }
 
         public void Attack(Coords coord, Gameboard gameboard)
         {
             gameboard.RecieveAttack(coord);
         }
-
-        
     }
 }
 

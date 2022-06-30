@@ -1,4 +1,4 @@
-using System;
+/* using System;
 using System.Text;
 using Telegram.Bot.Types;
 
@@ -37,7 +37,7 @@ namespace NavalBattle
         {
             if (this.CanHandle(message) && this.State == AttackState.Start)
             {   
-                this.Player = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString()).player;
+                this.Player = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString()).Player;
                 foreach (Match match in )
             }
             else if (this.State == AttackState.Attack)
@@ -85,4 +85,4 @@ namespace NavalBattle
             public string NickName { get; set; }
         }
     }
-}
+} */
