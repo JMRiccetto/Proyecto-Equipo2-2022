@@ -1,10 +1,16 @@
 ﻿using System.Text.Json;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
     public class GameUser : IJsonConvertible
     {   
-        private long chatId;
+        private long chatId = 0;
+
         private bool bombs = false;
 
         public bool Bombs
@@ -62,10 +68,9 @@ namespace NavalBattle
         
         private Player player;
 
-
-        public GameUser(string nickName)
+        public GameUser(string aNickName)
         {
-            this.NickName = nickName;
+            this.nickName = aNickName;
         }
 
         public Player Player
@@ -77,6 +82,18 @@ namespace NavalBattle
             set
             {
                 this.player = value;
+            }
+        }
+
+        public long ChatId
+        {
+            get
+            {
+                return this.chatId;
+            }
+            set
+            {
+                this.chatId = value;
             }
         }
         

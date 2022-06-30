@@ -1,5 +1,7 @@
 using System;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
@@ -17,6 +19,7 @@ namespace NavalBattle
 
         public GameUser User;
 
+        public Match Match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -28,6 +31,7 @@ namespace NavalBattle
             this.Keywords = new string[] {"/buscarpartida"};
             this.State = GameStartState.Start;
             this.User = null;
+            this.Match = null;
         }
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace NavalBattle
             {
                 if (this.State == GameStartState.Start && this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
                     //response = "Vuelva con vida capitán, es una orden.";
 
                     if (message.Text.ToLower().Trim() == "/buscarpartida")
@@ -59,7 +63,18 @@ namespace NavalBattle
                         //botClient.SendTextMessageAsync(message.Chat.Id, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
 
                         response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
-                        
+
+                        foreach (Match match in Admin.getAdmin().MatchList)
+                        {
+                            if (match.Players.Contains(this.User.Player))
+                            {
+                                this.Match = match;
+                            }
+                        }
+
+                        //Console.WriteLine($"{this.Match.Players[0].ChatId}");
+                        Bot.BotClient().SendTextMessageAsync(this.Match.Players[0].ChatId, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
+
                         return true;
                     }
                 }

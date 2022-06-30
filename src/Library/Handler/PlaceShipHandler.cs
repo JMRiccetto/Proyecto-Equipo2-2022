@@ -37,15 +37,15 @@ namespace NavalBattle
         {
             try
             {
-                if (this.CanHandle(message) && this.State = PlaceShipHandler.MatchState.Start)
+                if (this.CanHandle(message) && this.State == PlaceShipHandler.MatchState.Start)
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
 
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {
                         if (match.Players.Contains(this.User.Player))
                         {
-                            this.match = match;
+                            this.Match = match;
                         }
                     }
 
@@ -59,14 +59,16 @@ namespace NavalBattle
 
                         this.User.Player.PlaceShip(initialCoord, direction);
 
-                        this.match.Players[0].ChangeTurn();
+                        this.Match.Players[0].ChangeTurn();
 
-                        this.match.Players[1].ChangeTurn();
+                        this.Match.Players[1].ChangeTurn();
                         
                         //ITelegramBotClient botClient = new TelegramBotClient(null);
                         //botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno");
 
                         response = "Barco posicionado correctamente";
+
+
 
                         return true;
                     }

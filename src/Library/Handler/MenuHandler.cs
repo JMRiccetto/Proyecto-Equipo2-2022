@@ -47,7 +47,7 @@ namespace NavalBattle
             {
                 if (this.State == MenuState.Start && this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
                     if (message.Text.ToLower().Trim() == "/cambiartablero")
                     {
                         this.State = MenuState.Gameboard;

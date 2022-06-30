@@ -1,4 +1,9 @@
 using System;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
@@ -13,11 +18,12 @@ namespace NavalBattle
 
         private int counterShipLength = 2;
 
+        private long chatId = 0;
+
         public Player(int gameboardSide)
         {
             this.gameboard = new Gameboard(gameboardSide);
         }
-
 
         public Gameboard Gameboard
         {
@@ -25,6 +31,18 @@ namespace NavalBattle
             {
                 return this.gameboard;
             }   
+        }
+
+        public long ChatId
+        {
+            get
+            {
+                return this.chatId;
+            }
+            set
+            {
+                this.chatId = value;
+            }
         }
 
         public void PlaceShip (string initialCoord, string direction)
@@ -49,18 +67,6 @@ namespace NavalBattle
             get
             {
                 return turn;
-            }
-        }
-
-        public void ChangeTurn()
-        {
-            if(this.turn == true)
-            {
-                this.turn = false;
-            }
-            else
-            {
-                this.turn = true;
             }
         }
 

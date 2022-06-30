@@ -8,14 +8,14 @@ namespace NavalBattle
 {
      public class UserRegister : IJsonConvertible
     {
-          private List<GameUser> userData = new List<GameUser>();
+          private static List<GameUser> userData = new List<GameUser>();
 
           [JsonInclude]
-          public List<GameUser> UserData
+          public static List<GameUser> UserData
           {
                get
                {
-                    return this.userData;
+                    return userData;
                }
           }
 
@@ -41,13 +41,13 @@ namespace NavalBattle
 
           public void SetUp()
           {
-               this.userData = new List<GameUser>();
+               userData = new List<GameUser>();
           }
 
-          public void CreateUser(string nickName)
+          public static void CreateUser(string nickName)
           {
                GameUser user = new GameUser(nickName);
-               this.userData.Add(user);
+               userData.Add(user);
           }
 
           /// <summary>
@@ -56,11 +56,11 @@ namespace NavalBattle
           /// <param name="user"></param>
           public void RemoveUser(GameUser user)
           {
-               if (this.UserData.Contains(user))
+               if (UserData.Contains(user))
                {
                     throw new Exception();
                }
-               this.userData.Remove(user);
+               userData.Remove(user);
           }
 
           /// <summary>
@@ -68,12 +68,12 @@ namespace NavalBattle
           /// </summary>
           /// <param name="nickName"></param>
           /// <returns></returns>
-          public GameUser GetUserByNickName(string nickName)
+          public static GameUser GetUserByNickName(string nickName)
           {
                GameUser outcome = null;
-               if (this.userData.Exists(user => nickName == user.NickName))
+               if (userData.Exists(user => nickName == user.NickName))
                {
-                    outcome = this.userData.Find(user => nickName == user.NickName);
+                    outcome = userData.Find(user => nickName == user.NickName);
                }
                return outcome;
           }

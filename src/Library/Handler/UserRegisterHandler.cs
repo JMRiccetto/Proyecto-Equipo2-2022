@@ -11,7 +11,7 @@ namespace NavalBattle
     {
         public UserRegisterState State;
 
-        public UserRegisterData Data;
+        public GameUser User;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -21,6 +21,7 @@ namespace NavalBattle
         public UserRegisterHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/start"};
+            this.User = null;
         }
 
         /// <summary>
@@ -34,9 +35,11 @@ namespace NavalBattle
             if (this.CanHandle(message))
             {
                 StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                if(!UserRegister.UserData.Contains(UserRegister.GetUserByNickName(message.From.FirstName.ToString())))
                 {
-                    UserRegister.Instance.CreateUser(message.From.FirstName);
+                    UserRegister.CreateUser(message.From.FirstName);
+                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User.ChatId = message.Chat.Id;
                 }
                 start.Append("¿Qué deseas hacer?\n")
                     .Append("/jugarconelbot\n")
@@ -53,7 +56,7 @@ namespace NavalBattle
 
         protected override void InternalCancel()
         {
-            this.Data = new UserRegisterData();
+
         }
 
         /// <summary>

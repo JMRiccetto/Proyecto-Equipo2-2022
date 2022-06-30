@@ -18,7 +18,9 @@ namespace NavalBattle
         { 
             this.Players[0] = new Player(user1.GameboardSide);
             this.Players[1] = new Player(user2.GameboardSide);
-            gameboard.RecieveAttack(coord);
+
+            this.Players[0].ChatId = user1.ChatId;
+            this.Players[1].ChatId = user2.ChatId;
         }
     }
 }

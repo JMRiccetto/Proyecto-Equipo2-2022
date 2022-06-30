@@ -41,7 +41,7 @@ namespace NavalBattle
 
             var cts = new CancellationTokenSource();
 
-                botClient.StartReceiving(
+                BotClient().StartReceiving(
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 new ReceiverOptions()

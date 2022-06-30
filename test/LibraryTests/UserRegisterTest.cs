@@ -21,18 +21,18 @@ namespace Test.Library
         [Test]
         public void EmptyListTest()
         {
-            Assert.IsEmpty(UserRegister.Instance.UserData);
+            Assert.IsEmpty(UserRegister.UserData);
         }
 
         // Verifica si el usuario no esta registrado y lo registra.
         [Test]
         public void UnregisteredUserTest()
         {
-            if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(this.user.FirstName)))
+            if(!UserRegister.UserData.Contains(UserRegister.GetUserByNickName(this.user.FirstName)))
                 {
                     UserRegister.Instance.CreateUser(this.user.FirstName);
                 }
-            Assert.IsNotEmpty(UserRegister.Instance.UserData);
+            Assert.IsNotEmpty(UserRegister.UserData);
         }
     }
 }
