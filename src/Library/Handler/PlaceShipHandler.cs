@@ -45,47 +45,26 @@ namespace NavalBattle
                     {
                         if (match.Players.Contains(this.User.Player))
                         {
-                            this.Match = match;
+                            this.match = match;
                         }
                     }
 
-                    Console.WriteLine($"{this.Match.Players[0].Turn} + {this.Match.Players[1].Turn}");
-                    
-                    if (this.Match.Players[0].Turn && this.User.Player == this.Match.Players[0])
+                    if (this.User.Player.Turn)
                     {
                         string[] input = message.Text.Split(" ");
 
-                        int length = Int32.Parse(input[1]);
+                        string initialCoord = input[1];
 
-                        string initialCoord = input[2];
+                        string direction = input[2];
 
-                        string direction = input[3];
+                        this.User.Player.PlaceShip(initialCoord, direction);
 
-                        this.User.Player.PlaceShip(length, initialCoord, direction);
+                        this.match.Players[0].ChangeTurn();
+
+                        this.match.Players[1].ChangeTurn();
                         
-                        Match.Players[0].ChangeTurn();
-
-                        Match.Players[1].ChangeTurn();
-
-                        response = "Barco posicionado correctamente";
-
-                        return true;
-                    }
-                    else if (this.Match.Players[1].Turn && this.User.Player == this.Match.Players[1])
-                    {
-                        string[] input = message.Text.Split(" ");
-
-                        int length = Int32.Parse(input[1]);
-
-                        string initialCoord = input[2];
-
-                        string direction = input[3];
-
-                        this.User.Player.PlaceShip(length, initialCoord, direction);
-                        
-                        Match.Players[0].ChangeTurn();
-
-                        Match.Players[1].ChangeTurn();
+                        //ITelegramBotClient botClient = new TelegramBotClient(null);
+                        //botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno");
 
                         response = "Barco posicionado correctamente";
 
@@ -98,6 +77,7 @@ namespace NavalBattle
                         return true;
                     }
                 }
+                
             response = string.Empty;
             return false;
             }

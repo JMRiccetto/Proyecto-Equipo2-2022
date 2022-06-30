@@ -1,9 +1,10 @@
 using System;
+using System.Text;
 
 namespace NavalBattle
 {
     public interface IPrinter
     {
-        public void PrintGameboard(IGameboardContent gameboardContent);
+        public StringBuilder PrintGameboard(IGameboardContent gameboardContent);
     }
 }

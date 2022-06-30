@@ -1,6 +1,10 @@
 using System;
 using System.Text;
 using Telegram.Bot.Types;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
@@ -50,7 +54,11 @@ namespace NavalBattle
                             response = "Esperando";
                             return true;
                         }
-                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar largo del barco coordenada inicial direccion \n Las direcciones puede ser N S E W";
+
+                        //ITelegramBotClient botClient = new TelegramBotClient(null);
+                        //botClient.SendTextMessageAsync(message.Chat.Id, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
+
+                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
                         
                         return true;
                     }

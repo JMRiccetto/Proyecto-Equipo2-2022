@@ -7,26 +7,17 @@ namespace NavalBattle
     /// </summary>
     public class Player   
     {  
-        private Gameboard gameboard;
+        private Gameboard gameboard;     
 
-        private bool turn;
+        private bool turn = false; 
+
+        private int counterShipLength = 2;
 
         public Player(int gameboardSide)
         {
             this.gameboard = new Gameboard(gameboardSide);
         }
 
-        public bool Turn
-        {
-            get
-            {
-                return turn;
-            }
-            set
-            {
-                this.turn = value;
-            }
-        }
 
         public Gameboard Gameboard
         {
@@ -36,9 +27,41 @@ namespace NavalBattle
             }   
         }
 
-        public void PlaceShip(int length, string initialCoord, string direction)
+        public void PlaceShip (string initialCoord, string direction)
         {
-            gameboard.AddShip(length, initialCoord, direction);
+
+            gameboard.AddShip(this.counterShipLength, initialCoord, direction);
+
+            this.counterShipLength++;
+        }
+
+        public string Attack(string coordStr, Gameboard gameboard)
+        {
+            Coords coord = new Coords(coordStr);
+
+            string res = gameboard.RecieveAttack(coord);
+
+            return res;
+        }
+
+        public bool Turn
+        {
+            get
+            {
+                return turn;
+            }
+        }
+
+        public void ChangeTurn()
+        {
+            if(this.turn == true)
+            {
+                this.turn = false;
+            }
+            else
+            {
+                this.turn = true;
+            }
         }
 
         public void ChangeTurn()

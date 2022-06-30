@@ -18,17 +18,6 @@ namespace NavalBattle
         { 
             this.Players[0] = new Player(user1.GameboardSide);
             this.Players[1] = new Player(user2.GameboardSide);
-                
-            Players[0].Turn = true;
-
-            Players[1].Turn = false;
-
-            user1.Player = this.Players[0];
-            user2.Player = this.Players[1];
-        }
-
-        public void Attack(Coords coord, Gameboard gameboard)
-        {
             gameboard.RecieveAttack(coord);
         }
     }

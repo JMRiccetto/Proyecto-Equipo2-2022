@@ -37,6 +37,24 @@ namespace NavalBattle.Test
             int expected = 3;
 
             Assert.AreEqual(expected, gameboard.Ships.Count);
+
+            Assert.AreEqual("00" ,gameboard.Ships[0].Coords[0].CoordsLocation);
+
+            Assert.AreEqual("10" ,gameboard.Ships[0].Coords[1].CoordsLocation);
+
+            Assert.AreEqual("20" ,gameboard.Ships[0].Coords[2].CoordsLocation);
+
+            Assert.AreEqual("34" ,gameboard.Ships[1].Coords[0].CoordsLocation);
+
+            Assert.AreEqual("33" ,gameboard.Ships[1].Coords[1].CoordsLocation);
+
+            Assert.AreEqual("32" ,gameboard.Ships[1].Coords[2].CoordsLocation);
+
+            Assert.AreEqual("31" ,gameboard.Ships[1].Coords[3].CoordsLocation);
+
+            Assert.AreEqual("40" ,gameboard.Ships[2].Coords[0].CoordsLocation);
+
+            Assert.AreEqual("41" ,gameboard.Ships[2].Coords[1].CoordsLocation);
         }
 
         //Testea que no se puede agregar un barco con una coordenada inicial no valida.

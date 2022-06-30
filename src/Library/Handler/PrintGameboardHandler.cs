@@ -3,33 +3,26 @@ using System.Text;
 using Telegram.Bot.Types;
 using System.Linq;
 using System.Collections.Generic;
-using Telegram.Bot;
-using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class AttackHandler : BaseHandler
+    public class PrintGameboardHandler : BaseHandler
     {
-        public MatchState State;
-
         public GameUser User;
 
         public Match match;
-
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public AttackHandler(BaseHandler next) : base(next)
+        public PrintGameboardHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/atacar"};
+            this.Keywords = new string[] {"/vertableros"};
         }
 
         /// <summary>
@@ -54,40 +47,27 @@ namespace NavalBattle
                         }
                     }
 
-                    if (this.User.Player.Turn)
-                    {
-                        string[] input = message.Text.Split(" ");
+                    IPrinter printer;
 
-                        string AttackCoordStr = input[1];
+                    printer = new DefenseGameboardPrinter();
 
-                        string res = "hola";
+                    StringBuilder res = printer.PrintGameboard(this.User.Player.Gameboard);
+                    
+                    res.Append("\n");
 
-                        if(Equals(this.User.Player, this.match.Players[0]))
-                        {
-                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[1].Gameboard);
+                    printer = new AttackGameboardPrinter();
+
+                    if(Equals(this.User.Player, this.match.Players[0]))
+                        {     
+                            res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
                         }
                         else
                         {
-                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[0].Gameboard);
+                            res.Append(printer.PrintGameboard(this.match.Players[0].Gameboard));
                         }
-
-                        this.match.Players[0].ChangeTurn();
-
-                        this.match.Players[1].ChangeTurn();
-
-                        ITelegramBotClient botClient = new TelegramBotClient(null);
-                        botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno"); 
-
-                        response = res;
-
-                        return true;
-                    }
-                    else
-                    {
-                        response = "Espere su turno";
-
-                        return true;
-                    }
+                    
+                    response = res.ToString();
+                    return true;
                 }
                 
             response = string.Empty;
