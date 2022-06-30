@@ -1,33 +1,28 @@
 using System;
 using System.Text;
 using Telegram.Bot.Types;
-using Telegram.Bot;
-using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NavalBattle
 {
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class GameStartHandler : BaseHandler
+    public class PrintGameboardHandler : BaseHandler
     {
-        public GameStartState State;
-
         public GameUser User;
 
+        public Match match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public GameStartHandler(BaseHandler next) : base(next)
+        public PrintGameboardHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/buscarpartida"};
-            this.State = GameStartState.Start;
-            this.User = null;
+            this.Keywords = new string[] {"/vertableros"};
         }
 
         /// <summary>
@@ -40,45 +35,51 @@ namespace NavalBattle
         {
             try
             {
-                if (this.State == GameStartState.Start && this.CanHandle(message))
+                if (this.CanHandle(message))
                 {
                     this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
-                    //response = "Vuelva con vida capitán, es una orden.";
 
-                    if (message.Text.ToLower().Trim() == "/buscarpartida")
+                    foreach (Match match in Admin.getAdmin().MatchList)
                     {
-                        User.SearchGame();
- 
-                        if(WaitingList.waitingList.Contains(this.User))
-                        {   
-                            response = "Esperando";
-                            return true;
+                        if (match.Players.Contains(this.User.Player))
+                        {
+                            this.match = match;
                         }
-
-                        //ITelegramBotClient botClient = new TelegramBotClient(null);
-                        //botClient.SendTextMessageAsync(message.Chat.Id, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
-
-                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
-                        
-                        return true;
                     }
+
+                    IPrinter printer;
+
+                    printer = new DefenseGameboardPrinter();
+
+                    StringBuilder res = printer.PrintGameboard(this.User.Player.Gameboard);
+                    
+                    res.Append("\n");
+
+                    printer = new AttackGameboardPrinter();
+
+                    if(Equals(this.User.Player, this.match.Players[0]))
+                        {     
+                            res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
+                        }
+                        else
+                        {
+                            res.Append(printer.PrintGameboard(this.match.Players[0].Gameboard));
+                        }
+                    
+                    response = res.ToString();
+                    return true;
                 }
-                response = "";
-                return false;
+                
+            response = string.Empty;
+            return false;
             }
             catch (Exception e)
             {
                 System.Console.WriteLine(e.Message);
                 Cancel();
                 response = e.Message;
-
                 return true;
             }
-        }
-
-        protected override void InternalCancel()
-        {
-            this.State = GameStartState.Start;
         }
 
         /// <summary>
@@ -95,15 +96,28 @@ namespace NavalBattle
             }
         }
 
-        public enum GameStartState
+        protected override bool CanHandle(Message message)
         {
-            Start,
-            Waiting,
-            InGame,    
+            if (this.Keywords == null || this.Keywords.Length == 0)
+            {
+                throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
+            }
+            
+            string[] input = message.Text.Split(" ");
+            
+            if (this.Keywords.Contains(input[0]))
+            {
+                return true;
+            }
+            
+            return false;
         }
 
-        public class GameStartData
+        public enum MatchState
         {
+            Start,
+            positioning,
+            InGame,    
         }
     }
-} 
+}

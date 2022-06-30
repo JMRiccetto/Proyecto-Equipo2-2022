@@ -3,6 +3,10 @@ using System.Text;
 using Telegram.Bot.Types;
 using System.Linq;
 using System.Collections.Generic;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
@@ -16,6 +20,7 @@ namespace NavalBattle
         public GameUser User;
 
         public Match match;
+
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -69,7 +74,10 @@ namespace NavalBattle
                         this.match.Players[0].ChangeTurn();
 
                         this.match.Players[1].ChangeTurn();
-                        
+
+                        ITelegramBotClient botClient = new TelegramBotClient(null);
+                        botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno"); 
+
                         response = res;
 
                         return true;

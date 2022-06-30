@@ -64,6 +64,9 @@ namespace NavalBattle
 
                         this.match.Players[1].ChangeTurn();
                         
+                        //ITelegramBotClient botClient = new TelegramBotClient(null);
+                        //botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno");
+
                         response = "Barco posicionado correctamente";
 
                         return true;

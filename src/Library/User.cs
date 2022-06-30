@@ -3,10 +3,9 @@
 namespace NavalBattle
 {
     public class GameUser : IJsonConvertible
-    {
-        private int matchId;
-        
-        private bool bombs;
+    {   
+        private long chatId;
+        private bool bombs = false;
 
         public bool Bombs
         {
@@ -20,7 +19,7 @@ namespace NavalBattle
             }
         }
 
-        private bool doubleAttack;
+        private bool doubleAttack = false;
 
         public bool DoubleAttack
         {
