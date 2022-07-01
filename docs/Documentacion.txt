@@ -30,7 +30,7 @@ Roles de las clases:
 
 Coords: Information holder, Coordinator
 
-    Contiene información de las coordenadas del tablero, cambia de estado de las mismas, sabe si estas fueron atacadas, efectúa cambios
+    Contiene información de las coordenadas del tablero, cambia de estado de estas, sabe si estas fueron atacadas, efectúa cambios
     dependiendo del resto de cambios, además proporciona esta información a las mismas.
 
 Ship: Information holder, Structurer
@@ -44,7 +44,7 @@ Bomb: Information holder
 
 Gameboard: Information holder, Controller
 
-    Contiene información sobre sus objetos, utiliza los objetos de Coords, bomb y ships, controla la creación de los mismos y su uso, y proporciona su información a otras clases.
+    Contiene información sobre sus objetos, utiliza los objetos de Coords, bomb y ships, controla la creación de estos y su uso, y proporciona su información a otras clases.
 
 IPrinter: Interfacer
 
@@ -66,9 +66,58 @@ CoordsTranslate: Service provider
 
     Traduce las coordenadas que ingresa el usuario, para ser utilizables por el programa
 
-DefenseGameboardPrinter y AttackGameboardPrinter: Service provider
+DefenseGameboardPrinter & AttackGameboardPrinter: Service provider
 
-    se encarga de imprimir el gameboard del usuario (ataque y defensa)
+    Se encarga de imprimir el gameboard del usuario (ataque y defensa)
+
+UserRegister: Structurer, Controller, Coordinator
+
+    Realiza acciones tomando en cuenta las decisiones del usuario, modifica y crea instancias de otras clases y delega acciones.
+
+IJsonConvertible: Interfacer, Service provider
+
+    Se implementa en clases para transformar información a formato Json
+
+Match:  Controller, Structurer
+
+    Tiene la información de player, y a partir de ella toma decisiones y dirige estas al resto de clases relacionadas
+
+Player:  Information holder
+
+    Contiene la información del gameboard del jugador
+
+WaitingList: Service Provider
+
+    Es una lista donde se agregan los usuarios que están esperando para jugar
+
+InvalidCoordExeption: Service Provider
+
+    Toma una coordenada, si es invalida realiza el “servicio”, manda una excepción.
+
+IHandler: interfacer
+
+    Interfaz para implementar el patrón Chain of Responsibility.
+
+
+BaseHandler: Service Provider 
+
+    A confirmar
+
+MatchLogic: a confirmar
+
+    A confirmar
+
+MenuHandler: a confirmar
+
+    A confirmar
+
+UserRegister: a confirmar
+
+    A confirmar
+
+MyReferenceHandler: a resolver
+
+    A resolver
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -119,6 +168,7 @@ IGameboardContent:
 
 invalidCoordsException:
 
+    Toma una coordenada, si es invalida realiza el “servicio”, manda una excepción.
 
 IPrinter: 
   
