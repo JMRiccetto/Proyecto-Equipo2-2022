@@ -13,38 +13,18 @@ namespace NavalBattle
 
         private int counterShipLength = 2;
 
-        private long chatId;
-
         public Player(int gameboardSide)
         {
             this.gameboard = new Gameboard(gameboardSide);
         }
-        
-        public long ChatId
-        {
-            get
-            {
-                return chatId;
-            }
-            set
-            {
-                this.chatId = value; 
-            }
-        }
+
+
         public Gameboard Gameboard
         {
             get
             {
                 return this.gameboard;
             }   
-        }
-
-        public bool Turn
-        {
-            get
-            {
-                return turn;
-            }
         }
 
         public void PlaceShip (string initialCoord, string direction)
@@ -62,6 +42,14 @@ namespace NavalBattle
             string res = gameboard.RecieveAttack(coord);
 
             return res;
+        }
+
+        public bool Turn
+        {
+            get
+            {
+                return turn;
+            }
         }
 
         public void ChangeTurn()

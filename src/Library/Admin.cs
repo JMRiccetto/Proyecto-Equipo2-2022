@@ -12,8 +12,17 @@ namespace NavalBattle
         /// <returns></returns>
         List<Match> matchList = new List<Match>();
 
+        public List<Match> MatchList
+        {
+            get
+            {
+                return matchList;
+            }
+        }
+
         List<string> usersRegister = new List<string>();
 
+    
         /// <summary>
         /// Ser utiliza singleton para admin.
         /// </summary>
@@ -27,14 +36,6 @@ namespace NavalBattle
                 admin = new Admin();
             }
             return admin;
-        }
-
-        public List<Match> MatchList
-        {
-            get
-            {
-                return matchList;
-            }
         }
 
         public void UserRegister(string nickname)

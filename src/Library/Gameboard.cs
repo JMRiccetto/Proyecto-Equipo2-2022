@@ -9,12 +9,6 @@ namespace NavalBattle
     {   
         private int side;
 
-        private List<Ship> ships = new List<Ship>();
-
-        private List<Bomb> bombs = new List<Bomb>();
-
-        private List<Coords> water = new List<Coords>();
-
         public int Side
         {
             get
@@ -27,6 +21,8 @@ namespace NavalBattle
             }
         }
 
+        private List<Ship> ships = new List<Ship>();
+
         public List<Ship> Ships
         {
             get
@@ -34,6 +30,7 @@ namespace NavalBattle
                 return this.ships;
             }
         }
+        private List<Bomb> bombs = new List<Bomb>();
 
         public List<Bomb> Bombs
         {
@@ -43,11 +40,40 @@ namespace NavalBattle
             }
         }
 
+        private List<Coords> water = new List<Coords>();
+
         public List<Coords> Water
         {
             get
             {
                 return this.water;
+            }
+        }
+        private bool bombSwitch;
+
+        public bool BombSwitch
+        {
+            get
+            {
+                return bombSwitch;
+            }
+            set
+            {
+                bombSwitch = value;
+            }
+        }
+
+        private bool doubleAttackSwitch;
+
+        public bool DoubleAttackSwitch
+        {
+            get
+            {
+                return this.doubleAttackSwitch;
+            }
+            set
+            {
+                this.doubleAttackSwitch = value;
             }
         }
 
@@ -171,6 +197,10 @@ namespace NavalBattle
                 //Si ya fueron posicionados los tres barcos, el resto de las coordenadas se agregan a water.
                 if (this.ships.Count == 3)
                 {
+                    if (this.bombSwitch)
+                    {
+                        AddBombs();
+                    }
                     AddWater();
                 }
             }
@@ -380,11 +410,6 @@ namespace NavalBattle
                    Kaboom(coord); 
                    res = "Bomba";
                 }
-            }
-
-            if (IsMatchFinished())
-            {
-                res = "Fin del juego";
             }
             return res;
         }
