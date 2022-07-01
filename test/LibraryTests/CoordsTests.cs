@@ -30,5 +30,27 @@ namespace Tests
             Coords coord = new Coords("56");
             Assert.IsFalse(coord.HasBeenAttacked);
         }
+
+        //Testea que dos coordenadas sean iguales.
+        [Test]
+        public void CoordsEqualsTest()
+        {
+            Coords coord1 = new Coords("56");
+
+            Coords coord2 = new Coords("56");
+
+            Assert.IsTrue(coord1.CoordsEquals(coord2));
+        }
+
+        //Testea que dos coordenadas sean distintas.
+        [Test]
+        public void CoordsNotEqualsTest()
+        {
+            Coords coord1 = new Coords("56");
+
+            Coords coord2 = new Coords("57");
+
+            Assert.IsFalse(coord1.CoordsEquals(coord2));
+        }
     }
 }

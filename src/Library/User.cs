@@ -5,8 +5,22 @@ namespace NavalBattle
     public class GameUser : IJsonConvertible
     {   
         private long chatId;
+
         private bool bombs = false;
 
+        private bool doubleAttack = false;
+
+        private int gameboardSide = 6;
+
+        private string nickName;
+
+        private Player player;
+
+        public GameUser(string nickName)
+        {
+            this.NickName = nickName;
+        }
+        
         public bool Bombs
         {
             get
@@ -19,8 +33,7 @@ namespace NavalBattle
             }
         }
 
-        private bool doubleAttack = false;
-
+        
         public bool DoubleAttack
         {
             get
@@ -32,7 +45,7 @@ namespace NavalBattle
                 this.doubleAttack = value;
             }
         }
-        private int gameboardSide = 6;
+        
 
         public int GameboardSide
         {
@@ -45,7 +58,6 @@ namespace NavalBattle
                 this.gameboardSide = value;
             }
         }
-        private string nickName;
 
         public string NickName
         {
@@ -57,15 +69,6 @@ namespace NavalBattle
             {
                 this.nickName = this.NickName != null ? this.NickName : value;
             }
-        }
-
-        
-        private Player player;
-
-
-        public GameUser(string nickName)
-        {
-            this.NickName = nickName;
         }
 
         public Player Player

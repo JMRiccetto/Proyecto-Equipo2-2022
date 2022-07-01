@@ -10,6 +10,13 @@ namespace NavalBattle
     {
           private List<GameUser> userData = new List<GameUser>();
 
+          private static UserRegister instance;
+
+          private UserRegister()
+          {
+               SetUp();
+          }
+
           [JsonInclude]
           public List<GameUser> UserData
           {
@@ -18,13 +25,6 @@ namespace NavalBattle
                     return this.userData;
                }
           }
-
-          private UserRegister()
-          {
-               SetUp();
-          }
-
-          private static UserRegister instance;
 
           public static UserRegister Instance
           {

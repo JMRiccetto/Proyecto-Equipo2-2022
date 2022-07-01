@@ -6,14 +6,6 @@ namespace NavalBattle
 
         private int id;
 
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-        }
-        
         public Match(GameUser user1, GameUser user2)
         { 
             this.Players[0] = new Player(user1.GameboardSide);
@@ -25,12 +17,13 @@ namespace NavalBattle
             Players[0].ChangeTurn();
         }
 
-        public void Attack(Coords coord, Gameboard gameboard)
+        public int Id
         {
-            gameboard.RecieveAttack(coord);
+            get
+            {
+                return id;
+            }
         }
-
-        
     }
 }
 
