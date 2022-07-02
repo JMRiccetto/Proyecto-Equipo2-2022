@@ -20,8 +20,6 @@ namespace NavalBattle
             }
         }
 
-        List<string> usersRegister = new List<string>();
-
     
         /// <summary>
         /// Ser utiliza singleton para admin.
@@ -36,11 +34,6 @@ namespace NavalBattle
                 admin = new Admin();
             }
             return admin;
-        }
-
-        public void UserRegister(string nickname)
-        {
-            usersRegister.Add(nickname);
         }
 
         /// <summary>

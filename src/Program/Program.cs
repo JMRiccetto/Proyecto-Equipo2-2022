@@ -19,9 +19,6 @@ namespace NavalBattle
     /// </summary>
     public class Program
     {
-        // La instancia del bot.
-        private static TelegramBotClient Bot;
-
         // El token provisto por Telegram al crear el bot. Mira el archivo README.md en la raíz de este repo para
         // obtener indicaciones sobre cómo configurarlo.
         private static string token;
@@ -96,23 +93,21 @@ namespace NavalBattle
         {
             Start();
 
-            Bot = new TelegramBotClient(token);
+            ClientBot.GetBot();
 
             firstHandler =
                 new UserRegisterHandler(
                 new MenuHandler(
                 new GameStartHandler(     
-                new PlaceShipHandler(
-                new AttackHandler(
-                new PrintGameboardHandler(null)
-                )))));
+                new PlaceShipHandler(null)
+                )));
 
             var cts = new CancellationTokenSource();
 
             // Comenzamos a escuchar mensajes. Esto se hace en otro hilo (en background). El primer método
             // HandleUpdateAsync es invocado por el bot cuando se recibe un mensaje. El segundo método HandleErrorAsync
             // es invocado cuando ocurre un error.
-            Bot.StartReceiving(
+            ClientBot.GetBot().StartReceiving(
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 new ReceiverOptions()
@@ -166,7 +161,7 @@ namespace NavalBattle
 
             if (!string.IsNullOrEmpty(response))
             {
-                await Bot.SendTextMessageAsync(message.Chat.Id, response);
+                await ClientBot.GetBot().SendTextMessageAsync(message.Chat.Id, response);
             }
         }
 

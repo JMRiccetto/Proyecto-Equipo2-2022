@@ -44,9 +44,9 @@ namespace NavalBattle
                this.userData = new List<GameUser>();
           }
 
-          public void CreateUser(string nickName)
+          public void CreateUser(string nickName, long id)
           {
-               GameUser user = new GameUser(nickName);
+               GameUser user = new GameUser(nickName, id);
                this.userData.Add(user);
           }
 

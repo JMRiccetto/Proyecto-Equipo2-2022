@@ -13,11 +13,21 @@ namespace NavalBattle
 
         private int counterShipLength = 2;
 
-        public Player(int gameboardSide)
+        private long chatIdPlayer;
+
+        public long ChatIdPlayer
+        {
+            get
+            {
+                return this.chatIdPlayer;
+            }
+        }
+        public Player(int gameboardSide, long id)
         {
             this.gameboard = new Gameboard(gameboardSide);
+            this.chatIdPlayer = id;
         }
-
+        
 
         public Gameboard Gameboard
         {

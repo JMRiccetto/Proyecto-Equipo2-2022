@@ -11,6 +11,8 @@ namespace NavalBattle
     {
         public UserRegisterState State;
 
+        public GameUser User;
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
@@ -19,6 +21,7 @@ namespace NavalBattle
         public UserRegisterHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/start"};
+            this.User = null;
         }
 
         /// <summary>
@@ -34,8 +37,9 @@ namespace NavalBattle
                 StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
                 if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
                 {
-                    UserRegister.Instance.CreateUser(message.From.FirstName);
+                    UserRegister.Instance.CreateUser(message.From.FirstName, message.Chat.Id);
                 }
+                
                 start.Append("¿Qué deseas hacer?\n")
                     .Append("/jugarconelbot\n")
                     .Append("/cambiartablero\n")
