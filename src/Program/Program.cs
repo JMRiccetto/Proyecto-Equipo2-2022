@@ -93,7 +93,7 @@ namespace NavalBattle
         {
             Start();
 
-            Bot.BotClient();
+            ClientBot.GetBot();
 
             firstHandler =
                 new UserRegisterHandler(
@@ -107,7 +107,7 @@ namespace NavalBattle
             // Comenzamos a escuchar mensajes. Esto se hace en otro hilo (en background). El primer método
             // HandleUpdateAsync es invocado por el bot cuando se recibe un mensaje. El segundo método HandleErrorAsync
             // es invocado cuando ocurre un error.
-            Bot.BotClient().StartReceiving(
+            ClientBot.GetBot().StartReceiving(
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 new ReceiverOptions()
@@ -161,7 +161,7 @@ namespace NavalBattle
 
             if (!string.IsNullOrEmpty(response))
             {
-                await Bot.BotClient().SendTextMessageAsync(message.Chat.Id, response);
+                await ClientBot.GetBot().SendTextMessageAsync(message.Chat.Id, response);
             }
         }
 

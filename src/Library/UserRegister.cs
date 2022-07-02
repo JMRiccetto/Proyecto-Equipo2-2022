@@ -44,9 +44,9 @@ namespace NavalBattle
                userData = new List<GameUser>();
           }
 
-          public static void CreateUser(string nickName)
+          public void CreateUser(string nickName, long id)
           {
-               GameUser user = new GameUser(nickName);
+               GameUser user = new GameUser(nickName, id);
                userData.Add(user);
           }
 
@@ -68,7 +68,7 @@ namespace NavalBattle
           /// </summary>
           /// <param name="nickName"></param>
           /// <returns></returns>
-          public static GameUser GetUserByNickName(string nickName)
+          public GameUser GetUserByNickName(string nickName)
           {
                GameUser outcome = null;
                if (userData.Exists(user => nickName == user.NickName))

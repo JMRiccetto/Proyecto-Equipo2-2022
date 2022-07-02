@@ -35,12 +35,11 @@ namespace NavalBattle
             if (this.CanHandle(message))
             {
                 StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.UserData.Contains(UserRegister.GetUserByNickName(message.From.FirstName.ToString())))
+                if(!UserRegister.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
                 {
-                    UserRegister.CreateUser(message.From.FirstName);
-                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
-                    this.User.ChatId = message.Chat.Id;
+                    UserRegister.Instance.CreateUser(message.From.FirstName, message.Chat.Id);
                 }
+                
                 start.Append("¿Qué deseas hacer?\n")
                     .Append("/jugarconelbot\n")
                     .Append("/cambiartablero\n")

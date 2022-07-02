@@ -28,9 +28,9 @@ namespace Test.Library
         [Test]
         public void UnregisteredUserTest()
         {
-            if(!UserRegister.UserData.Contains(UserRegister.GetUserByNickName(this.user.FirstName)))
+            if(!UserRegister.UserData.Contains(UserRegister.Instance.GetUserByNickName(this.user.FirstName)))
                 {
-                    UserRegister.CreateUser(this.user.FirstName);
+                    UserRegister.Instance.CreateUser(this.user.FirstName,1);
                 }
             Assert.IsNotEmpty(UserRegister.UserData);
         }

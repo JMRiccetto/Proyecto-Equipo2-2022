@@ -18,11 +18,19 @@ namespace NavalBattle
 
         private int counterShipLength = 2;
 
-        private long chatId = 0;
+        private long chatIdPlayer;
 
-        public Player(int gameboardSide)
+        public long ChatIdPlayer
+        {
+            get
+            {
+                return this.chatIdPlayer;
+            }
+        }
+        public Player(int gameboardSide, long id)
         {
             this.gameboard = new Gameboard(gameboardSide);
+            this.chatIdPlayer = id;
         }
 
         public Gameboard Gameboard
@@ -32,19 +40,7 @@ namespace NavalBattle
                 return this.gameboard;
             }   
         }
-
-        public long ChatId
-        {
-            get
-            {
-                return this.chatId;
-            }
-            set
-            {
-                this.chatId = value;
-            }
-        }
-
+        
         public void PlaceShip (string initialCoord, string direction)
         {
 

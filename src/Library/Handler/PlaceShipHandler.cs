@@ -3,6 +3,7 @@ using System.Text;
 using Telegram.Bot.Types;
 using System.Linq;
 using System.Collections.Generic;
+using Telegram.Bot;
 
 namespace NavalBattle
 {
@@ -39,7 +40,7 @@ namespace NavalBattle
             {
                 if (this.CanHandle(message) && this.State == PlaceShipHandler.MatchState.Start)
                 {
-                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {
@@ -62,13 +63,23 @@ namespace NavalBattle
                         this.Match.Players[0].ChangeTurn();
 
                         this.Match.Players[1].ChangeTurn();
+
+                        TelegramBotClient bot = ClientBot.GetBot();
+
+                        if(Match.Players[0].Turn)
+                        {
+                            long id = this.Match.Players[0].ChatIdPlayer;
                         
-                        //ITelegramBotClient botClient = new TelegramBotClient(null);
-                        //botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno");
-
+                            bot.SendTextMessageAsync(id, "Es su turno");
+                        }
+                        else
+                        {
+                            long id = this.Match.Players[1].ChatIdPlayer;
+                        
+                            bot.SendTextMessageAsync(id, "Es su turno");
+                        }
+                    
                         response = "Barco posicionado correctamente";
-
-
 
                         return true;
                     }

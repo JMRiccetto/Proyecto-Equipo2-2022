@@ -9,8 +9,15 @@ namespace NavalBattle
 {
     public class GameUser : IJsonConvertible
     {   
-        private long chatId = 0;
+        private long chatId;
 
+        public long ChatId
+        {
+            get
+            {
+                return this.chatId;
+            }
+        }
         private bool bombs = false;
 
         public bool Bombs
@@ -68,9 +75,11 @@ namespace NavalBattle
         
         private Player player;
 
-        public GameUser(string aNickName)
+
+        public GameUser(string nickName, long aChatId)
         {
-            this.nickName = aNickName;
+            this.chatId = aChatId;
+            this.NickName = nickName;
         }
 
         public Player Player
@@ -82,18 +91,6 @@ namespace NavalBattle
             set
             {
                 this.player = value;
-            }
-        }
-
-        public long ChatId
-        {
-            get
-            {
-                return this.chatId;
-            }
-            set
-            {
-                this.chatId = value;
             }
         }
         

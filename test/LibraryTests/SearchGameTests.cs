@@ -15,7 +15,7 @@ namespace NavalBattle
         [Test]
         public void SearchGameTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1",1);
 
             user1.SearchGame();
 
@@ -26,9 +26,9 @@ namespace NavalBattle
         [Test]
         public void MatchmakingTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1",1);
 
-            GameUser user2 = new GameUser("juan2");
+            GameUser user2 = new GameUser("juan2",2);
 
             user1.SearchGame();
 
@@ -49,13 +49,13 @@ namespace NavalBattle
         [Test]
         public void MatchListTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1", 1);
 
-            GameUser user2 = new GameUser("juan2");
+            GameUser user2 = new GameUser("juan2", 2);
 
-            GameUser user3 = new GameUser("juan3");
+            GameUser user3 = new GameUser("juan3", 3);
 
-            GameUser user4 = new GameUser("juan4");
+            GameUser user4 = new GameUser("juan4", 4);
 
             user1.GameboardSide = 7;
 
