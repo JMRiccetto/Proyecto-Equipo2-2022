@@ -12,11 +12,9 @@ namespace NavalBattle
     /// </summary>
     public class PlaceShipHandler : BaseHandler
     {
-        public MatchState State;
+        private GameUser user;
 
-        public GameUser User;
-
-        public Match Match;
+        private Match match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -37,49 +35,62 @@ namespace NavalBattle
         protected override bool InternalHandle(Message message, out string response)
         {
             try
-            {
-                if (this.CanHandle(message) && this.State == PlaceShipHandler.MatchState.Start)
+            {   
+                if (this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
+                    if (this.user.State != GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede realizar esta acción en este momento");
+                    }
+                    
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {
-                        if (match.Players.Contains(this.User.Player))
+                        if (match.Players.Contains(this.user.Player))
                         {
-                            this.Match = match;
+                            this.match = match;
                         }
                     }
 
-                    if (this.User.Player.Turn)
+                    if (this.user.Player.Turn)
                     {
-                        string[] input = message.Text.Split(" ");
+                        string[] input = message.Text.Split("-");
 
-                        string initialCoord = input[1];
+                        string initialCoord = input[1].ToUpper();
 
-                        string direction = input[2];
+                        string direction = input[2].ToUpper();
 
-                        this.User.Player.PlaceShip(initialCoord, direction);
+                        this.user.Player.PlaceShip(initialCoord, direction);
 
-                        this.Match.Players[0].ChangeTurn();
+                        this.match.Players[0].ChangeTurn();
 
-                        this.Match.Players[1].ChangeTurn();
+                        this.match.Players[1].ChangeTurn();
+
+                        long idPlayer0 = this.match.Players[0].ChatIdPlayer;
+                        
+                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
 
                         TelegramBotClient bot = ClientBot.GetBot();
 
-                        if(Match.Players[0].Turn)
+                        bot.SendTextMessageAsync(message.Chat.Id, "Barco posicionado correctamente\n\nIngrese /vertableros para ver sus tableros");
+
+                        if ((match.Players[0].CounterShipLength > 4) && (match.Players[1].CounterShipLength > 4))
                         {
-                            long id = this.Match.Players[0].ChatIdPlayer;
-                        
-                            bot.SendTextMessageAsync(id, "Es su turno");
+                            bot.SendTextMessageAsync(idPlayer1, "La fase de posicionamiento terminó\n\nComienza la fase de ataque, ingrese /atacar-coordenada a atacar\n\nIngrese /rendirse para rendirse");
+                            bot.SendTextMessageAsync(idPlayer0, "La fase de posicionamiento terminó\n\nComienza la fase de ataque, ingrese /atacar-coordenada a atacar\n\nIngrese /rendirse para rendirse");
+                        }
+
+                        if(match.Players[0].Turn)
+                        {            
+                            bot.SendTextMessageAsync(idPlayer0, "\n\nEs su turno");
                         }
                         else
                         {
-                            long id = this.Match.Players[1].ChatIdPlayer;
-                        
-                            bot.SendTextMessageAsync(id, "Es su turno");
+                            bot.SendTextMessageAsync(idPlayer1, "\n\nEs su turno");
                         }
                     
-                        response = "Barco posicionado correctamente";
+                        response = "";
 
                         return true;
                     }
@@ -93,6 +104,18 @@ namespace NavalBattle
                 
             response = string.Empty;
             return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
+            }
+            catch(IndexOutOfRangeException re)
+            {
+                response = "Comando no válido. Inténtelo de nuevo";
+
+                return true;
             }
             catch (Exception e)
             {
@@ -124,7 +147,7 @@ namespace NavalBattle
                 throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
             }
             
-            string[] input = message.Text.Split(" ");
+            string[] input = message.Text.Split("-");
             
             if (this.Keywords.Contains(input[0]))
             {
@@ -132,13 +155,6 @@ namespace NavalBattle
             }
             
             return false;
-        }
-
-        public enum MatchState
-        {
-            Start,
-            positioning,
-            InGame,    
         }
     }
 }

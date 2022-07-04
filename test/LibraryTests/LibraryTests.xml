@@ -4,5 +4,91 @@
         <name>LibraryTests</name>
     </assembly>
     <members>
+        <member name="M:Test.Library.PlayerTest.MatchTest1">
+            <summary>
+            Testea que los barcos se posicionen con sus largos correspondientes(el primero 2, el segundo 3 y el tercero 4).
+            </summary>
+        </member>
+        <member name="M:Test.Library.PlayerTest.AttackTest">
+            <summary>
+            Testea que un jugador puede atacar a otro.
+            </summary>
+        </member>
+        <member name="M:Test.Library.PlayerTest.SunkTest">
+            <summary>
+            Testea que un jugador puede hundir un barco.
+            </summary>
+        </member>
+        <member name="M:Test.Library.PlayerTest.ChangeTurnTest">
+            <summary>
+            Testea que el trueno de un jugador cambie al llamar al metodo ChangeTurn.
+            Aclaración: Los turnos se regulan desde los Handlers. Que un jugador no pueda atacar o posicionar barco
+            debido a que no es su turno se modifica en el Handler de ataque o de posicionamiento.
+            </summary>
+        </member>
+        <member name="T:Test.Library.PrintTests">
+            <summary>
+            esta clase prueba que las clases que implementen las interface de IPrinter (y como arraste IGameboardContent)
+            </summary>
+        </member>
+        <member name="M:Test.Library.PrintTests.DefenseGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el DefenseGameboard
+            </summary>
+        </member>
+        <member name="M:Test.Library.PrintTests.AttackGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el AttackGameboard
+            </summary>
+        </member>
+        <member name="T:Test.Library.ShipsTests">
+            <summary>
+            clase de prueba para los Ships
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.Setup">
+            <summary>
+            se ingresa un ship, una coordenada y se agrega al barco
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.GetCoordsShipTest">
+            <summary>
+            este test prueba que la coordenada que se quiera colocar un barco sea la correcta (A1 = 00)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.ShipsIsSunkTest">
+            <summary>
+            est test prueba si la coordenada que se se ingreso contiene un barco hundido (debe dar negativo osea 0)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.ShipsIsSunkTest2">
+            <summary>
+            este test prueba lo mismo que el anterior pero debe ser positivo (1)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.ShipContainCoordTest">
+            <summary>
+            este test prueba que se ingrese contenga el barco... si un barco ocupa A1, A2, A3 y A4 por ejemplo
+            al ingresar cualquiera de las coordenadas este debe dar positivo (true)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.ShipContainCoordTest2">
+            <summary>
+            este test prueba lo mismo que el anterior pero debe ser negativo (false)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.RecieveDamageTest">
+            <summary>
+            estos test creo que deberia ir en coords pero no lo tengo claaro
+            </summary>
+            <summary>
+            este test prueba que si ataco a una coordenada contenga el barco cambie de estado y debe dar positivo (true)
+            </summary>
+        </member>
+        <member name="M:Test.Library.ShipsTests.RecieveDamageTest2">
+            <summary>
+            este test prueba lo mismo que el anterior pero debe ser negativo (false)
+            </summary>
+        </member>
     </members>
 </doc>

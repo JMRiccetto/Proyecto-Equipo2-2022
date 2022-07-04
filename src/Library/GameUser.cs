@@ -11,6 +11,23 @@ namespace NavalBattle
     {   
         private long chatId;
 
+        private bool bombs = false;
+
+        private bool doubleAttack = false;
+
+        private int gameboardSide = 6;
+
+        private string nickName;
+
+        private Player player;
+
+        private UserState state = UserState.NotInGame;
+
+        public GameUser(string nickName, long aChatId)
+        {
+            this.chatId = aChatId;
+            this.nickName = nickName;
+        }
         public long ChatId
         {
             get
@@ -18,7 +35,18 @@ namespace NavalBattle
                 return this.chatId;
             }
         }
-        private bool bombs = false;
+
+        public UserState State
+        {
+            get
+            {
+                return this.state;
+            }
+            set
+            {
+                this.state = value;
+            }
+        }
 
         public bool Bombs
         {
@@ -32,8 +60,6 @@ namespace NavalBattle
             }
         }
 
-        private bool doubleAttack = false;
-
         public bool DoubleAttack
         {
             get
@@ -45,7 +71,6 @@ namespace NavalBattle
                 this.doubleAttack = value;
             }
         }
-        private int gameboardSide = 6;
 
         public int GameboardSide
         {
@@ -58,7 +83,7 @@ namespace NavalBattle
                 this.gameboardSide = value;
             }
         }
-        private string nickName;
+
 
         public string NickName
         {
@@ -72,15 +97,6 @@ namespace NavalBattle
             }
         }
 
-        
-        private Player player;
-
-
-        public GameUser(string nickName, long aChatId)
-        {
-            this.chatId = aChatId;
-            this.NickName = nickName;
-        }
 
         public Player Player
         {
@@ -91,7 +107,22 @@ namespace NavalBattle
             set
             {
                 this.player = value;
-            }
+            } 
+        }
+
+        /// <summary>
+        /// Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
+        /// Solo se controla si el usuario está en partida o no, porque los demas estdos se controlan en Gameboard.
+        /// Por ejemplo: 
+        ///     que un jugador no pueda atacar en la fase de posicionamiento.
+        ///     que un jugador no pueda posicionar barcos en la fase de ataque.
+        /// </summary>
+        public enum UserState
+        {   
+            NotInGame,
+            Waiting,
+            InGame,
+
         }
         
         /// <summary>
@@ -102,6 +133,7 @@ namespace NavalBattle
         /// <param name="doubleAttack"></param>
         public void SearchGame() 
         {
+            this.state = GameUser.UserState.Waiting;
             Admin.getAdmin().AddToWaitingList(this);
         }
 

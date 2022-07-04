@@ -78,6 +78,21 @@ namespace NavalBattle
                return outcome;
           }
 
+          /// <summary>
+          /// Encuentra un User en la lista de Users por su id.
+          /// </summary>
+          /// <param name="chatId"></param>
+          /// <returns></returns>
+          public GameUser GetUserById(long chatId)
+          {
+               GameUser outcome = null;
+               if (this.userData.Exists(user => chatId == user.ChatId))
+               {
+                    outcome = this.userData.Find(user => chatId == user.ChatId);
+               }
+               return outcome;
+          }
+
           public string ConvertToJson(JsonSerializerOptions options)
           {
                return JsonSerializer.Serialize(this, options);

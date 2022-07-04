@@ -11,9 +11,9 @@ namespace NavalBattle
     /// </summary>
     public class PrintGameboardHandler : BaseHandler
     {
-        public GameUser User;
+        private GameUser user;
 
-        public Match match;
+        private Match match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -37,11 +37,16 @@ namespace NavalBattle
             {
                 if (this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+
+                    if(this.user.State != GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede realizar esta acción en este momento");
+                    }
 
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {
-                        if (match.Players.Contains(this.User.Player))
+                        if (match.Players.Contains(this.user.Player))
                         {
                             this.match = match;
                         }
@@ -51,13 +56,13 @@ namespace NavalBattle
 
                     printer = new DefenseGameboardPrinter();
 
-                    StringBuilder res = printer.PrintGameboard(this.User.Player.Gameboard);
+                    StringBuilder res = printer.PrintGameboard(this.user.Player.Gameboard);
                     
                     res.Append("\n");
 
                     printer = new AttackGameboardPrinter();
 
-                    if(Equals(this.User.Player, this.match.Players[0]))
+                    if(Equals(this.user.Player, this.match.Players[0]))
                         {     
                             res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
                         }
@@ -72,6 +77,12 @@ namespace NavalBattle
                 
             response = string.Empty;
             return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
             }
             catch (Exception e)
             {
@@ -111,13 +122,6 @@ namespace NavalBattle
             }
             
             return false;
-        }
-
-        public enum MatchState
-        {
-            Start,
-            positioning,
-            InGame,    
         }
     }
 }

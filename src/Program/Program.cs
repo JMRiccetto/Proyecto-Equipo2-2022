@@ -99,8 +99,12 @@ namespace NavalBattle
                 new UserRegisterHandler(
                 new MenuHandler(
                 new GameStartHandler(     
-                new PlaceShipHandler(null)
-                )));
+                new CancelHandler(
+                new PlaceShipHandler(
+                new AttackHandler(
+                new SurrenderHandler(
+                new PrintGameboardHandler(null) 
+                )))))));
 
             var cts = new CancellationTokenSource();
 

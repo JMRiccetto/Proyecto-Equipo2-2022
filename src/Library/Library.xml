@@ -42,6 +42,11 @@
             </summary>
             <param name="stringCoord"></param>
         </member>
+        <member name="T:NavalBattle.ClientBot">
+            <summary>
+            Realizamos un singleton del bot para poder llamar a los metodos del bot de telegram desde los handlers.
+            </summary>
+        </member>
         <member name="F:NavalBattle.Coords.coordsLocation">
             <summary>
             String de la coordenada.
@@ -252,6 +257,33 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.CancelHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.CancelHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.CancelHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.CancelHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
         <member name="T:NavalBattle.GameStartHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
@@ -328,6 +360,11 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.MenuHandler.menuState">
+            <summary>
+            Estado del menu.
+            </summary>
+        </member>
         <member name="T:NavalBattle.PlaceShipHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
@@ -382,6 +419,33 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.SurrenderHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.SurrenderHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
+            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            </summary>
+            <param name="next">El próximo "handler".</param>
+        </member>
+        <member name="M:NavalBattle.SurrenderHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.SurrenderHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
         <member name="T:NavalBattle.UserRegisterHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
@@ -414,9 +478,40 @@
             Interfaz que implementa la clase Gameboard con el objetivo de aplicar DIP.
             </summary>
         </member>
+        <member name="T:NavalBattle.InvalidStateException">
+            <summary>
+            Excepción que se lanza cuando se quiere ingresar un comando en un momoento en el que no se quiere lanzar.
+            </summary>
+        </member>
         <member name="T:NavalBattle.Player">
             <summary>
             Player es una intancia de los usuarios cuando se crea un Match.
+            </summary>
+        </member>
+        <member name="F:NavalBattle.Player.counterShipLength">
+            <summary>
+            Este atributo es el largo de los barcos que se van posicionar. El primer barco es de largo 2, 
+            el segundo de largo 3 y el tercero de largo 4.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Player.PlaceShip(System.String,System.String)">
+            <summary>
+            Metodo para posicionar barco en tablero propio.
+            </summary>
+            <param name="initialCoord"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="M:NavalBattle.Player.Attack(System.String,NavalBattle.Gameboard)">
+            <summary>
+            Metodo para atacar tablero de otro jugador.
+            </summary>
+            <param name="coordStr"></param>
+            <param name="gameboard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Player.ChangeTurn">
+            <summary>
+            Cambia el turno del jugador.
             </summary>
         </member>
         <member name="M:NavalBattle.Ship.AddShipCoord(System.String)">
@@ -445,6 +540,23 @@
             </summary>
             <param name="coord"></param>
         </member>
+        <member name="T:NavalBattle.GameUser.UserState">
+            <summary>
+            Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
+            Solo se controla si el usuario está en partida o no, porque los demas estdos se controlan en Gameboard.
+            Por ejemplo: 
+                que un jugador no pueda atacar en la fase de posicionamiento.
+                que un jugador no pueda posicionar barcos en la fase de ataque.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.GameUser.SearchGame">
+            <summary>
+            El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
+            </summary>
+            <param name="gameboardSide"></param>
+            <param name="bombs"></param>
+            <param name="doubleAttack"></param>
+        </member>
         <member name="M:NavalBattle.UserRegister.RemoveUser(NavalBattle.GameUser)">
             <summary>
             Remueve un usuario de la lista de usuarios.
@@ -456,6 +568,13 @@
             Encuentra un User en la lista de Users por su nombre.
             </summary>
             <param name="nickName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.UserRegister.GetUserById(System.Int64)">
+            <summary>
+            Encuentra un User en la lista de Users por su id.
+            </summary>
+            <param name="chatId"></param>
             <returns></returns>
         </member>
         <member name="T:NavalBattle.WaitingList">

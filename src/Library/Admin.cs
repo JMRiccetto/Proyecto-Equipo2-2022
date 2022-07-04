@@ -10,9 +10,8 @@ namespace NavalBattle
         /// </summary>
         /// <typeparam name="Match"></typeparam>
         /// <returns></returns>
-        public readonly List<Match> MatchList = new List<Match>();
+        private List<Match> matchList = new List<Match>();
 
-    
         /// <summary>
         /// Ser utiliza singleton para admin.
         /// </summary>
@@ -28,6 +27,13 @@ namespace NavalBattle
             return admin;
         }
 
+         public List<Match> MatchList
+        {
+            get
+            {
+                return matchList;
+            }
+        }
         /// <summary>
         /// Cuando un User busca partida, si en la WaitingList hay un otro User con las mismas caracteristicas
         /// de partida que el, se emparejan en la misma partida.
