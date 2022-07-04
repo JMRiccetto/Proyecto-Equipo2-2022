@@ -11,7 +11,7 @@ namespace NavalBattle
           private static List<GameUser> userData = new List<GameUser>();
 
           [JsonInclude]
-          public static List<GameUser> UserData
+          public List<GameUser> UserData
           {
                get
                {
@@ -86,9 +86,9 @@ namespace NavalBattle
           public GameUser GetUserById(long chatId)
           {
                GameUser outcome = null;
-               if (this.userData.Exists(user => chatId == user.ChatId))
+               if (userData.Exists(user => chatId == user.ChatId))
                {
-                    outcome = this.userData.Find(user => chatId == user.ChatId);
+                    outcome = userData.Find(user => chatId == user.ChatId);
                }
                return outcome;
           }
