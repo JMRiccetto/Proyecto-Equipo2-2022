@@ -1,15 +1,15 @@
 using System;
 using System.Text;
 using Telegram.Bot.Types;
+using Telegram.Bot;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace NavalBattle
 {
     /// <summary>
     /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
     /// </summary>
-    public class PrintGameboardHandler : BaseHandler
+    public class SurrenderHandler : BaseHandler
     {
         private GameUser user;
 
@@ -20,9 +20,10 @@ namespace NavalBattle
         /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
         /// </summary>
         /// <param name="next">El próximo "handler".</param>
-        public PrintGameboardHandler(BaseHandler next) : base(next)
+        public SurrenderHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/vertableros"};
+            this.Keywords = new string[] {"/rendirse"};
+            this.user = null;
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace NavalBattle
 
                     if(this.user.State != GameUser.UserState.InGame)
                     {
-                        throw new InvalidStateException("No puede realizar esta acción en este momento");
+                        throw new InvalidStateException("No es posible realizar esta acción en este momento");
                     }
 
                     foreach (Match match in Admin.getAdmin().MatchList)
@@ -52,31 +53,32 @@ namespace NavalBattle
                         }
                     }
 
-                    IPrinter printer;
+                    TelegramBotClient bot = ClientBot.GetBot();
 
-                    printer = new DefenseGameboardPrinter();
-
-                    StringBuilder res = printer.PrintGameboard(this.user.Player.Gameboard);
+                    long idPlayer0 = this.match.Players[0].ChatIdPlayer;
                     
-                    res.Append("\n");
+                    long idPlayer1 = this.match.Players[1].ChatIdPlayer;
 
-                    printer = new AttackGameboardPrinter();
+                    bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} se rindió");
 
-                    if(Equals(this.user.Player, this.match.Players[0]))
-                        {     
-                            res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
-                        }
-                        else
-                        {
-                            res.Append(printer.PrintGameboard(this.match.Players[0].Gameboard));
-                        }
+                    bot.SendTextMessageAsync(idPlayer1, $"La partida finalizó. {this.user.NickName} se rindió");
+
+                    Admin.getAdmin().MatchList.Remove(this.match);
+
+                    GameUser user1 = UserRegister.Instance.GetUserById(idPlayer0);
+
+                    GameUser user2 = UserRegister.Instance.GetUserById(idPlayer1);
+
+                    user1.State = GameUser.UserState.NotInGame;
+
+                    user2.State = GameUser.UserState.NotInGame;
                     
-                    response = res.ToString();
-                    return true;
+                    response = "";
+
+                    return true;        
                 }
-                
-            response = string.Empty;
-            return false;
+                response = "";
+                return false;
             }
             catch(NullReferenceException ne)
             {
@@ -89,6 +91,7 @@ namespace NavalBattle
                 System.Console.WriteLine(e.Message);
                 Cancel();
                 response = e.Message;
+
                 return true;
             }
         }
@@ -105,23 +108,6 @@ namespace NavalBattle
             {
                 this.Next.Cancel();
             }
-        }
-
-        protected override bool CanHandle(Message message)
-        {
-            if (this.Keywords == null || this.Keywords.Length == 0)
-            {
-                throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
-            }
-            
-            string[] input = message.Text.Split(" ");
-            
-            if (this.Keywords.Contains(input[0]))
-            {
-                return true;
-            }
-            
-            return false;
         }
     }
 }

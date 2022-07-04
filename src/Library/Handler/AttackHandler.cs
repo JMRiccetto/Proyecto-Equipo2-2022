@@ -15,11 +15,9 @@ namespace NavalBattle
     /// </summary>
     public class AttackHandler : BaseHandler
     {
-        public MatchState State;
+        private GameUser user;
 
-        public GameUser User;
-
-        public Match match;
+        private Match match;
 
 
         /// <summary>
@@ -44,41 +42,80 @@ namespace NavalBattle
             {
                 if (this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
+                    if (this.user.State != GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede realizar esta acción en este momento");
+                    }
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {
-                        if (match.Players.Contains(this.User.Player))
+                        if (match.Players.Contains(this.user.Player))
                         {
                             this.match = match;
                         }
                     }
 
-                    if (this.User.Player.Turn)
+                    if (this.user.Player.Turn)
                     {
-                        string[] input = message.Text.Split(" ");
+                        string[] input = message.Text.Split("-");
 
-                        string AttackCoordStr = input[1];
+                        string AttackCoordStr = input[1].ToUpper();
 
                         string res = "hola";
 
-                        if(Equals(this.User.Player, this.match.Players[0]))
+                        if(Equals(this.user.Player, this.match.Players[0]))
                         {
-                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[1].Gameboard);
+                            res = this.user.Player.Attack(AttackCoordStr, this.match.Players[1].Gameboard);
                         }
                         else
                         {
-                            res = this.User.Player.Attack(AttackCoordStr, this.match.Players[0].Gameboard);
+                            res = this.user.Player.Attack(AttackCoordStr, this.match.Players[0].Gameboard);
                         }
 
                         this.match.Players[0].ChangeTurn();
 
                         this.match.Players[1].ChangeTurn();
 
-                        ITelegramBotClient botClient = new TelegramBotClient(null);
-                        botClient.SendTextMessageAsync(message.Chat.Id, "Es su turno"); 
+                        TelegramBotClient bot = ClientBot.GetBot();
 
-                        response = res;
+                        long idPlayer0 = this.match.Players[0].ChatIdPlayer;
+                        
+                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
+
+                        if(res == "Fin")
+                        {
+                            bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
+
+                            bot.SendTextMessageAsync(idPlayer1, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
+
+                            Admin.getAdmin().MatchList.Remove(this.match);
+
+                            GameUser user1 = UserRegister.Instance.GetUserById(idPlayer0);
+
+                            GameUser user2 = UserRegister.Instance.GetUserById(idPlayer1);
+
+                            user1.State = GameUser.UserState.NotInGame;
+
+                            user2.State = GameUser.UserState.NotInGame;
+                            
+                            response = "";
+
+                            return true;
+                        }
+
+                        if(match.Players[0].Turn)
+                        {            
+                            bot.SendTextMessageAsync(idPlayer0, "Es su turno");
+                        }
+                        else
+                        {
+                            long id = this.match.Players[1].ChatIdPlayer;
+                        
+                            bot.SendTextMessageAsync(idPlayer1, "Es su turno");
+                        }
+
+                        response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse";
 
                         return true;
                     }
@@ -89,9 +126,20 @@ namespace NavalBattle
                         return true;
                     }
                 }
-                
             response = string.Empty;
             return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
+            }
+            catch(IndexOutOfRangeException re)
+            {
+                response = "Comando no válido. Inténtelo de nuevo";
+
+                return true;
             }
             catch (Exception e)
             {
@@ -123,7 +171,7 @@ namespace NavalBattle
                 throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
             }
             
-            string[] input = message.Text.Split(" ");
+            string[] input = message.Text.Split("-");
             
             if (this.Keywords.Contains(input[0]))
             {
@@ -131,13 +179,6 @@ namespace NavalBattle
             }
             
             return false;
-        }
-
-        public enum MatchState
-        {
-            Start,
-            positioning,
-            InGame,    
         }
     }
 }

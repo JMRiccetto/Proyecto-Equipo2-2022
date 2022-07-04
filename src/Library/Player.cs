@@ -11,10 +11,20 @@ namespace NavalBattle
 
         private bool turn = false; 
 
+        /// <summary>
+        /// Este atributo es el largo de los barcos que se van posicionar. El primer barco es de largo 2, 
+        /// el segundo de largo 3 y el tercero de largo 4.
+        /// </summary>
         private int counterShipLength = 2;
 
         private long chatIdPlayer;
 
+        public Player(int gameboardSide, long id)
+        {
+            this.gameboard = new Gameboard(gameboardSide);
+            this.chatIdPlayer = id;
+        }
+        
         public long ChatIdPlayer
         {
             get
@@ -22,12 +32,14 @@ namespace NavalBattle
                 return this.chatIdPlayer;
             }
         }
-        public Player(int gameboardSide, long id)
-        {
-            this.gameboard = new Gameboard(gameboardSide);
-            this.chatIdPlayer = id;
-        }
         
+        public int CounterShipLength
+        {
+            get
+            {
+                return this.counterShipLength;
+            }
+        }
 
         public Gameboard Gameboard
         {
@@ -35,23 +47,6 @@ namespace NavalBattle
             {
                 return this.gameboard;
             }   
-        }
-
-        public void PlaceShip (string initialCoord, string direction)
-        {
-
-            gameboard.AddShip(this.counterShipLength, initialCoord, direction);
-
-            this.counterShipLength++;
-        }
-
-        public string Attack(string coordStr, Gameboard gameboard)
-        {
-            Coords coord = new Coords(coordStr);
-
-            string res = gameboard.RecieveAttack(coord);
-
-            return res;
         }
 
         public bool Turn
@@ -62,6 +57,37 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Metodo para posicionar barco en tablero propio.
+        /// </summary>
+        /// <param name="initialCoord"></param>
+        /// <param name="direction"></param>
+        public void PlaceShip (string initialCoord, string direction)
+        {
+            gameboard.AddShip(this.counterShipLength, initialCoord, direction);
+
+            this.counterShipLength++;
+        }
+
+        /// <summary>
+        /// Metodo para atacar tablero de otro jugador.
+        /// </summary>
+        /// <param name="coordStr"></param>
+        /// <param name="gameboard"></param>
+        /// <returns></returns>
+        public string Attack(string coordStr, Gameboard gameboard)
+        {
+            Coords coord = new Coords(coordStr);
+
+            string res = gameboard.RecieveAttack(coord);
+
+            return res;
+        }
+
+
+        /// <summary>
+        /// Cambia el turno del jugador.
+        /// </summary>
         public void ChangeTurn()
         {
             if(this.turn == true)

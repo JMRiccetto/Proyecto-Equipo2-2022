@@ -5,15 +5,7 @@ namespace NavalBattle
     public class Bomb
     {
         private Coords coord;
-
-        public Coords Coord
-        {
-            get
-            {
-                return this.coord;
-            }
-        }
-
+        
         /// <summary>
         /// La coordenada de la bomba se crea en Bomb por creator.
         /// </summary>
@@ -22,6 +14,14 @@ namespace NavalBattle
         {
             Coords coord = new Coords("stringCoord");
             this.coord = coord;
+        }
+
+        public Coords Coord
+        {
+            get
+            {
+                return this.coord;
+            }
         }
     }
 }

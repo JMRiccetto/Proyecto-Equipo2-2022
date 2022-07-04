@@ -2,6 +2,9 @@ using Telegram.Bot;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// Realizamos un singleton del bot para poder llamar a los metodos del bot de telegram desde los handlers.
+    /// </summary>
     public class ClientBot
     {
         static private TelegramBotClient getBot;

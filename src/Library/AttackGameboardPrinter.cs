@@ -18,7 +18,7 @@ namespace NavalBattle
 
             for (int x = 0; x < lenght; x++)
             {
-                s.Append("   "+x.ToString());
+                s.Append("      "+x.ToString());
             }
 
             s.Append("\n");
@@ -31,15 +31,15 @@ namespace NavalBattle
                 {
                     if (gameboard[i,j] == "t")
                     {
-                        s.Append("| T |");
+                        s.Append("|  T  |");
                     }
                     else if (gameboard[i,j] == "x")
                     {
-                        s.Append("| x |");
+                        s.Append("|  X  |");
                     }
                     else 
                     {
-                        s.Append("|   |");
+                        s.Append("|      |");
                     }
                 }
                 s.Append("\n");

@@ -9,9 +9,7 @@ namespace NavalBattle
     /// </summary>
     public class UserRegisterHandler : BaseHandler
     {
-        public UserRegisterState State;
-
-        public GameUser User;
+        private GameUser user;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -21,7 +19,7 @@ namespace NavalBattle
         public UserRegisterHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/start"};
-            this.User = null;
+            this.user = null;
         }
 
         /// <summary>
@@ -31,26 +29,45 @@ namespace NavalBattle
         /// <param name="response">La respuesta al mensaje procesado.</param>
         /// <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         protected override bool InternalHandle(Message message, out string response)
-        {
-            if (this.CanHandle(message))
+        {   
+            try
             {
-                StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                if (this.CanHandle(message))
                 {
-                    UserRegister.Instance.CreateUser(message.From.FirstName, message.Chat.Id);
+                    StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
+                    if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                    {
+                        UserRegister.Instance.CreateUser(message.From.FirstName, message.Chat.Id);
+                    }
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+
+                    if (this.user.State == GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede acceder al menu mientras está en partida");
+                    } 
+                    if (this.user.State == GameUser.UserState.Waiting)
+                    {
+                        throw new InvalidStateException("No puede acceder al menu mientras está buscando partida\n\nIngrese /cancelar para cancelar la busqueda");
+                    } 
+                    
+                    start.Append("¿Qué deseas hacer?\n")
+                        .Append("/cambiartablero\n")
+                        .Append("/bombas\n")
+                        .Append("/ataquedoble\n")
+                        .Append("/buscarpartida");
+                    response = start.ToString();
+                    return true;
                 }
-                
-                start.Append("¿Qué deseas hacer?\n")
-                    .Append("/jugarconelbot\n")
-                    .Append("/cambiartablero\n")
-                    .Append("/bombas\n")
-                    .Append("/ataquedoble\n")
-                    .Append("/buscarpartida");
-                response = start.ToString();
+                response = string.Empty;
+                return false;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                Cancel();
+                response = e.Message;
                 return true;
             }
-            response = string.Empty;
-            return false;
         }
 
         /// <summary>
@@ -65,15 +82,6 @@ namespace NavalBattle
             {
                 this.Next.Cancel();
             }
-        }
-
-        public enum UserRegisterState
-        {
-        }
-
-        public class UserRegisterData
-        {
-            public string NickName { get; set; }
         }
     }
 }

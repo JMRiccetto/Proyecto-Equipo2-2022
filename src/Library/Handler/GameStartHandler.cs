@@ -11,9 +11,7 @@ namespace NavalBattle
     /// </summary>
     public class GameStartHandler : BaseHandler
     {
-       private GameStartState State;
-
-        private GameUser User;
+        private GameUser user;
         
         private Match match;
 
@@ -26,8 +24,7 @@ namespace NavalBattle
         public GameStartHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/buscarpartida"};
-            this.State = GameStartState.Start;
-            this.User = null;
+            this.user = null;
         }
 
         /// <summary>
@@ -40,15 +37,25 @@ namespace NavalBattle
         {
             try
             {
-                if (this.State == GameStartState.Start && this.CanHandle(message))
+                if (this.CanHandle(message))
                 {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
+                    if (this.user.State == GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede acceder al menu mientras está en partida");
+                    } 
+
+                    if (this.user.State == GameUser.UserState.Waiting)
+                    {
+                        throw new InvalidStateException("No puede buscar partida mientras está en cola de espera\n\nIngrese /cancelar para cancelar la busqueda");
+                    } 
+                    
                     if (message.Text.ToLower().Trim() == "/buscarpartida")
                     {
-                        User.SearchGame();
+                        user.SearchGame();
  
-                        if(WaitingList.waitingList.Contains(this.User))
+                        if(WaitingList.waitingList.Contains(this.user))
                         {   
                             response = "Esperando";
                             return true;
@@ -56,24 +63,31 @@ namespace NavalBattle
 
                         foreach (Match match in Admin.getAdmin().MatchList)
                         {
-                            if (match.Players.Contains(this.User.Player))
+                            if (match.Players.Contains(this.user.Player))
                             {
                                 this.match = match;
                             }
                         }
+
                         TelegramBotClient bot = ClientBot.GetBot();
                                
-                        long id = this.match.Players[1].ChatIdPlayer;
+                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
                         
-                        bot.SendTextMessageAsync(id, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
+                        bot.SendTextMessageAsync(idPlayer1, "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse");
                           
-                        response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
+                        response = "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse\n\nEs su truno";
                         
                         return true;
                     }
                 }
                 response = "";
                 return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
             }
             catch (Exception e)
             {
@@ -83,11 +97,6 @@ namespace NavalBattle
 
                 return true;
             }
-        }
-
-        protected override void InternalCancel()
-        {
-            this.State = GameStartState.Start;
         }
 
         /// <summary>
@@ -102,17 +111,6 @@ namespace NavalBattle
             {
                 this.Next.Cancel();
             }
-        }
-
-        public enum GameStartState
-        {
-            Start,
-            Waiting,
-            InGame,    
-        }
-
-        public class GameStartData
-        {
         }
     }
 } 
