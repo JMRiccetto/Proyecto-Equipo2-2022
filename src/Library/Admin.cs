@@ -10,19 +10,8 @@ namespace NavalBattle
         /// </summary>
         /// <typeparam name="Match"></typeparam>
         /// <returns></returns>
-        List<Match> matchList = new List<Match>();
+        private List<Match> matchList = new List<Match>();
 
-        public List<Match> MatchList
-        {
-            get
-            {
-                return matchList;
-            }
-        }
-
-        List<string> usersRegister = new List<string>();
-
-    
         /// <summary>
         /// Ser utiliza singleton para admin.
         /// </summary>
@@ -38,11 +27,13 @@ namespace NavalBattle
             return admin;
         }
 
-        public void UserRegister(string nickname)
+         public List<Match> MatchList
         {
-            usersRegister.Add(nickname);
+            get
+            {
+                return matchList;
+            }
         }
-
         /// <summary>
         /// Cuando un User busca partida, si en la WaitingList hay un otro User con las mismas caracteristicas
         /// de partida que el, se emparejan en la misma partida.
@@ -50,28 +41,20 @@ namespace NavalBattle
         /// </summary>
         /// <param name="user"></param>
         public void AddToWaitingList(GameUser user)
-        {     
-            if (WaitingList.waitingList.Count > 0)
+        {
+            WaitingList.waitingList.Add(user);
+
+            int i = 0;
+
+            while ((i < WaitingList.waitingList.Count - 1) && (WaitingList.waitingList[i].DoubleAttack != user.DoubleAttack || WaitingList.waitingList[i].Bombs != user.Bombs || WaitingList.waitingList[i].GameboardSide != user.GameboardSide))
             {
-                int i = 0;
-                while(i< WaitingList.waitingList.Count &&  WaitingList.waitingList[i].GameboardSide != user.GameboardSide && WaitingList.waitingList[i].Bombs != user.Bombs && WaitingList.waitingList[i].DoubleAttack != user.DoubleAttack)
-                {
-                    i++;
-                }
-                if (i < WaitingList.waitingList.Count)
-                {
-                    CreateMatch(user, WaitingList.waitingList[i]);
-                    WaitingList.waitingList.Remove(user);
-                    WaitingList.waitingList.Remove(WaitingList.waitingList[i]);
-                }
-                else
-                {
-                    WaitingList.waitingList.Add(user);
-                }
-            }
-            else
+                i++;
+            } 
+            if (i < WaitingList.waitingList.Count - 1)
             {
-                WaitingList.waitingList.Add(user);
+                CreateMatch(user, WaitingList.waitingList[i]);
+                WaitingList.waitingList.Remove(user);
+                WaitingList.waitingList.Remove(WaitingList.waitingList[i]);
             }
         }
         

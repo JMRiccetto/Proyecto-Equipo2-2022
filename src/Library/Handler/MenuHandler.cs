@@ -11,11 +11,15 @@ namespace NavalBattle
     /// </summary>
     public class MenuHandler : BaseHandler
     {
-        public MenuState State;
+        private menuState state;
 
-        public GameUser User;
+        private GameUser user;
 
-        public MenuHandlerData Data;
+        private int gameboardSide;
+
+        private bool bombs = false;
+
+        private bool doubleAttack = false;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -25,8 +29,8 @@ namespace NavalBattle
         public MenuHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/menu", "/cambiartablero", "/bombas", "/ataquedoble"};
-            this.State = MenuState.Start;
-            this.User = null;
+            this.state = menuState.Start;
+            this.user = null;
         }
 
         /// <summary>
@@ -38,102 +42,122 @@ namespace NavalBattle
         protected override bool InternalHandle(Message message, out string response)
         {
             try
-            {
-                if (this.State == MenuState.Start && this.CanHandle(message))
-                {
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+            {   
+                if (this.CanHandle(message))
+                {   
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+
+                    if (this.user.State == GameUser.UserState.InGame)
+                    {
+                        throw new InvalidStateException("No puede acceder al menu mientras está en partida");
+                    } 
+
+                    if (this.user.State == GameUser.UserState.Waiting)
+                    {
+                        throw new InvalidStateException("No puede acceder al menu mientras buscando partida\n\nIngrese /cancelar para cancelar la busqueda");
+                    }
+
+                    if (this.state != menuState.Start)
+                    {
+                        throw new InvalidStateException("Ingrese /start para ver el menu de opciones");
+                    } 
+                    
                     if (message.Text.ToLower().Trim() == "/cambiartablero")
                     {
-                        this.State = MenuState.Gameboard;
+                        this.state = menuState.Gameboard;
                         response = "Introduce un tamaño para el tablero entre 6-8.";
                         return true;
                     }
                     else if (message.Text.ToLower().Trim() == "/bombas")
                     {
-                        this.State = MenuState.Bomb;
+                        this.state = menuState.Bomb;
                         response = "/on\n" + "/off";
                         return true;
                     }
                     else if (message.Text.ToLower().Trim() == "/ataquedoble")
                     {
-                        this.State = MenuState.DoubleAttack;    
+                        this.state = menuState.DoubleAttack;    
                         response = "ataquedoble cambiado";
                         return true;
                     }
                 }
-                else if (this.State == MenuState.Gameboard)
+                else if (this.state == menuState.Gameboard)
                 {
                     //response = "Si deseas cambiar el tamaño de tu tablero, por favor introduce un número entre 6-8.";
                     if (message.Text.Trim() == "6")
                     {
-                        this.User.Gameboard.Side = 6;
-                        this.State = MenuState.Start;
+                        this.user.GameboardSide = 6;
+                        this.state = menuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 6.";
                         return true;
                     }
                     else if (message.Text.Trim() == "7")
                     {
-                        this.User.Gameboard.Side = 7;
-                        this.State = MenuState.Start;
+                        this.user.GameboardSide = 7;
+                        this.state = menuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 7.";
-                        Console.WriteLine($"{this.User.Gameboard.Side}");
                         return true;
                     }
                     else if (message.Text.Trim() == "8")
                     {
-                        this.User.Gameboard.Side = 8;
-                        this.State = MenuState.Start;
+                        this.user.GameboardSide = 8;
+                        this.state = menuState.Start;
                         response = "El tamaño de tu tablero ha sido restablecido a 8.";
                         return true;
                     }
                     else
                     {
-                        this.User.Gameboard.Side = 6;
-                        this.State = MenuState.Start;
+                        this.user.GameboardSide = 6;
+                        this.state = menuState.Start;
                         response = "No se pudo registrar tu mensaje, el tamaño del tablero será cambiado a 6";
-                        Console.WriteLine($"{this.User.Gameboard.Side}");
                         return true;
                     }
                 }
-                else if (this.State == MenuState.Bomb)
+                else if (this.state == menuState.Bomb)
                 {
                     if (message.Text.ToLower().Trim() == "/off")
                     {
-                        this.User.Gameboard.BombSwitch = false;
-                        this.State = MenuState.Start;
+                        this.user.Bombs = false;
+                        this.state = menuState.Start;
                         response = "Las bombas han sido desactivadas.";
                         return true;
                     }
                     else if (message.Text.ToLower().Trim() == "/on")
                     {
-                        this.User.Gameboard.BombSwitch = true;
-                        this.State = MenuState.Start;
+                        this.user.Bombs = true;
+                        this.state = menuState.Start;
                         response = "Las bombas han sido activadas.";
                         return true;
                     }
                     else
                     {
-                        this.State = MenuState.Start;
+                        this.state = menuState.Start;
                         response = "No se pudo registrar su mensaje, el estado de las bombas sigue igual";
                         return true;
                     }
                 }
-                else if (this.State == MenuState.DoubleAttack)
+                else if (this.state == menuState.DoubleAttack)
                 {
-                    if (this.User.Gameboard.DoubleAttackSwitch)
+                    if (this.user.DoubleAttack)
                     {
-                        this.User.Gameboard.DoubleAttackSwitch = false;
-                        this.State = MenuState.Start;
+                        this.user.DoubleAttack = false;
+                        this.state = menuState.Start;
                         response = "El ataque doble ha sido desactivado.";
                         return true;
                     }
-                    this.User.Gameboard.DoubleAttackSwitch = true;
-                    this.State = MenuState.Start;
+                    this.user.DoubleAttack = true;
+                    this.state = menuState.Start;
                     response = "El ataque doble ha sido activado.";
                     return true;
                 }
                 response = string.Empty;
                 return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
             }
             catch(Exception e)
             {
@@ -145,8 +169,7 @@ namespace NavalBattle
 
         protected override void InternalCancel()
         {
-            this.State = MenuState.Start;
-            this.Data = new MenuHandlerData();
+            this.state = menuState.Start;
         }
 
         /// <summary>
@@ -162,19 +185,15 @@ namespace NavalBattle
                 this.Next.Cancel();
             }
         }
-
-        public enum MenuState
+        /// <summary>
+        /// Estado del menu.
+        /// </summary>
+        private enum menuState
         {
             Start,
-            BotGame,
             Gameboard,
             Bomb,
             DoubleAttack,
-        }
-
-        public class MenuHandlerData
-        {
-
         }
     }
 }

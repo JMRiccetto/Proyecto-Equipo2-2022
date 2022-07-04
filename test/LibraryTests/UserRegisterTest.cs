@@ -30,7 +30,7 @@ namespace Test.Library
         {
             if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(this.user.FirstName)))
                 {
-                    UserRegister.Instance.CreateUser(this.user.FirstName);
+                    UserRegister.Instance.CreateUser(this.user.FirstName,1);
                 }
             Assert.IsNotEmpty(UserRegister.Instance.UserData);
         }

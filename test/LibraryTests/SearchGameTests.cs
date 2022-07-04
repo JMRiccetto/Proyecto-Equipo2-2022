@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NavalBattle
 {
@@ -9,13 +11,13 @@ namespace NavalBattle
         {
         }
 
-        //Testea que un jugador pueda buscar partida.
+        //Testea que cuando un jugador busca partida va a la lista de espera.
         [Test]
         public void SearchGameTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1",1);
 
-            user1.SearchGame(7, false, false);
+            user1.SearchGame();
 
             Assert.AreEqual("juan1", WaitingList.waitingList[0].NickName);      
         }
@@ -24,46 +26,54 @@ namespace NavalBattle
         [Test]
         public void MatchmakingTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1",1);
 
-            GameUser user2 = new GameUser("juan2");
+            GameUser user2 = new GameUser("juan2",2);
 
-            user1.SearchGame(7, false, false);
+            user1.SearchGame();
 
-            Assert.IsNull(user1.player);
+            Assert.IsNull(user1.Player);
             
-            user2.SearchGame(7, false, false);
+            user2.SearchGame();
 
-            Assert.IsNotNull(user1.player);
+            Assert.IsNotNull(user1.Player);
 
-            Assert.IsNotNull(user2.player);
+            Assert.IsNotNull(user2.Player);
 
-            Assert.AreEqual(7, user1.player.Gameboard.Side);
+            Assert.AreEqual(6, user1.Player.Gameboard.Side);
 
-            Assert.AreEqual(7, user2.player.Gameboard.Side);
+            Assert.AreEqual(6, user2.Player.Gameboard.Side);
         } 
 
         //Testea que se puedan almacenar varias partidas en simultaneo.
         [Test]
         public void MatchListTest()
         {
-            GameUser user1 = new GameUser("juan1");
+            GameUser user1 = new GameUser("juan1", 1);
 
-            GameUser user2 = new GameUser("juan2");
+            GameUser user2 = new GameUser("juan2", 2);
 
-            GameUser user3 = new GameUser("juan3");
+            GameUser user3 = new GameUser("juan3", 3);
 
-            GameUser user4 = new GameUser("juan4");
+            GameUser user4 = new GameUser("juan4", 4);
 
-            user1.SearchGame(7, false, false);
+            user1.GameboardSide = 7;
 
-            user2.SearchGame(7, false, false);
+            user2.GameboardSide = 7;
 
-            user3.SearchGame(6, true, false);
+            user3.Bombs = true;
+
+            user4.Bombs = true;
+
+            user1.SearchGame();
+
+            user2.SearchGame();
+
+            user3.SearchGame();
                  
-            user4.SearchGame(6, true, false);
+            user4.SearchGame();
 
             Assert.AreEqual(2, Admin.getAdmin().MatchList.Count);
         }
     }
-}
+} 

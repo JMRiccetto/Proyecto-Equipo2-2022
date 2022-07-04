@@ -8,7 +8,7 @@ namespace NavalBattle
     /// </summary>
     public class AttackGameboardPrinter : IPrinter
     {
-        public void PrintGameboard(IGameboardContent gameboardContent)
+        public StringBuilder PrintGameboard(IGameboardContent gameboardContent)
         {
             StringBuilder s = new StringBuilder();
 
@@ -18,33 +18,33 @@ namespace NavalBattle
 
             for (int x = 0; x < lenght; x++)
             {
-                s.Append("  "+x.ToString());
+                s.Append("      "+x.ToString());
             }
 
             s.Append("\n");
 
             for (int i = 0; i < lenght; i++)
             {
-                s.Append(i.ToString());
+                s.Append(i.ToString()+" ");
                 
                 for (int j = 0; j < lenght; j++)
                 {
                     if (gameboard[i,j] == "t")
                     {
-                        s.Append("|T|");
+                        s.Append("|  T  |");
                     }
                     else if (gameboard[i,j] == "x")
                     {
-                        s.Append("|x|");
+                        s.Append("|  X  |");
                     }
                     else 
                     {
-                        s.Append("| |");
+                        s.Append("|      |");
                     }
                 }
                 s.Append("\n");
             }
-            Console.WriteLine(s.ToString());
+            return s;
         }
     }
 }

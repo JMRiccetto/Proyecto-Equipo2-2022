@@ -1,6 +1,8 @@
-/* using System;
+using System;
 using System.Text;
 using Telegram.Bot.Types;
+using Telegram.Bot;
+using System.Linq;
 
 namespace NavalBattle
 {
@@ -9,11 +11,10 @@ namespace NavalBattle
     /// </summary>
     public class GameStartHandler : BaseHandler
     {
-        public GameStartState State;
+        private GameUser user;
+        
+        private Match match;
 
-        public GameUser User;
-
-        public GameStartData Data;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -23,8 +24,7 @@ namespace NavalBattle
         public GameStartHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/buscarpartida"};
-            this.State = GameStartState.Start;
-            this.User = null;
+            this.user = null;
         }
 
         /// <summary>
@@ -37,237 +37,66 @@ namespace NavalBattle
         {
             try
             {
-                if (this.State == GameStartState.Start && this.CanHandle(message))
+                if (this.CanHandle(message))
                 {
-                    
-                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
-                    response = "Vuelva con vida capitán, es una orden.";
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
-                    if (this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 6 && message.Text.ToLower().Trim() == "/buscarpartida")
+                    if (this.user.State == GameUser.UserState.InGame)
                     {
-                        System.Console.WriteLine("2222");
-                        System.Console.WriteLine(WaitingList.BombsDoubleAttackSize6);
-                        WaitingList.BombsDoubleAttackSize6.Add(this.User);
-                        this.State = GameStartState.BombsDoubleAttackSize6;
-                        response = "ok";
-                        return true;
+                        throw new InvalidStateException("No puede acceder al menu mientras está en partida");
                     } 
-                    else if (this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 7)
+
+                    if (this.user.State == GameUser.UserState.Waiting)
                     {
-                        WaitingList.BombsDoubleAttackSize7.Add(this.User);
-                        this.State = GameStartState.BombsDoubleAttackSize7;
+                        throw new InvalidStateException("No puede buscar partida mientras está en cola de espera\n\nIngrese /cancelar para cancelar la busqueda");
+                    } 
+                    
+                    if (message.Text.ToLower().Trim() == "/buscarpartida")
+                    {
+                        user.SearchGame();
+ 
+                        if(WaitingList.waitingList.Contains(this.user))
+                        {   
+                            response = "Esperando";
+                            return true;
+                        }
+
+                        foreach (Match match in Admin.getAdmin().MatchList)
+                        {
+                            if (match.Players.Contains(this.user.Player))
+                            {
+                                this.match = match;
+                            }
+                        }
+
+                        TelegramBotClient bot = ClientBot.GetBot();
+                               
+                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
+                        
+                        bot.SendTextMessageAsync(idPlayer1, "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse");
+                          
+                        response = "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse\n\nEs su truno";
+                        
                         return true;
                     }
-                    else if (this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 8)
-                    {
-                        WaitingList.BombsDoubleAttackSize8.Add(this.User);
-                        this.State = GameStartState.BombsDoubleAttackSize8;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 6)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize6.Add(this.User);
-                        this.State = GameStartState.NoBombsDoubleAttackSize6;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 7)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize7.Add(this.User);
-                        this.State = GameStartState.NoBombsDoubleAttackSize7;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 8)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize8.Add(this.User);
-                        this.State = GameStartState.NoBombsDoubleAttackSize8;
-                        return true;
-                    }
-                    else if (this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 6)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize6.Add(this.User);
-                        this.State = GameStartState.BombsNoDoubleAttackSize6;
-                        return true;
-                    }
-                    else if (this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 7)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize7.Add(this.User);
-                        this.State = GameStartState.BombsNoDoubleAttackSize7;
-                        return true;
-                    }
-                    else if (this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 8)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize8.Add(this.User);
-                        this.State = GameStartState.BombsNoDoubleAttackSize8;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 6 && message.Text.ToLower().Trim() == "/buscarpartida")
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize6.Add(this.User);
-                        this.State = GameStartState.NoBombsNoDoubleAttackSize6;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 7)
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize7.Add(this.User);
-                        this.State = GameStartState.NoBombsNoDoubleAttackSize7;
-                        return true;
-                    }
-                    else if (!this.User.Gameboard.BombSwitch && !this.User.Gameboard.DoubleAttackSwitch && this.User.Gameboard.Side == 8)
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize8.Add(this.User);
-                        this.State = GameStartState.NoBombsNoDoubleAttackSize8;
-                        return true;
-                    }
-                }
-                else if (this.State == GameStartState.BombsDoubleAttackSize6 && WaitingList.BombsDoubleAttackSize6.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsDoubleAttackSize6[0], WaitingList.BombsDoubleAttackSize6[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsDoubleAttackSize6.Remove(WaitingList.BombsDoubleAttackSize6[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.BombsDoubleAttackSize7 && WaitingList.BombsDoubleAttackSize7.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsDoubleAttackSize7[0], WaitingList.BombsDoubleAttackSize7[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsDoubleAttackSize7.Remove(WaitingList.BombsDoubleAttackSize7[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.BombsDoubleAttackSize8 && WaitingList.BombsDoubleAttackSize8.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsDoubleAttackSize8[0], WaitingList.BombsDoubleAttackSize8[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsDoubleAttackSize8.Remove(WaitingList.BombsDoubleAttackSize8[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsDoubleAttackSize6 && WaitingList.NoBombsDoubleAttackSize6.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsDoubleAttackSize6[0], WaitingList.NoBombsDoubleAttackSize6[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize6.Remove(WaitingList.NoBombsDoubleAttackSize6[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsDoubleAttackSize7 && WaitingList.NoBombsDoubleAttackSize7.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsDoubleAttackSize7[0], WaitingList.NoBombsDoubleAttackSize7[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize7.Remove(WaitingList.NoBombsDoubleAttackSize7[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsDoubleAttackSize8 && WaitingList.NoBombsDoubleAttackSize8.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsDoubleAttackSize8[0], WaitingList.NoBombsDoubleAttackSize8[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsDoubleAttackSize8.Remove(WaitingList.NoBombsDoubleAttackSize8[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.BombsNoDoubleAttackSize6 && WaitingList.BombsNoDoubleAttackSize6.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsNoDoubleAttackSize6[0], WaitingList.BombsNoDoubleAttackSize6[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize6.Remove(WaitingList.BombsNoDoubleAttackSize6[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.BombsNoDoubleAttackSize7 && WaitingList.BombsNoDoubleAttackSize7.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsNoDoubleAttackSize7[0], WaitingList.BombsNoDoubleAttackSize7[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize7.Remove(WaitingList.BombsNoDoubleAttackSize7[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.BombsNoDoubleAttackSize8 && WaitingList.BombsNoDoubleAttackSize8.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.BombsNoDoubleAttackSize8[0], WaitingList.BombsNoDoubleAttackSize8[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.BombsNoDoubleAttackSize8.Remove(WaitingList.BombsNoDoubleAttackSize8[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsNoDoubleAttackSize6 && WaitingList.NoBombsNoDoubleAttackSize6.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsNoDoubleAttackSize6[0], WaitingList.NoBombsNoDoubleAttackSize6[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize6.Remove(WaitingList.NoBombsNoDoubleAttackSize6[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsNoDoubleAttackSize7 && WaitingList.NoBombsNoDoubleAttackSize7.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsNoDoubleAttackSize7[0], WaitingList.NoBombsNoDoubleAttackSize7[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize7.Remove(WaitingList.NoBombsNoDoubleAttackSize7[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
-                }
-                else if (this.State == GameStartState.NoBombsNoDoubleAttackSize8 && WaitingList.NoBombsNoDoubleAttackSize8.Count > 1)
-                {
-                    BotUtils.MatchPlayers(WaitingList.NoBombsNoDoubleAttackSize8[0], WaitingList.NoBombsNoDoubleAttackSize8[1]);
-                    for (int i = 0; i < 1; i++)
-                    {
-                        WaitingList.NoBombsNoDoubleAttackSize8.Remove(WaitingList.NoBombsNoDoubleAttackSize8[0]);
-                    }
-                    this.State = GameStartState.Start;
-                    response = "";
-                    return true;
                 }
                 response = "";
                 return false;
+            }
+            catch(NullReferenceException ne)
+            {
+                response = "Ingrese /start para acceder al menu de opciones.";
+
+                return true;
             }
             catch (Exception e)
             {
                 System.Console.WriteLine(e.Message);
                 Cancel();
                 response = e.Message;
-               
+
                 return true;
             }
-        }
-
-        protected override void InternalCancel()
-        {
-            this.State = GameStartState.Start;
-            this.Data = new GameStartData();
         }
 
         /// <summary>
@@ -283,26 +112,5 @@ namespace NavalBattle
                 this.Next.Cancel();
             }
         }
-
-        public enum GameStartState
-        {
-            Start,
-            NoBombsNoDoubleAttackSize6,
-            NoBombsNoDoubleAttackSize7,
-            NoBombsNoDoubleAttackSize8,
-            NoBombsDoubleAttackSize6,
-            NoBombsDoubleAttackSize7,
-            NoBombsDoubleAttackSize8,
-            BombsNoDoubleAttackSize6,
-            BombsNoDoubleAttackSize7,
-            BombsNoDoubleAttackSize8,
-            BombsDoubleAttackSize6,
-            BombsDoubleAttackSize7,
-            BombsDoubleAttackSize8,
-        }
-
-        public class GameStartData
-        {
-        }
     }
-} */
+} 

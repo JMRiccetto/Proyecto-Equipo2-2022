@@ -3,8 +3,45 @@
 namespace NavalBattle
 {
     public class GameUser : IJsonConvertible
-    {
-        private bool bombs;
+    {   
+        private long chatId;
+
+        private bool bombs = false;
+
+        private bool doubleAttack = false;
+
+        private int gameboardSide = 6;
+
+        private string nickName;
+
+        private Player player;
+
+        private UserState state = UserState.NotInGame;
+
+        public GameUser(string nickName, long aChatId)
+        {
+            this.chatId = aChatId;
+            this.nickName = nickName;
+        }
+        public long ChatId
+        {
+            get
+            {
+                return this.chatId;
+            }
+        }
+
+        public UserState State
+        {
+            get
+            {
+                return this.state;
+            }
+            set
+            {
+                this.state = value;
+            }
+        }
 
         public bool Bombs
         {
@@ -12,9 +49,11 @@ namespace NavalBattle
             {
                 return bombs;
             }
+            set
+            {
+                this.bombs = value;
+            }
         }
-
-        private bool doubleAttack;
 
         public bool DoubleAttack
         {
@@ -22,8 +61,11 @@ namespace NavalBattle
             {
                 return doubleAttack;
             }
+            set
+            {
+                this.doubleAttack = value;
+            }
         }
-        private int gameboardSide;
 
         public int GameboardSide
         {
@@ -31,8 +73,12 @@ namespace NavalBattle
             {
                 return gameboardSide;
             }
+            set
+            {
+                this.gameboardSide = value;
+            }
         }
-        private string nickName;
+
 
         public string NickName
         {
@@ -46,26 +92,32 @@ namespace NavalBattle
             }
         }
 
-        private Gameboard gameboard;
 
-        public Gameboard Gameboard
+        public Player Player
         {
             get
             {
-                return this.gameboard;
+                return this.player;
             }
             set
             {
-                this.gameboard = Gameboard;
-            }
+                this.player = value;
+            } 
         }
 
-        public Player player {get; set;}
+        /// <summary>
+        /// Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
+        /// Solo se controla si el usuario está en partida o no, porque los demas estdos se controlan en Gameboard.
+        /// Por ejemplo: 
+        ///     que un jugador no pueda atacar en la fase de posicionamiento.
+        ///     que un jugador no pueda posicionar barcos en la fase de ataque.
+        /// </summary>
+        public enum UserState
+        {   
+            NotInGame,
+            Waiting,
+            InGame,
 
-
-        public GameUser(string nickName)
-        {
-            this.NickName = nickName;
         }
         
         /// <summary>
@@ -74,14 +126,9 @@ namespace NavalBattle
         /// <param name="gameboardSide"></param>
         /// <param name="bombs"></param>
         /// <param name="doubleAttack"></param>
-        public void SearchGame(int gameboardSide, bool bombs, bool doubleAttack) 
+        public void SearchGame() 
         {
-            this.gameboardSide = gameboardSide;
-
-            this.bombs = bombs;
-
-            this.doubleAttack = doubleAttack;
-
+            this.state = GameUser.UserState.Waiting;
             Admin.getAdmin().AddToWaitingList(this);
         }
 

@@ -14,13 +14,6 @@ namespace NavalBattle
 
         private List<Coords> coords;
 
-        public List<Coords> Coords 
-        {
-            get
-            {
-                return coords;
-            }
-        }
         
         public Ship (int length, string direction)
         {
@@ -30,12 +23,30 @@ namespace NavalBattle
             this.coords = new List<Coords>();
         }
 
-        /// <summary>
-        /// //Añade una coordenada al barco.
-        /// </summary>
-        /// <param name="coord"></param>
-        public void AddShipCoord(Coords coord)
+        public List<Coords> Coords 
         {
+            get
+            {
+                return coords;
+            }
+        }
+
+        public int Length
+        {
+            get
+            {
+                return this.length;
+            }
+        }
+        
+        /// <summary>
+        /// Añade una coordenada al barco.
+        /// La coordenada a agregar se crea en Ship por creator.
+        /// </summary>
+        /// <param name="stringCoord"></param>
+        public void AddShipCoord(string stringCoord)
+        {
+            Coords coord = new Coords(stringCoord);
             this.coords.Add(coord);
         }
 

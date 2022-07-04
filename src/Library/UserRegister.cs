@@ -44,9 +44,9 @@ namespace NavalBattle
                this.userData = new List<GameUser>();
           }
 
-          public void CreateUser(string nickName)
+          public void CreateUser(string nickName, long id)
           {
-               GameUser user = new GameUser(nickName);
+               GameUser user = new GameUser(nickName, id);
                this.userData.Add(user);
           }
 
@@ -74,6 +74,21 @@ namespace NavalBattle
                if (this.userData.Exists(user => nickName == user.NickName))
                {
                     outcome = this.userData.Find(user => nickName == user.NickName);
+               }
+               return outcome;
+          }
+
+          /// <summary>
+          /// Encuentra un User en la lista de Users por su id.
+          /// </summary>
+          /// <param name="chatId"></param>
+          /// <returns></returns>
+          public GameUser GetUserById(long chatId)
+          {
+               GameUser outcome = null;
+               if (this.userData.Exists(user => chatId == user.ChatId))
+               {
+                    outcome = this.userData.Find(user => chatId == user.ChatId);
                }
                return outcome;
           }
