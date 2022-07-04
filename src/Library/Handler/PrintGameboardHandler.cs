@@ -37,7 +37,7 @@ namespace NavalBattle
             {
                 if (this.CanHandle(message))
                 {
-                    this.User = UserRegister.GetUserByNickName(message.From.FirstName.ToString());
+                    this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
                     foreach (Match match in Admin.getAdmin().MatchList)
                     {

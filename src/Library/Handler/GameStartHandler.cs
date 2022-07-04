@@ -1,7 +1,5 @@
 using System;
 using System.Text;
-using System.Linq;
-using System.Collections.Generic;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using System.Linq;
@@ -13,13 +11,9 @@ namespace NavalBattle
     /// </summary>
     public class GameStartHandler : BaseHandler
     {
-       private GameStartState State;
-
         private GameUser User;
         
         private Match match;
-
-        public Match Match;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -29,9 +23,7 @@ namespace NavalBattle
         public GameStartHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/buscarpartida"};
-            this.State = GameStartState.Start;
             this.User = null;
-            this.Match = null;
         }
 
         /// <summary>
@@ -44,10 +36,9 @@ namespace NavalBattle
         {
             try
             {
-                if (this.State == GameStartState.Start && this.CanHandle(message))
+                if (this.CanHandle(message))
                 {
                     this.User = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
-                    //response = "Vuelva con vida capitán, es una orden.";
 
                     if (message.Text.ToLower().Trim() == "/buscarpartida")
                     {
@@ -73,18 +64,7 @@ namespace NavalBattle
                         bot.SendTextMessageAsync(id, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
                           
                         response = "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4";
-
-                        foreach (Match match in Admin.getAdmin().MatchList)
-                        {
-                            if (match.Players.Contains(this.User.Player))
-                            {
-                                this.Match = match;
-                            }
-                        }
-
-                        //Console.WriteLine($"{this.Match.Players[0].ChatId}");
-                        Bot.BotClient().SendTextMessageAsync(this.Match.Players[0].ChatIdPlayer, "Partida creada\n para posicionar un barco ingrese: /posicionar coordenada inicial direccion \n Las direcciones puede ser N S E W \n El primer barco que cree sera de largo 2 el segundo de largo 3 y el tercero de largo 4");
-
+                        
                         return true;
                     }
                 }
@@ -101,11 +81,6 @@ namespace NavalBattle
             }
         }
 
-        protected override void InternalCancel()
-        {
-            this.State = GameStartState.Start;
-        }
-
         /// <summary>
         /// Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
         /// procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
@@ -119,16 +94,5 @@ namespace NavalBattle
                 this.Next.Cancel();
             }
         }
-
-        public enum GameStartState
-        {
-            Start,
-            Waiting,
-            InGame,    
-        }
-
-        public class GameStartData
-        {
-        }
     }
-} 
+}
