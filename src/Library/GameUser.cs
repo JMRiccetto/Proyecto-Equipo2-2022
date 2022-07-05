@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
@@ -23,11 +24,18 @@ namespace NavalBattle
 
         private UserState state = UserState.NotInGame;
 
+        //[JsonConstructor]
         public GameUser(string nickName, long aChatId)
         {
             this.chatId = aChatId;
             this.nickName = nickName;
         }
+
+        /* public GameUser(string json)
+        {
+            this.LoadFromJson(json);
+        } */
+
         public long ChatId
         {
             get
@@ -138,15 +146,24 @@ namespace NavalBattle
         }
 
 
-        public string ConvertToJson(JsonSerializerOptions options)
+        public string ConvertToJson()
         {
-            JsonSerializerOptions option = new ()
+            JsonSerializerOptions option = new()
             {
                 ReferenceHandler = MyReferenceHandler.Instance,
                 WriteIndented = true
             };
 
             return JsonSerializer.Serialize(this, option);
+        }
+
+        public void LoadFromJson(string json)
+        {
+            GameUser deserialized = JsonSerializer.Deserialize<GameUser>(json);
+            this.chatId = deserialized.chatId;
+            this.nickName = deserialized.nickName;
+            this.bombs = deserialized.bombs;
+            this.gameboardSide = deserialized.gameboardSide;
         }
     }
 }

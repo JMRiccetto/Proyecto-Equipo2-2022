@@ -15,13 +15,13 @@ namespace NavalBattle
             string[,] gameboard = gameboardContent.GetGameboardToPrint();
 
             int lenght;
-            
+
             lenght= gameboard.GetLength(0);
 
             s.Append("TABLEROS \n");
             for (int x = 0; x < lenght; x++)
             {
-                s.Append("      " +x.ToString());
+                s.Append("      " + x.ToString());
             }
 
             s.Append("\n");
@@ -32,11 +32,11 @@ namespace NavalBattle
 
                 for (int j = 0; j < lenght; j++)
                 {
-                    if(gameboard[i,j] == "o")
+                    if (gameboard[i,j] == "o")
                     {
                         s.Append("|  O  |");
                     }
-                    else if(gameboard[i,j] == "t")
+                    else if (gameboard[i,j] == "t")
                     {
                         s.Append("|  X  |");
                     }

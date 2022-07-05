@@ -7,7 +7,7 @@ using System.Linq;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/buscarpartida".
     /// </summary>
     public class GameStartHandler : BaseHandler
     {
@@ -27,7 +27,7 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/buscarpartida" y coloca al jugador en una lista de espera hasta que haya otro con sus mismos settings que desee jugar.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
@@ -48,14 +48,14 @@ namespace NavalBattle
                     if (this.user.State == GameUser.UserState.Waiting)
                     {
                         throw new InvalidStateException("No puede buscar partida mientras está en cola de espera\n\nIngrese /cancelar para cancelar la busqueda");
-                    } 
-                    
+                    }
+
                     if (message.Text.ToLower().Trim() == "/buscarpartida")
                     {
-                        user.SearchGame();
+                        this.user.SearchGame();
  
-                        if(WaitingList.waitingList.Contains(this.user))
-                        {   
+                        if (WaitingList.waitingList.Contains(this.user))
+                        {
                             response = "Esperando";
                             return true;
                         }
@@ -69,20 +69,20 @@ namespace NavalBattle
                         }
 
                         TelegramBotClient bot = ClientBot.GetBot();
-                               
+ 
                         long idPlayer1 = this.match.Players[1].ChatIdPlayer;
-                        
+
                         bot.SendTextMessageAsync(idPlayer1, "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse");
-                          
+
                         response = "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse\n\nEs su truno";
-                        
+
                         return true;
                     }
                 }
-                response = "";
+                response = string.Empty;
                 return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
@@ -91,7 +91,7 @@ namespace NavalBattle
             catch (Exception e)
             {
                 System.Console.WriteLine(e.Message);
-                Cancel();
+                this.Cancel();
                 response = e.Message;
 
                 return true;

@@ -16,25 +16,26 @@ namespace NavalBattle
                 {
                     instance = new MyReferenceHandler();
                 }
-            return instance;
+
+                return instance;
             }
         }
 
         public MyReferenceHandler() => Reset();
         private ReferenceResolver rootedResolver;
-        public override ReferenceResolver CreateResolver() => rootedResolver;
-        public void Reset() => rootedResolver = new MyReferenceResolver();
+        public override ReferenceResolver CreateResolver() => this.rootedResolver;
+        public void Reset() => this.rootedResolver = new MyReferenceResolver();
     }
 
     class MyReferenceResolver : ReferenceResolver
     {
-        private readonly Dictionary<string, object> referenceIdToObjectMap = new();
-        private readonly Dictionary<object, string> objectToReferenceIdMap = new(ReferenceEqualityComparer.Instance);
+        private readonly Dictionary<string, object> referenceIdToObjectMap = new ();
+        private readonly Dictionary<object, string> objectToReferenceIdMap = new (ReferenceEqualityComparer.Instance);
         private uint referenceCount;
 
         public override void AddReference(string referenceId, object value)
         {
-            if (!referenceIdToObjectMap.TryAdd(referenceId, value))
+            if (!this.referenceIdToObjectMap.TryAdd(referenceId, value))
             {
                 throw new JsonException();
             }
@@ -42,15 +43,15 @@ namespace NavalBattle
 
         public override string GetReference(object value, out bool alreadyExists)
         {
-            if (objectToReferenceIdMap.TryGetValue(value.ToString(), out string referenceId))
+            if (this.objectToReferenceIdMap.TryGetValue(value.ToString(), out string referenceId))
             {
                 alreadyExists = true;
             }
             else
             {
-                referenceCount++;
-                referenceId = referenceCount.ToString();
-                objectToReferenceIdMap.Add(value, referenceId);
+                this.referenceCount++;
+                referenceId = this.referenceCount.ToString();
+                this.objectToReferenceIdMap.Add(value, referenceId);
                 alreadyExists = false;
             }
 

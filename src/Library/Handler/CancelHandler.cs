@@ -7,7 +7,7 @@ using System.Linq;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/cancelar".
     /// </summary>
     public class CancelHandler : BaseHandler
     {
@@ -26,7 +26,7 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/cancelar" y remueve al usuario de la lista de espera.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>

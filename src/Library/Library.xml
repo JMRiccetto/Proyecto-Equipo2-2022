@@ -4,36 +4,58 @@
         <name>Library</name>
     </assembly>
     <members>
-        <member name="F:NavalBattle.Admin.MatchList">
+        <member name="T:NavalBattle.Admin">
             <summary>
-            Lista donde se guardan las partidas.
+            Clase encargada de crear y contener las partidas en juego, ademáas de agregar usuarios a la lista de espera.
             </summary>
-            <typeparam name="Match"></typeparam>
-            <returns></returns>
         </member>
         <member name="F:NavalBattle.Admin.admin">
             <summary>
-            Ser utiliza singleton para admin.
+            Se utiliza singleton para admin.
             </summary>
+        </member>
+        <member name="F:NavalBattle.Admin.matchList">
+            <summary>
+            Lista donde se guardan las partidas.
+            </summary>
+            <typeparam name="Match">Partida.</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Admin.getAdmin">
+            <summary>
+            Singleton de Admin, si no existe una instancia la crea, y si ya existe devuelve esa misma instancia.
+            </summary>
+            <returns>Admin.</returns>
+        </member>
+        <member name="P:NavalBattle.Admin.MatchList">
+            <summary>
+            Gets de la lista de partidas en juego.
+            </summary>
+            <value></value>
         </member>
         <member name="M:NavalBattle.Admin.AddToWaitingList(NavalBattle.GameUser)">
             <summary>
-            Cuando un User busca partida, si en la WaitingList hay un otro User con las mismas caracteristicas
+            Cuando un User busca partida, si en la WaitingList hay un otro User con las mismas características
             de partida que el, se emparejan en la misma partida.
             Si no hay otro player disponible para jugar, se agrega a waitingList.
             </summary>
-            <param name="user"></param>
+            <param name="user">Usuario.</param>
         </member>
         <member name="M:NavalBattle.Admin.CreateMatch(NavalBattle.GameUser,NavalBattle.GameUser)">
             <summary>
             Se crea la partida con los dos Users luego de ser emparejados.
             </summary>
-            <param name="user1"></param>
-            <param name="user2"></param>
+            <param name="user1">Usuario 1.</param>
+            <param name="user2">Usuario 2.</param>
         </member>
         <member name="T:NavalBattle.AttackGameboardPrinter">
             <summary>
             Imprime el tablero de manera que se puede visualizar donde se efectuaron los ataques y si algun barco fue tocado.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.Bomb">
+            <summary>
+            Clase que representa a las bombas que irán dentro del tablero.
             </summary>
         </member>
         <member name="M:NavalBattle.Bomb.#ctor(System.String)">
@@ -41,6 +63,12 @@
             La coordenada de la bomba se crea en Bomb por creator.
             </summary>
             <param name="stringCoord"></param>
+        </member>
+        <member name="P:NavalBattle.Bomb.Coord">
+            <summary>
+            Gets de las coordenadas de la bomba.
+            </summary>
+            <value></value>
         </member>
         <member name="T:NavalBattle.ClientBot">
             <summary>
@@ -87,6 +115,41 @@
             Imprime el tablero de manera que se puede visualizar la posicion de los barcos y si fueron tocados o no.
             </summary>
         </member>
+        <member name="T:NavalBattle.Gameboard">
+            <summary>
+            El tablero de los jugadores, aquí se guarda todo lo que va dentro de las casillas del tablero junto a gran parte de la lógica del juego.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Gameboard.#ctor(System.Int32)">
+            <summary>
+            Constructor del tablero.
+            </summary>
+            <param name="side">Tamaño del tablero.</param>
+        </member>
+        <member name="P:NavalBattle.Gameboard.Side">
+            <summary>
+            Gets del lado del tablero.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Gameboard.Ships">
+            <summary>
+            Gets de la lista de casilas con agua.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Gameboard.Water">
+            <summary>
+            Gets de la lista de casillas con agua.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Gameboard.Bombs">
+            <summary>
+            Gets de la lista de casillas con bombas.
+            </summary>
+            <value></value>
+        </member>
         <member name="M:NavalBattle.Gameboard.IsValidCoord(System.String)">
             <summary>
             Devuelve true si la coordenada se encuentra en el tablero.
@@ -111,7 +174,7 @@
             <summary>
             Metodo que añade bombas al tablero.
             Se Crean y añaden en Gameboard por creator.
-            Precondiciones: 
+            Precondiciones:
                 Solo se añaden tres bombas cualquiera sea el tamaño del tablero.
                 No puede haber dos bombas a menos de dos "casilleros" de distancia.
             </summary>
@@ -148,6 +211,15 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:NavalBattle.GameUser.UserState">
+            <summary>
+            Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
+            Solo se controla si el usuario está en partida o no, porque los demas estdos se controlan en Gameboard.
+            Por ejemplo: 
+                que un jugador no pueda atacar en la fase de posicionamiento.
+                que un jugador no pueda posicionar barcos en la fase de ataque.
+            </summary>
+        </member>
         <member name="M:NavalBattle.GameUser.SearchGame">
             <summary>
             El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
@@ -158,7 +230,7 @@
         </member>
         <member name="T:NavalBattle.AttackHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/atacar".
             </summary>
         </member>
         <member name="M:NavalBattle.AttackHandler.#ctor(NavalBattle.BaseHandler)">
@@ -170,7 +242,7 @@
         </member>
         <member name="M:NavalBattle.AttackHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/atacar" y ataca el tablero del rival en la coordenada indicada.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -182,6 +254,16 @@
             procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
             estado inicial.
             </summary>
+        </member>
+        <member name="M:NavalBattle.AttackHandler.CanHandle(Telegram.Bot.Types.Message)">
+            <summary>
+            Determina si este "handler" puede procesar el mensaje. En la clase base se utiliza el array
+            <see cref="P:NavalBattle.BaseHandler.Keywords"/> para buscar el texto en el mensaje ignorando mayúsculas y minúsculas. Las
+            clases sucesores pueden sobreescribir este método para proveer otro mecanismo para determina si procesan o no
+            un mensaje.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <returns>true si el mensaje puede ser pocesado; false en caso contrario.</returns>
         </member>
         <member name="T:NavalBattle.BaseHandler">
             <summary>
@@ -259,7 +341,7 @@
         </member>
         <member name="T:NavalBattle.CancelHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/cancelar".
             </summary>
         </member>
         <member name="M:NavalBattle.CancelHandler.#ctor(NavalBattle.BaseHandler)">
@@ -271,7 +353,7 @@
         </member>
         <member name="M:NavalBattle.CancelHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/cancelar" y remueve al usuario de la lista de espera.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -286,7 +368,7 @@
         </member>
         <member name="T:NavalBattle.GameStartHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/buscarpartida".
             </summary>
         </member>
         <member name="M:NavalBattle.GameStartHandler.#ctor(NavalBattle.BaseHandler)">
@@ -298,7 +380,7 @@
         </member>
         <member name="M:NavalBattle.GameStartHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/buscarpartida" y coloca al jugador en una lista de espera hasta que haya otro con sus mismos settings que desee jugar.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -335,19 +417,19 @@
         </member>
         <member name="T:NavalBattle.MenuHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa los comandos "/cambiartablero" y "/bombas".
             </summary>
         </member>
         <member name="M:NavalBattle.MenuHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de MenuHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next">El próximo handler.</param>
+            <returns>MenuHandler.</returns>
         </member>
         <member name="M:NavalBattle.MenuHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa los mensajes "/cambiartablero" y "/bombas" y despliega las opciones para prenderlos y apagarlos.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -372,14 +454,14 @@
         </member>
         <member name="M:NavalBattle.PlaceShipHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de PlaceShipHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next">El próximo handler.</param>
+            <returns>PlaceShipHandler.</returns>
         </member>
         <member name="M:NavalBattle.PlaceShipHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/posicionar" y procede a colocar el barco en la coordenada indicada por el jugador.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -394,19 +476,19 @@
         </member>
         <member name="T:NavalBattle.PrintGameboardHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/vertableros".
             </summary>
         </member>
         <member name="M:NavalBattle.PrintGameboardHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de PrintGameBoardHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next">Próximo Handler.</param>
+            <returns>PrintGameboardHandler.</returns>
         </member>
         <member name="M:NavalBattle.PrintGameboardHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/vertableros" y le muestra al usuario el tablero con sus barcos y el tablero donde ha atacado.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -421,19 +503,19 @@
         </member>
         <member name="T:NavalBattle.SurrenderHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/rendirse".
             </summary>
         </member>
         <member name="M:NavalBattle.SurrenderHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de SurrenderHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next">El próximo handler.</param>
+            <returns></returns>
         </member>
         <member name="M:NavalBattle.SurrenderHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/rendirse", terminando la partida y dándole la victoria al otro jugador.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -448,19 +530,19 @@
         </member>
         <member name="T:NavalBattle.UserRegisterHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/start".
             </summary>
         </member>
         <member name="M:NavalBattle.UserRegisterHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de UserRegisterHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next"></param>
+            <returns></returns>
         </member>
         <member name="M:NavalBattle.UserRegisterHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
-            Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+            Procesa el mensaje "/start" y si el usuario no aparece en la lista de usuarios registrados lo registra y despliega el menú de opciones.
             </summary>
             <param name="message">El mensaje a procesar.</param>
             <param name="response">La respuesta al mensaje procesado.</param>
@@ -478,10 +560,33 @@
             Interfaz que implementa la clase Gameboard con el objetivo de aplicar DIP.
             </summary>
         </member>
+        <member name="M:NavalBattle.IGameboardContent.GetGameboardToPrint">
+            <summary>
+            Devuelve el tablero en forma de matriz.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NavalBattle.InvalidCoordException">
+            <summary>
+            Excepción que se lanza cuando un jugador introduce una coordenada inválida.
+            </summary>
+        </member>
         <member name="T:NavalBattle.InvalidStateException">
             <summary>
-            Excepción que se lanza cuando se quiere ingresar un comando en un momoento en el que no se quiere lanzar.
+            Excepción que se lanza cuando se quiere ingresar un comando en un momento en el que no se quiere lanzar.
             </summary>
+        </member>
+        <member name="T:NavalBattle.IPrinter">
+            <summary>
+            Interfaz para la impresión.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.IPrinter.PrintGameboard(NavalBattle.IGameboardContent)">
+            <summary>
+            Método para imprimir tableros, que requiere un objeto del tipo IGameboardContent.
+            </summary>
+            <param name="gameboardContent"></param>
+            <returns></returns>
         </member>
         <member name="T:NavalBattle.Player">
             <summary>
@@ -514,6 +619,56 @@
             Cambia el turno del jugador.
             </summary>
         </member>
+        <member name="T:NavalBattle.IJsonConvertible">
+            <summary>
+            Interfaz para implementar la serialización de Json.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.IJsonConvertible.ConvertToJson">
+            <summary>
+            Método para serializar objetos a Json.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.IJsonConvertible.LoadFromJson(System.String)">
+            <summary>
+            Método para convertir strings en formato Json a texto.
+            </summary>
+            <param name="json"></param>
+        </member>
+        <member name="T:NavalBattle.JsonSerializerUtils">
+            <summary>
+            Clase donde reside la mayoría del código relacionado a la serialización/deserialización de Json.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.JsonSerializerUtils.SerializeUsers">
+            <summary>
+            Método para serializar objetos GameUser a formato Json.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.JsonSerializerUtils.DeserializeUsers">
+            <summary>
+            Método para deserializar strings en formato Json a objetos GameUser.
+            </summary>
+        </member>
+        <member name="T:NavalBattle.Ship">
+            <summary>
+            Clase que representa a los barcos que van dentro del tablero.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Ship.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor del barco.
+            </summary>
+            <param name="length"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="P:NavalBattle.Ship.Length">
+            <summary>
+            Gets del largo del barco.
+            </summary>
+            <value></value>
+        </member>
         <member name="M:NavalBattle.Ship.AddShipCoord(System.String)">
             <summary>
             Añade una coordenada al barco.
@@ -540,47 +695,53 @@
             </summary>
             <param name="coord"></param>
         </member>
-        <member name="T:NavalBattle.GameUser.UserState">
+        <member name="M:NavalBattle.UserRegister.CreateUser(System.String,System.Int64)">
             <summary>
-            Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
-            Solo se controla si el usuario está en partida o no, porque los demas estdos se controlan en Gameboard.
-            Por ejemplo: 
-                que un jugador no pueda atacar en la fase de posicionamiento.
-                que un jugador no pueda posicionar barcos en la fase de ataque.
+            Método que aplica el patrón Creator para crear y añadir un usuario a la lista de usuarios.
             </summary>
+            <param name="nickName">Nombre del usuario.</param>
+            <param name="id">Id del usuario.</param>
         </member>
-        <member name="M:NavalBattle.GameUser.SearchGame">
+        <member name="M:NavalBattle.UserRegister.ContainsUser(NavalBattle.GameUser)">
             <summary>
-            El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
-            </summary>
-            <param name="gameboardSide"></param>
-            <param name="bombs"></param>
-            <param name="doubleAttack"></param>
-        </member>
-        <member name="M:NavalBattle.UserRegister.RemoveUser(NavalBattle.GameUser)">
-            <summary>
-            Remueve un usuario de la lista de usuarios.
+            Por la ley de demeter y para evitar el alto acoplamiento se crea este método para verificar si un usarios 
+            está en la lista de usuarios y que otro objeto no deba de conocer todas la conexiones internas.
             </summary>
             <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.UserRegister.Add(NavalBattle.GameUser)">
+            <summary>
+            Por la ley de demeter y para evitar el alto acoplamiento se crea este método para añadir usuarios a la lista
+            de usuarios y además que otro objeto no deba de conocer todas la conexiones internas.
+            </summary>
+            <param name="item"></param>
         </member>
         <member name="M:NavalBattle.UserRegister.GetUserByNickName(System.String)">
             <summary>
             Encuentra un User en la lista de Users por su nombre.
             </summary>
-            <param name="nickName"></param>
-            <returns></returns>
+            <param name="nickName">Nombre del usuario.</param>
+            <returns>GameUser.</returns>
         </member>
         <member name="M:NavalBattle.UserRegister.GetUserById(System.Int64)">
             <summary>
             Encuentra un User en la lista de Users por su id.
             </summary>
-            <param name="chatId"></param>
-            <returns></returns>
+            <param name="chatId">Id del chat por el que se habla con el usuario.</param>
+            <returns>GameUser.</returns>
         </member>
         <member name="T:NavalBattle.WaitingList">
             <summary>
-            Lista donde se agregan los usuarios que estan esperando para jugar.
+            Lista donde se agregan los usuarios que están esperando para jugar.
             </summary>
+        </member>
+        <member name="F:NavalBattle.WaitingList.waitingList">
+            <summary>
+            Lista de espera para los jugadores que no esten en partida.
+            </summary>
+            <typeparam name="GameUser">Usuarios.</typeparam>
+            <returns></returns>
         </member>
     </members>
 </doc>

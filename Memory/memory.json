@@ -1,0 +1,20 @@
+[
+  {
+    "ChatId": 0,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 7,
+    "NickName": "Mart\u00EDn",
+    "Player": null
+  },
+  {
+    "ChatId": 0,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 6,
+    "NickName": "Luis",
+    "Player": null
+  }
+]

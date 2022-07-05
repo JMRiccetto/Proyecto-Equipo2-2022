@@ -6,16 +6,24 @@ using Telegram.Bot.Types;
 
 namespace NavalBattle
 {
-     public class UserRegister : IJsonConvertible
+     public class UserRegister
     {
-          private static List<GameUser> userData = new List<GameUser>();
+          private List<GameUser> userData = new List<GameUser>();
 
           [JsonInclude]
+          /// <summary>
+          /// Gets de la lista de usuarios registrados.
+          /// </summary>
+          /// <value></value>
           public List<GameUser> UserData
           {
                get
                {
-                    return userData;
+                    return this.userData;
+               }
+               set
+               {
+                    this.userData = value;
                }
           }
 
@@ -41,39 +49,59 @@ namespace NavalBattle
 
           public void SetUp()
           {
-               userData = new List<GameUser>();
-          }
-
-          public void CreateUser(string nickName, long id)
-          {
-               GameUser user = new GameUser(nickName, id);
-               userData.Add(user);
+               this.userData = new List<GameUser>();
           }
 
           /// <summary>
-          /// Remueve un usuario de la lista de usuarios.
+          /// Método que aplica el patrón Creator para crear y añadir un usuario a la lista de usuarios.
+          /// </summary>
+          /// <param name="nickName">Nombre del usuario.</param>
+          /// <param name="id">Id del usuario.</param>
+          public void CreateUser(string nickName, long id)
+          {
+               GameUser user = new GameUser(nickName, id);
+               this.userData.Add(user);
+          }
+
+          /// <summary>
+          /// Por la ley de demeter y para evitar el alto acoplamiento se crea este método para verificar si un usarios 
+          /// está en la lista de usuarios y que otro objeto no deba de conocer todas la conexiones internas.
           /// </summary>
           /// <param name="user"></param>
-          public void RemoveUser(GameUser user)
+          /// <returns></returns>
+          public bool ContainsUser(GameUser user)
           {
-               if (UserData.Contains(user))
+               if(this.userData.Contains(user))
                {
-                    throw new Exception();
+                    return true;
                }
-               userData.Remove(user);
+               else
+               {
+                    return false;
+               }
+          }
+
+          /// <summary>
+          /// Por la ley de demeter y para evitar el alto acoplamiento se crea este método para añadir usuarios a la lista
+          /// de usuarios y además que otro objeto no deba de conocer todas la conexiones internas.
+          /// </summary>
+          /// <param name="item"></param>
+          public void Add(GameUser item)
+          {
+               this.userData.Add(item);
           }
 
           /// <summary>
           /// Encuentra un User en la lista de Users por su nombre.
           /// </summary>
-          /// <param name="nickName"></param>
-          /// <returns></returns>
+          /// <param name="nickName">Nombre del usuario.</param>
+          /// <returns>GameUser.</returns>
           public GameUser GetUserByNickName(string nickName)
           {
                GameUser outcome = null;
-               if (userData.Exists(user => nickName == user.NickName))
+               if (this.userData.Exists(user => nickName == user.NickName))
                {
-                    outcome = userData.Find(user => nickName == user.NickName);
+                    outcome = this.userData.Find(user => nickName == user.NickName);
                }
                return outcome;
           }
@@ -81,34 +109,16 @@ namespace NavalBattle
           /// <summary>
           /// Encuentra un User en la lista de Users por su id.
           /// </summary>
-          /// <param name="chatId"></param>
-          /// <returns></returns>
+          /// <param name="chatId">Id del chat por el que se habla con el usuario.</param>
+          /// <returns>GameUser.</returns>
           public GameUser GetUserById(long chatId)
           {
                GameUser outcome = null;
-               if (userData.Exists(user => chatId == user.ChatId))
+               if (this.userData.Exists(user => chatId == user.ChatId))
                {
-                    outcome = userData.Find(user => chatId == user.ChatId);
+                    outcome = this.userData.Find(user => chatId == user.ChatId);
                }
                return outcome;
-          }
-
-          public string ConvertToJson(JsonSerializerOptions options)
-          {
-               return JsonSerializer.Serialize(this, options);
-          }
-
-          public void LoadFromJson(string json)
-          {
-               this.SetUp();
-               GameUser user = JsonSerializer.Deserialize<GameUser>(json);
-               JsonSerializerOptions options = new()
-               {
-                    ReferenceHandler = MyReferenceHandler.Instance,
-                    WriteIndented = true,
-               };
-
-               user = JsonSerializer.Deserialize<GameUser>(json, options);
           }
     }
 }
