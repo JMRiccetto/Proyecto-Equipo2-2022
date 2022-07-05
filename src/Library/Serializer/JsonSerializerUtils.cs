@@ -28,6 +28,11 @@ namespace NavalBattle
             {
                 System.Text.Json.JsonSerializer.Serialize(fileStream, user, options);
             } */
+            foreach (GameUser user in UserRegister.Instance.UserData)
+            {
+                user.Player = null;
+                user.State = 0;
+            }
             System.Text.Json.JsonSerializer.Serialize(fileStream, UserRegister.Instance.UserData, options);
         }
 

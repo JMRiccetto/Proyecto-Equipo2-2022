@@ -1,8 +1,11 @@
 using System;
 using System.Text;
+using System.IO;
 using Telegram.Bot.Types;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using Nito.AsyncEx;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types.Enums;
@@ -19,6 +22,7 @@ namespace NavalBattle
 
         private Match match;
 
+        TelegramBotClient bot = ClientBot.GetBot();
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -64,7 +68,7 @@ namespace NavalBattle
 
                         string res = "hola";
 
-                        TelegramBotClient bot = ClientBot.GetBot();
+                        
 
                         long idPlayer0 = this.match.Players[0].ChatIdPlayer;
 
@@ -72,13 +76,13 @@ namespace NavalBattle
 
                         if (Equals(this.user.Player, this.match.Players[0]))
                         {
-                            bot.SendAudioAsync(idPlayer0, "https://www.youtube.com/watch?v=tRY8w9Ft_7Q");
                             res = this.user.Player.Attack(attackCoordStr, this.match.Players[1].Gameboard);
+                            AsyncContext.Run(() => SendImage(message));
                         }
                         else
                         {
-                            bot.SendAudioAsync(idPlayer1, "https://www.youtube.com/watch?v=tRY8w9Ft_7Q");
                             res = this.user.Player.Attack(attackCoordStr, this.match.Players[0].Gameboard);
+                            AsyncContext.Run(() => SendImage(message));
                         }
 
                         this.match.Players[0].ChangeTurn();
@@ -190,5 +194,18 @@ namespace NavalBattle
             
             return false;
         }
+
+        public async Task SendImage(Message message)
+        {
+            await this.bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);
+            string path = @"..\..\Assets\barco.jpg";
+            this.bot.SendPhotoAsync(message.Chat.Id, path);
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var fileName = path.Split(Path.DirectorySeparatorChar).Last();
+            await this.bot.SendPhotoAsync(
+            chatId: message.Chat.Id,
+            photo: new InputOnlineFile(fileStream, fileName));
+        }
+        
     }
 }

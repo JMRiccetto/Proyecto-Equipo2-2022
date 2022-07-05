@@ -42,6 +42,10 @@ namespace NavalBattle
             {
                 return this.chatId;
             }
+            set
+            {
+                this.chatId = value;
+            }
         }
 
         public UserState State
