@@ -8,13 +8,11 @@ using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
-    public class GameUser : IJsonConvertible
+    public class GameUser
     {   
         private long chatId;
 
         private bool bombs = false;
-
-        private bool doubleAttack = false;
 
         private int gameboardSide = 6;
 
@@ -69,18 +67,6 @@ namespace NavalBattle
             set
             {
                 this.bombs = value;
-            }
-        }
-
-        public bool DoubleAttack
-        {
-            get
-            {
-                return doubleAttack;
-            }
-            set
-            {
-                this.doubleAttack = value;
             }
         }
 
@@ -147,27 +133,6 @@ namespace NavalBattle
         {
             this.state = GameUser.UserState.Waiting;
             Admin.getAdmin().AddToWaitingList(this);
-        }
-
-
-        public string ConvertToJson()
-        {
-            JsonSerializerOptions option = new()
-            {
-                ReferenceHandler = MyReferenceHandler.Instance,
-                WriteIndented = true
-            };
-
-            return JsonSerializer.Serialize(this, option);
-        }
-
-        public void LoadFromJson(string json)
-        {
-            GameUser deserialized = JsonSerializer.Deserialize<GameUser>(json);
-            this.chatId = deserialized.chatId;
-            this.nickName = deserialized.nickName;
-            this.bombs = deserialized.bombs;
-            this.gameboardSide = deserialized.gameboardSide;
         }
     }
 }

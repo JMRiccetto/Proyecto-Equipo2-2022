@@ -6,6 +6,9 @@ using Telegram.Bot.Types;
 
 namespace NavalBattle
 {
+     /// <summary>
+     /// Clase donde se registran y guardan los 
+     /// </summary>
      public class UserRegister
     {
           private List<GameUser> userData = new List<GameUser>();

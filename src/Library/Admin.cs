@@ -58,7 +58,7 @@ namespace NavalBattle
 
             int i = 0;
 
-            while ((i < WaitingList.waitingList.Count - 1) && (WaitingList.waitingList[i].DoubleAttack != user.DoubleAttack || WaitingList.waitingList[i].Bombs != user.Bombs || WaitingList.waitingList[i].GameboardSide != user.GameboardSide))
+            while ((i < WaitingList.waitingList.Count - 1) && WaitingList.waitingList[i].Bombs != user.Bombs || WaitingList.waitingList[i].GameboardSide != user.GameboardSide)
             {
                 i++;
             }

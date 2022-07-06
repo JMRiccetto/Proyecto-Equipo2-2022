@@ -136,20 +136,6 @@ namespace NavalBattle
                         return true;
                     }
                 }
-                else if (this.state == menuState.DoubleAttack)
-                {
-                    if (this.user.DoubleAttack)
-                    {
-                        this.user.DoubleAttack = false;
-                        this.state = menuState.Start;
-                        response = "El ataque doble ha sido desactivado.";
-                        return true;
-                    }
-                    this.user.DoubleAttack = true;
-                    this.state = menuState.Start;
-                    response = "El ataque doble ha sido activado.";
-                    return true;
-                }
                 response = string.Empty;
                 return false;
             }

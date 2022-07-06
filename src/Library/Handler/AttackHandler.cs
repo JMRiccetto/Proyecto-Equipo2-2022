@@ -78,11 +78,13 @@ namespace NavalBattle
                         {
                             res = this.user.Player.Attack(attackCoordStr, this.match.Players[1].Gameboard);
                             AsyncContext.Run(() => SendImage(message));
+                            AsyncContext.Run(() => SendVoice(message));
                         }
                         else
                         {
                             res = this.user.Player.Attack(attackCoordStr, this.match.Players[0].Gameboard);
                             AsyncContext.Run(() => SendImage(message));
+                            AsyncContext.Run(() => SendVoice(message));
                         }
 
                         this.match.Players[0].ChangeTurn();
@@ -195,6 +197,11 @@ namespace NavalBattle
             return false;
         }
 
+        /// <summary>
+        /// Método para mandar imágenes por medio del bot.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public async Task SendImage(Message message)
         {
             await this.bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);
@@ -206,6 +213,16 @@ namespace NavalBattle
             chatId: message.Chat.Id,
             photo: new InputOnlineFile(fileStream, fileName));
         }
-        
+        public async Task SendVoice(Message message)
+        {
+            await this.bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadVoice);
+            string path = @"..\..\Assets\CannonBall.mp3";
+            this.bot.SendVoiceAsync(message.Chat.Id, path);
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var fileName = path.Split(Path.DirectorySeparatorChar).Last();
+            await this.bot.SendVoiceAsync(
+            chatId: message.Chat.Id,
+            voice: new InputOnlineFile(fileStream, fileName));
+        }
     }
 }

@@ -265,6 +265,13 @@
             <param name="message">El mensaje a procesar.</param>
             <returns>true si el mensaje puede ser pocesado; false en caso contrario.</returns>
         </member>
+        <member name="M:NavalBattle.AttackHandler.SendImage(Telegram.Bot.Types.Message)">
+            <summary>
+            Método para mandar imágenes por medio del bot.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="T:NavalBattle.BaseHandler">
             <summary>
             Clase base para implementar el patrón Chain of Responsibility. En ese patrón se pasa un mensaje a través de una
@@ -694,6 +701,11 @@
             Cambia el estado de la coordenada del barco que fue atacada.
             </summary>
             <param name="coord"></param>
+        </member>
+        <member name="T:NavalBattle.UserRegister">
+            <summary>
+            Clase donde se registran y guardan los 
+            </summary>
         </member>
         <member name="M:NavalBattle.UserRegister.CreateUser(System.String,System.Int64)">
             <summary>
