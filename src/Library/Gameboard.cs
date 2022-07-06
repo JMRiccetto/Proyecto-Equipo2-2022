@@ -5,6 +5,9 @@ using System.IO;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// El tablero de los jugadores, aquí se guarda todo lo que va dentro de las casillas del tablero junto a gran parte de la lógica del juego.
+    /// </summary>
     public class Gameboard : IGameboardContent
     {   
         private int side;
@@ -15,12 +18,19 @@ namespace NavalBattle
 
         private List<Coords> water = new List<Coords>();
 
-    
+        /// <summary>
+        /// Constructor del tablero.
+        /// </summary>
+        /// <param name="side">Tamaño del tablero.</param>
         public Gameboard (int side)
         {
             this.side = side;
-        }   
+        }
 
+        /// <summary>
+        /// Gets del lado del tablero.
+        /// </summary>
+        /// <value></value>
         public int Side
         {
             get
@@ -29,6 +39,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets de la lista de casilas con agua.
+        /// </summary>
+        /// <value></value>
         public List<Ship> Ships
         {
             get
@@ -37,6 +51,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets de la lista de casillas con agua.
+        /// </summary>
+        /// <value></value>
         public List<Coords> Water
         {
             get
@@ -45,6 +63,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets de la lista de casillas con bombas.
+        /// </summary>
+        /// <value></value>
         public List<Bomb> Bombs
         {
             get
@@ -52,7 +74,6 @@ namespace NavalBattle
                 return this.bombs;
             }
         }
-
 
         /// <summary>
         /// Devuelve true si la coordenada se encuentra en el tablero.
@@ -70,10 +91,10 @@ namespace NavalBattle
                 int coordX = (int)Char.GetNumericValue(coordStr[0]);
                 int coordY = (int)Char.GetNumericValue(coordStr[1]);
 
-                if((coordX < this.side) && (coordY < this.side))
+                if ((coordX < this.side) && (coordY < this.side))
                 {
                     return true;
-                }               
+                }            
                 return false;
             }
         }
@@ -113,7 +134,7 @@ namespace NavalBattle
                 for (int i = 0; i < length; i++)
                 {                                     
                     ship.AddShipCoord(initialCoordX.ToString() + initialCoordY.ToString());
-                    initialCoordX--; 
+                    initialCoordX--;
                 }
             }  
             else if ((direction == "E") && (initialCoordY + length <= this.side))
@@ -155,22 +176,18 @@ namespace NavalBattle
                     if (placedShip.ShipContainCoord(coord))
                     {
                         validShipCounter += 1;
-                    }                     
-                }                    
+                    }                  
+                }        
             }
-            
+
             //Si el barco a agregar no comparte ninguna coordenada con ningun barco posicionado, se agrega al tablero.
             if (validShipCounter == 0)
             {
-                ships.Add(ship);
+                this.ships.Add(ship);
 
                 //Si ya fueron posicionados los tres barcos, el resto de las coordenadas se agregan a water.
                 if (this.ships.Count == 3)
                 {
-                    /* if (this.bombSwitch)
-                    {
-                        AddBombs();
-                    } */
                     AddWater();
                 }
             }
@@ -187,13 +204,13 @@ namespace NavalBattle
         {
             int shipCoordChecker = 0;
 
-            for(int i = 0; i < this.side; i++)
+            for (int i = 0; i < this.side; i++)
             {
-                for(int j = 0; j < this.side; j++)
+                for (int j = 0; j < this.side; j++)
                 {
                     Coords coord = new Coords(i.ToString()+j.ToString());
 
-                    foreach(Ship ship in this.ships)
+                    foreach (Ship ship in this.ships)
                     {        
                         if (ship.ShipContainCoord(coord))
                         {
@@ -210,10 +227,11 @@ namespace NavalBattle
                 }
             }
         }
+
         /// <summary>
         /// Metodo que añade bombas al tablero.
         /// Se Crean y añaden en Gameboard por creator.
-        /// Precondiciones: 
+        /// Precondiciones:
         ///     Solo se añaden tres bombas cualquiera sea el tamaño del tablero.
         ///     No puede haber dos bombas a menos de dos "casilleros" de distancia.
         /// </summary>
@@ -223,7 +241,7 @@ namespace NavalBattle
 
             int i = 0;
 
-            while(i < 3)
+            while (i < 3)
             {
                 int bombCoordX = rnd.Next(0, this.side -1);
 
@@ -235,35 +253,35 @@ namespace NavalBattle
 
                 foreach (Bomb bomb in this.bombs)
                 {
-                    if ((bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + (bombCoordY-1).ToString()))
+                    if (bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + (bombCoordY-1).ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + (bombCoordY+1).ToString()))
+                    else if (bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + (bombCoordY+1).ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + (bombCoordY).ToString()))
+                    else if (bomb.Coord.CoordsLocation == (bombCoordX+1).ToString() + bombCoordY.ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + (bombCoordY+1).ToString()))
+                    else if (bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + (bombCoordY+1).ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + (bombCoordY-1).ToString()))
+                    else if (bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + (bombCoordY-1).ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + (bombCoordY).ToString()))
+                    else if (bomb.Coord.CoordsLocation == (bombCoordX-1).ToString() + bombCoordY.ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX).ToString() + (bombCoordY+1).ToString()))
+                    else if (bomb.Coord.CoordsLocation == bombCoordX.ToString() + (bombCoordY+1).ToString())
                     {
                         nearBombChecker++;
                     }
-                    else if ((bomb.Coord.CoordsLocation == (bombCoordX).ToString() + (bombCoordY-1).ToString()))
+                    else if (bomb.Coord.CoordsLocation == bombCoordX.ToString() + (bombCoordY-1).ToString())
                     {
                         nearBombChecker++;
                     }
@@ -277,7 +295,7 @@ namespace NavalBattle
 
                     Bomb bombToAdd = new Bomb(bombCoordStr);
 
-                    bombs.Add(bombToAdd);
+                    this.bombs.Add(bombToAdd);
 
                     i++;
                 }
@@ -291,15 +309,15 @@ namespace NavalBattle
         /// </summary>
         /// <returns></returns>
         public string[,] GetGameboardToPrint()
-        {   
+        {
             string[,] res = new string[this.side,this.side];
 
-            foreach(Ship ship in this.ships)
+            foreach (Ship ship in this.ships)
             {
-                foreach(Coords shipCoord in ship.Coords)
+                foreach (Coords shipCoord in ship.Coords)
                 {
                     int coordX = (int)Char.GetNumericValue(shipCoord.CoordsLocation[0]);
-            
+
                     int coordY = (int)Char.GetNumericValue(shipCoord.CoordsLocation[1]);
 
                     if (shipCoord.HasBeenAttacked == true)
@@ -313,7 +331,7 @@ namespace NavalBattle
                 }
             }
             
-            foreach(Coords waterCoord in this.water)
+            foreach (Coords waterCoord in this.water)
             {
                 int coordX = (int)Char.GetNumericValue(waterCoord.CoordsLocation[0]);
             
@@ -341,7 +359,7 @@ namespace NavalBattle
                 throw new Exception("No estan todos los barcos posicionados.");
             }
             
-            if(!IsValidCoord(coord.CoordsLocation))
+            if (!IsValidCoord(coord.CoordsLocation))
             {
                 throw new InvalidCoordException("Coordenada no valida");
             }
@@ -350,7 +368,7 @@ namespace NavalBattle
 
             foreach (Ship placedShip in ships)
             {
-                if(placedShip.ShipContainCoord(coord))
+                if (placedShip.ShipContainCoord(coord))
                 {
                     placedShip.RecieveDamage(coord);
 
@@ -373,16 +391,16 @@ namespace NavalBattle
                 }
             }
 
-            foreach(Bomb bomb in bombs)
+            foreach (Bomb bomb in this.bombs)
             {
                 if (coord.CoordsEquals(bomb.Coord))
                 {
-                   Kaboom(coord); 
+                   this.Kaboom(coord);
                    res = "Bomba";
                 }
             }
 
-            if (IsMatchFinished())
+            if (this.IsMatchFinished())
             {
                 res = "Fin";
             }
@@ -400,14 +418,14 @@ namespace NavalBattle
         public void Kaboom(Coords coord)
         {
             int attackCoordX = (int)Char.GetNumericValue(coord.CoordsLocation[0]);
-            
+
             int attackCoordY = (int)Char.GetNumericValue(coord.CoordsLocation[1]);
 
             if (attackCoordX+1 < this.side)
-            RecieveAttack(new Coords((attackCoordX+1).ToString() + (attackCoordY).ToString()));
+            RecieveAttack(new Coords((attackCoordX+1).ToString() + attackCoordY.ToString()));
 
             if (attackCoordY+1 < this.side)
-            RecieveAttack(new Coords((attackCoordX).ToString() + (attackCoordY+1).ToString()));
+            RecieveAttack(new Coords(attackCoordX.ToString() + (attackCoordY+1).ToString()));
 
             if (attackCoordX+1 < this.side && attackCoordY-1 >= 0)
             RecieveAttack(new Coords((attackCoordX+1).ToString() + (attackCoordY-1).ToString()));
@@ -416,10 +434,10 @@ namespace NavalBattle
             RecieveAttack(new Coords((attackCoordX+1).ToString() + (attackCoordY+1).ToString()));
 
             if (attackCoordX-1 >= 0)
-            RecieveAttack(new Coords((attackCoordX-1).ToString() + (attackCoordY).ToString()));
+            RecieveAttack(new Coords((attackCoordX-1).ToString() + attackCoordY.ToString()));
 
             if (attackCoordY-1 >= 0)
-            RecieveAttack(new Coords((attackCoordX).ToString() + (attackCoordY-1).ToString()));
+            RecieveAttack(new Coords(attackCoordX.ToString() + (attackCoordY-1).ToString()));
 
             if (attackCoordX-1 >=0 && attackCoordY-1 >=0)
             RecieveAttack(new Coords((attackCoordX-1).ToString() + (attackCoordY-1).ToString()));
@@ -436,14 +454,14 @@ namespace NavalBattle
         {
             int finishMatchChecker = 0;
 
-            foreach (Ship placedShip in ships)
+            foreach (Ship placedShip in this.ships)
             {
                 if (placedShip.IsSunk())
                 {
                     finishMatchChecker++;
                 }
             }
-            return (finishMatchChecker == ships.Count);
+            return finishMatchChecker == this.ships.Count;
         }
     }     
 }

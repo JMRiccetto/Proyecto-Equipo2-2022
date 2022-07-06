@@ -1,14 +1,18 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
-    public class GameUser : IJsonConvertible
+    public class GameUser
     {   
         private long chatId;
 
         private bool bombs = false;
-
-        private bool doubleAttack = false;
 
         private int gameboardSide = 6;
 
@@ -18,16 +22,27 @@ namespace NavalBattle
 
         private UserState state = UserState.NotInGame;
 
+        //[JsonConstructor]
         public GameUser(string nickName, long aChatId)
         {
             this.chatId = aChatId;
             this.nickName = nickName;
         }
+
+        /* public GameUser(string json)
+        {
+            this.LoadFromJson(json);
+        } */
+
         public long ChatId
         {
             get
             {
                 return this.chatId;
+            }
+            set
+            {
+                this.chatId = value;
             }
         }
 
@@ -52,18 +67,6 @@ namespace NavalBattle
             set
             {
                 this.bombs = value;
-            }
-        }
-
-        public bool DoubleAttack
-        {
-            get
-            {
-                return doubleAttack;
-            }
-            set
-            {
-                this.doubleAttack = value;
             }
         }
 
@@ -130,18 +133,6 @@ namespace NavalBattle
         {
             this.state = GameUser.UserState.Waiting;
             Admin.getAdmin().AddToWaitingList(this);
-        }
-
-
-        public string ConvertToJson(JsonSerializerOptions options)
-        {
-            JsonSerializerOptions option = new ()
-            {
-                ReferenceHandler = MyReferenceHandler.Instance,
-                WriteIndented = true
-            };
-
-            return JsonSerializer.Serialize(this, option);
         }
     }
 }

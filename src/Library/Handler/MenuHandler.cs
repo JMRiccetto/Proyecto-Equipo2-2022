@@ -7,7 +7,7 @@ namespace NavalBattle
 {
 
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa los comandos "/cambiartablero" y "/bombas".
     /// </summary>
     public class MenuHandler : BaseHandler
     {
@@ -22,19 +22,19 @@ namespace NavalBattle
         private bool doubleAttack = false;
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de MenuHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next">El próximo handler.</param>
+        /// <returns>MenuHandler.</returns>
         public MenuHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/menu", "/cambiartablero", "/bombas", "/ataquedoble"};
+            this.Keywords = new string[] {"/cambiartablero", "/bombas", "/ataquedoble"};
             this.state = menuState.Start;
             this.user = null;
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa los mensajes "/cambiartablero" y "/bombas" y despliega las opciones para prenderlos y apagarlos.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
@@ -135,20 +135,6 @@ namespace NavalBattle
                         response = "No se pudo registrar su mensaje, el estado de las bombas sigue igual";
                         return true;
                     }
-                }
-                else if (this.state == menuState.DoubleAttack)
-                {
-                    if (this.user.DoubleAttack)
-                    {
-                        this.user.DoubleAttack = false;
-                        this.state = menuState.Start;
-                        response = "El ataque doble ha sido desactivado.";
-                        return true;
-                    }
-                    this.user.DoubleAttack = true;
-                    this.state = menuState.Start;
-                    response = "El ataque doble ha sido activado.";
-                    return true;
                 }
                 response = string.Empty;
                 return false;

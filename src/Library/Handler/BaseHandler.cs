@@ -52,7 +52,7 @@ namespace NavalBattle
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
         /// <returns>true si el mensaje fue procesado; false en caso contrario</returns>
-        protected abstract bool InternalHandle(Message message, out string responder);
+        protected abstract bool InternalHandle(Message message, out string response);
         // {
         //     throw new InvalidOperationException("Este método debe ser sobrescrito");
         // }
@@ -107,6 +107,8 @@ namespace NavalBattle
                 return null;
             }
         }
+
+        
 
         /// <summary>
         /// Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que

@@ -7,7 +7,7 @@ using System.Linq;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/rendirse".
     /// </summary>
     public class SurrenderHandler : BaseHandler
     {
@@ -16,10 +16,10 @@ namespace NavalBattle
         private Match match;
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de SurrenderHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next">El próximo handler.</param>
+        /// <returns></returns>
         public SurrenderHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/rendirse"};
@@ -27,7 +27,7 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/rendirse", terminando la partida y dándole la victoria al otro jugador.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
@@ -40,7 +40,7 @@ namespace NavalBattle
                 {
                     this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
-                    if(this.user.State != GameUser.UserState.InGame)
+                    if (this.user.State != GameUser.UserState.InGame)
                     {
                         throw new InvalidStateException("No es posible realizar esta acción en este momento");
                     }
@@ -56,7 +56,7 @@ namespace NavalBattle
                     TelegramBotClient bot = ClientBot.GetBot();
 
                     long idPlayer0 = this.match.Players[0].ChatIdPlayer;
-                    
+
                     long idPlayer1 = this.match.Players[1].ChatIdPlayer;
 
                     bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} se rindió");
@@ -72,15 +72,15 @@ namespace NavalBattle
                     user1.State = GameUser.UserState.NotInGame;
 
                     user2.State = GameUser.UserState.NotInGame;
-                    
-                    response = "";
 
-                    return true;        
+                    response = string.Empty;
+
+                    return true;
                 }
-                response = "";
+                response = string.Empty;
                 return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
@@ -89,7 +89,7 @@ namespace NavalBattle
             catch (Exception e)
             {
                 System.Console.WriteLine(e.Message);
-                Cancel();
+                this.Cancel();
                 response = e.Message;
 
                 return true;

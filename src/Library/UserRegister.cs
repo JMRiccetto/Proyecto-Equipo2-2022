@@ -6,16 +6,27 @@ using Telegram.Bot.Types;
 
 namespace NavalBattle
 {
-     public class UserRegister : IJsonConvertible
+     /// <summary>
+     /// Clase donde se registran y guardan los 
+     /// </summary>
+     public class UserRegister
     {
           private List<GameUser> userData = new List<GameUser>();
 
           [JsonInclude]
+          /// <summary>
+          /// Gets de la lista de usuarios registrados.
+          /// </summary>
+          /// <value></value>
           public List<GameUser> UserData
           {
                get
                {
                     return this.userData;
+               }
+               set
+               {
+                    this.userData = value;
                }
           }
 
@@ -44,6 +55,11 @@ namespace NavalBattle
                this.userData = new List<GameUser>();
           }
 
+          /// <summary>
+          /// Método que aplica el patrón Creator para crear y añadir un usuario a la lista de usuarios.
+          /// </summary>
+          /// <param name="nickName">Nombre del usuario.</param>
+          /// <param name="id">Id del usuario.</param>
           public void CreateUser(string nickName, long id)
           {
                GameUser user = new GameUser(nickName, id);
@@ -51,23 +67,38 @@ namespace NavalBattle
           }
 
           /// <summary>
-          /// Remueve un usuario de la lista de usuarios.
+          /// Por la ley de demeter y para evitar el alto acoplamiento se crea este método para verificar si un usarios 
+          /// está en la lista de usuarios y que otro objeto no deba de conocer todas la conexiones internas.
           /// </summary>
           /// <param name="user"></param>
-          public void RemoveUser(GameUser user)
+          /// <returns></returns>
+          public bool ContainsUser(GameUser user)
           {
-               if (this.UserData.Contains(user))
+               if(this.userData.Contains(user))
                {
-                    throw new Exception();
+                    return true;
                }
-               this.userData.Remove(user);
+               else
+               {
+                    return false;
+               }
+          }
+
+          /// <summary>
+          /// Por la ley de demeter y para evitar el alto acoplamiento se crea este método para añadir usuarios a la lista
+          /// de usuarios y además que otro objeto no deba de conocer todas la conexiones internas.
+          /// </summary>
+          /// <param name="item"></param>
+          public void Add(GameUser item)
+          {
+               this.userData.Add(item);
           }
 
           /// <summary>
           /// Encuentra un User en la lista de Users por su nombre.
           /// </summary>
-          /// <param name="nickName"></param>
-          /// <returns></returns>
+          /// <param name="nickName">Nombre del usuario.</param>
+          /// <returns>GameUser.</returns>
           public GameUser GetUserByNickName(string nickName)
           {
                GameUser outcome = null;
@@ -81,8 +112,8 @@ namespace NavalBattle
           /// <summary>
           /// Encuentra un User en la lista de Users por su id.
           /// </summary>
-          /// <param name="chatId"></param>
-          /// <returns></returns>
+          /// <param name="chatId">Id del chat por el que se habla con el usuario.</param>
+          /// <returns>GameUser.</returns>
           public GameUser GetUserById(long chatId)
           {
                GameUser outcome = null;
@@ -91,24 +122,6 @@ namespace NavalBattle
                     outcome = this.userData.Find(user => chatId == user.ChatId);
                }
                return outcome;
-          }
-
-          public string ConvertToJson(JsonSerializerOptions options)
-          {
-               return JsonSerializer.Serialize(this, options);
-          }
-
-          public void LoadFromJson(string json)
-          {
-               this.SetUp();
-               GameUser user = JsonSerializer.Deserialize<GameUser>(json);
-               JsonSerializerOptions options = new()
-               {
-                    ReferenceHandler = MyReferenceHandler.Instance,
-                    WriteIndented = true,
-               };
-
-               user = JsonSerializer.Deserialize<GameUser>(json, options);
           }
     }
 }

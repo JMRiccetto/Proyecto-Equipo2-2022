@@ -9,7 +9,7 @@ namespace NavalBattle
     {
         static private TelegramBotClient getBot;
 
-        private ClientBot() { }
+        public ClientBot() { }
 
         static public TelegramBotClient GetBot()
         {

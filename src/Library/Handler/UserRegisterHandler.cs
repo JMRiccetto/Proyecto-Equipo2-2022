@@ -1,21 +1,23 @@
 using System;
+using System.Linq;
+using System.IO;
 using System.Text;
 using Telegram.Bot.Types;
 
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/start".
     /// </summary>
     public class UserRegisterHandler : BaseHandler
     {
         private GameUser user;
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de UserRegisterHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public UserRegisterHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/start"};
@@ -23,33 +25,33 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/start" y si el usuario no aparece en la lista de usuarios registrados lo registra y despliega el menú de opciones.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
         /// <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
         protected override bool InternalHandle(Message message, out string response)
-        {   
+        {
             try
             {
                 if (this.CanHandle(message))
                 {
                     StringBuilder start = new StringBuilder("Bienvenido capitán! Te estábamos esperando.");
-                    if(!UserRegister.Instance.UserData.Contains(UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString())))
+                    if (!UserRegister.Instance.ContainsUser(UserRegister.Instance.GetUserByNickName(message.From.FirstName)))
                     {
                         UserRegister.Instance.CreateUser(message.From.FirstName, message.Chat.Id);
                     }
-                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
+                    this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName);
 
                     if (this.user.State == GameUser.UserState.InGame)
                     {
                         throw new InvalidStateException("No puede acceder al menu mientras está en partida");
-                    } 
+                    }
                     if (this.user.State == GameUser.UserState.Waiting)
                     {
                         throw new InvalidStateException("No puede acceder al menu mientras está buscando partida\n\nIngrese /cancelar para cancelar la busqueda");
-                    } 
-                    
+                    }
+
                     start.Append("¿Qué deseas hacer?\n")
                         .Append("/cambiartablero\n")
                         .Append("/bombas\n")
@@ -64,10 +66,15 @@ namespace NavalBattle
             catch (Exception e)
             {
                 System.Console.WriteLine(e.Message);
-                Cancel();
+                this.Cancel();
                 response = e.Message;
                 return true;
             }
+        }
+
+        protected override void InternalCancel()
+        {
+
         }
 
         /// <summary>

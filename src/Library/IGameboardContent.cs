@@ -5,6 +5,10 @@ namespace NavalBattle
     /// </summary>
     public interface IGameboardContent
     {
+        /// <summary>
+        /// Devuelve el tablero en forma de matriz.
+        /// </summary>
+        /// <returns></returns>
         string[,] GetGameboardToPrint();
     }
 } 
