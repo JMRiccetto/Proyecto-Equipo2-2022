@@ -36,23 +36,23 @@ namespace Test.Library
 
             s.Append("TABLEROS \n");
 
-            s.Append("     0     1     2     3");
+            s.Append("      0      1      2      3");
 
             s.Append("\n");
 
-            s.Append("0 | o || x || o || ~ |");
+            s.Append("0 |  O  ||  X  ||  O  ||  ~  |");
 
             s.Append("\n");
 
-            s.Append("1 | o || o || o || ~ |");
+            s.Append("1 |  O  ||  O  ||  O  ||  ~  |");
 
             s.Append("\n");
 
-            s.Append("2 | ~ || ~ || ~ || ~ |");
+            s.Append("2 |  ~  ||  ~  ||  ~  ||  ~  |");
 
             s.Append("\n");
 
-            s.Append("3 | ~ || ~ || ~ || ~ |");
+            s.Append("3 |  ~  ||  ~  ||  ~  ||  ~  |");
 
             s.Append("\n");
 
@@ -81,23 +81,23 @@ namespace Test.Library
 
             StringBuilder s = new StringBuilder();
 
-            s.Append("   0   1   2   3");
+            s.Append("      0      1      2      3");
 
             s.Append("\n");
 
-            s.Append("0 |   || T ||   ||   |");
+            s.Append("0 |      ||  T  ||      ||      |");
 
             s.Append("\n");
 
-            s.Append("1 |   ||   ||   ||   |");
+            s.Append("1 |      ||      ||      ||      |");
 
             s.Append("\n");
 
-            s.Append("2 |   ||   ||   ||   |");
+            s.Append("2 |      ||      ||      ||      |");
 
             s.Append("\n");
 
-            s.Append("3 |   ||   ||   ||   |");
+            s.Append("3 |      ||      ||      ||      |");
 
             s.Append("\n");
 

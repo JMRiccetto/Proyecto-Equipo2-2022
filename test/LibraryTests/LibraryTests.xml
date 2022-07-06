@@ -26,5 +26,15 @@
             debido a que no es su turno se modifica en el Handler de ataque o de posicionamiento.
             </summary>
         </member>
+        <member name="T:Test.Library.PrintTests">
+            <summary>
+            esta clase prueba que las clases que implementen las interface de IPrinter (y como arraste IGameboardContent)
+            </summary>
+        </member>
+        <member name="M:Test.Library.PrintTests.AttackGameboardPrinter">
+            <summary>
+            este test deberia probar que se imprima el AttackGameboard
+            </summary>
+        </member>
     </members>
 </doc>
