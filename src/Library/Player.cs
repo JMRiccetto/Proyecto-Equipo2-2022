@@ -10,11 +10,11 @@ namespace NavalBattle
     /// <summary>
     /// Player es una intancia de los usuarios cuando se crea un Match.
     /// </summary>
-    public class Player   
-    {  
-        private Gameboard gameboard;     
+    public class Player
+    {
+        private Gameboard gameboard;
 
-        private bool turn = false; 
+        private bool turn = false;
 
         /// <summary>
         /// Este atributo es el largo de los barcos que se van posicionar. El primer barco es de largo 2, 
@@ -24,12 +24,21 @@ namespace NavalBattle
 
         private long chatIdPlayer;
 
+        /// <summary>
+        /// Constructor de Player.
+        /// </summary>
+        /// <param name="gameboardSide"></param>
+        /// <param name="id"></param>
         public Player(int gameboardSide, long id)
         {
             this.gameboard = new Gameboard(gameboardSide);
             this.chatIdPlayer = id;
         }
-        
+
+        /// <summary>
+        /// Gets de la Id del jugador.
+        /// </summary>
+        /// <value></value>
         public long ChatIdPlayer
         {
             get
@@ -37,7 +46,11 @@ namespace NavalBattle
                 return this.chatIdPlayer;
             }
         }
-        
+
+        /// <summary>
+        /// Gets del contador del largo del barco.
+        /// </summary>
+        /// <value></value>
         public int CounterShipLength
         {
             get
@@ -46,6 +59,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets del gameboard para el jugador.
+        /// </summary>
+        /// <value></value>
         public Gameboard Gameboard
         {
             get
@@ -54,6 +71,10 @@ namespace NavalBattle
             }   
         }
 
+        /// <summary>
+        /// Gets del turno del jugador.
+        /// </summary>
+        /// <value></value>
         public bool Turn
         {
             get
@@ -95,7 +116,7 @@ namespace NavalBattle
         /// </summary>
         public void ChangeTurn()
         {
-            if(this.turn == true)
+            if (this.turn == true)
             {
                 this.turn = false;
             }

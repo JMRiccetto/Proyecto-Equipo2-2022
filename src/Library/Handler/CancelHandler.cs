@@ -1,8 +1,5 @@
 using System;
-using System.Text;
 using Telegram.Bot.Types;
-using Telegram.Bot;
-using System.Linq;
 
 namespace NavalBattle
 {
@@ -12,13 +9,12 @@ namespace NavalBattle
     public class CancelHandler : BaseHandler
     {
         private GameUser user;
-        
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de CancelHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public CancelHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/cancelar"};
@@ -39,10 +35,11 @@ namespace NavalBattle
                 {
                     this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
-                    if(this.user.State != GameUser.UserState.Waiting)
+                    if (this.user.State != GameUser.UserState.Waiting)
                     {
                         throw new InvalidStateException("No es posible realizar esta acción en este momento");
                     }
+
                     WaitingList.waitingList.Remove(this.user);
 
                     this.user.State = GameUser.UserState.NotInGame;
@@ -51,10 +48,10 @@ namespace NavalBattle
 
                     return true;
                 }
-                response = "";
+                response = string.Empty;
                 return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 

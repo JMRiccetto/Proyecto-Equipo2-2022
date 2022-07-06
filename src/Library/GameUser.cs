@@ -8,6 +8,9 @@ using Telegram.Bot.Types.InputFiles;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// Clase usuario, posee atributos que luego serán utilizados por Player.
+    /// </summary>
     public class GameUser
     {   
         private long chatId;
@@ -22,17 +25,16 @@ namespace NavalBattle
 
         private UserState state = UserState.NotInGame;
 
-        //[JsonConstructor]
+        /// <summary>
+        /// Constructor de GameUser.
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <param name="aChatId"></param>
         public GameUser(string nickName, long aChatId)
         {
             this.chatId = aChatId;
             this.nickName = nickName;
         }
-
-        /* public GameUser(string json)
-        {
-            this.LoadFromJson(json);
-        } */
 
         public long ChatId
         {
@@ -40,68 +42,92 @@ namespace NavalBattle
             {
                 return this.chatId;
             }
+
             set
             {
                 this.chatId = value;
             }
         }
 
+        /// <summary>
+        /// Gets y Sets de los Usuarios.
+        /// </summary>
+        /// <value></value>
         public UserState State
         {
             get
             {
                 return this.state;
             }
+
             set
             {
                 this.state = value;
             }
         }
 
+        /// <summary>
+        /// Gets y Sets del interruptor de bombas.
+        /// </summary>
+        /// <value></value>
         public bool Bombs
         {
             get
             {
-                return bombs;
+                return this.bombs;
             }
+
             set
             {
                 this.bombs = value;
             }
         }
 
+        /// <summary>
+        /// Gets y Sets del lado de Gameboard que se creará en player.
+        /// </summary>
+        /// <value></value>
         public int GameboardSide
         {
             get
             {
-                return gameboardSide;
+                return this.gameboardSide;
             }
+
             set
             {
                 this.gameboardSide = value;
             }
         }
 
-
+        /// <summary>
+        /// Gets y Sets del nombre de usuario.
+        /// </summary>
+        /// <value></value>
         public string NickName
         {
             get
             {
                 return this.nickName;
             }
+
             private set
             {
                 this.nickName = this.NickName != null ? this.NickName : value;
             }
         }
 
-
+        /// <summary>
+        /// Gets y Sets de Player.
+        /// </summary>
+        /// <value></value>
         public Player Player
         {
             get
             {
                 return this.player;
             }
+
             set
             {
                 this.player = value;
@@ -116,20 +142,20 @@ namespace NavalBattle
         ///     que un jugador no pueda posicionar barcos en la fase de ataque.
         /// </summary>
         public enum UserState
-        {   
+        {
             NotInGame,
             Waiting,
             InGame,
 
         }
-        
+
         /// <summary>
         /// El usuuario busca partida eligiendo las caracteristicas con las que quiere jugar.
         /// </summary>
         /// <param name="gameboardSide"></param>
         /// <param name="bombs"></param>
         /// <param name="doubleAttack"></param>
-        public void SearchGame() 
+        public void SearchGame()
         {
             this.state = GameUser.UserState.Waiting;
             Admin.getAdmin().AddToWaitingList(this);

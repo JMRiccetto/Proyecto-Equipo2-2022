@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace NavalBattle
     public class GameStartHandler : BaseHandler
     {
         private GameUser user;
-        
+
         private Match match;
 
         /// <summary>
@@ -79,6 +78,7 @@ namespace NavalBattle
                         return true;
                     }
                 }
+
                 response = string.Empty;
                 return false;
             }

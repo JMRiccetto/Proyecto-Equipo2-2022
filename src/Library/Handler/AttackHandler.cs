@@ -25,10 +25,10 @@ namespace NavalBattle
         TelegramBotClient bot = ClientBot.GetBot();
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de AttackHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public AttackHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/atacar"};
@@ -68,8 +68,6 @@ namespace NavalBattle
 
                         string res = "hola";
 
-                        
-
                         long idPlayer0 = this.match.Players[0].ChatIdPlayer;
 
                         long idPlayer1 = this.match.Players[1].ChatIdPlayer;
@@ -93,9 +91,9 @@ namespace NavalBattle
 
                         if (res == "Fin")
                         {
-                            bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
+                            this.bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
 
-                            bot.SendTextMessageAsync(idPlayer1, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
+                            this.bot.SendTextMessageAsync(idPlayer1, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
 
                             Admin.getAdmin().MatchList.Remove(this.match);
 
@@ -106,21 +104,21 @@ namespace NavalBattle
                             user1.State = GameUser.UserState.NotInGame;
 
                             user2.State = GameUser.UserState.NotInGame;
-                            
-                            response = "";
+
+                            response = string.Empty;
 
                             return true;
                         }
 
-                        if(match.Players[0].Turn)
-                        {            
-                            bot.SendTextMessageAsync(idPlayer0, "Es su turno");
+                        if (this.match.Players[0].Turn)
+                        {
+                            this.bot.SendTextMessageAsync(idPlayer0, "Es su turno");
                         }
                         else
                         {
                             long id = this.match.Players[1].ChatIdPlayer;
-                        
-                            bot.SendTextMessageAsync(idPlayer1, "Es su turno");
+
+                            this.bot.SendTextMessageAsync(idPlayer1, "Es su turno");
                         }
 
                         response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse";
@@ -134,16 +132,17 @@ namespace NavalBattle
                         return true;
                     }
                 }
-            response = string.Empty;
-            return false;
+
+                response = string.Empty;
+                return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
                 return true;
             }
-            catch(IndexOutOfRangeException re)
+            catch (IndexOutOfRangeException re)
             {
                 response = "Comando no válido. Inténtelo de nuevo";
 
@@ -186,14 +185,14 @@ namespace NavalBattle
             {
                 throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
             }
-            
+
             string[] input = message.Text.Split("-");
-            
+
             if (this.Keywords.Contains(input[0]))
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -213,6 +212,12 @@ namespace NavalBattle
             chatId: message.Chat.Id,
             photo: new InputOnlineFile(fileStream, fileName));
         }
+
+        /// <summary>
+        /// Método para mandar audio por medio del bot.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public async Task SendVoice(Message message)
         {
             await this.bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadVoice);
