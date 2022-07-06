@@ -75,6 +75,11 @@
             Realizamos un singleton del bot para poder llamar a los metodos del bot de telegram desde los handlers.
             </summary>
         </member>
+        <member name="T:NavalBattle.Coords">
+            <summary>
+            Coords representa las coordenadas, que ocupan cada una una cuadrícula del tablero.
+            </summary>
+        </member>
         <member name="F:NavalBattle.Coords.coordsLocation">
             <summary>
             String de la coordenada.
@@ -84,6 +89,24 @@
             <summary>
             Estado de la coordenada.
             </summary>
+        </member>
+        <member name="M:NavalBattle.Coords.#ctor(System.String)">
+            <summary>
+            Constructor de Coords.
+            </summary>
+            <param name="aCoordsLocation"></param>
+        </member>
+        <member name="P:NavalBattle.Coords.CoordsLocation">
+            <summary>
+            Gets de CoordsLocation.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Coords.HasBeenAttacked">
+            <summary>
+            Gets de HasBeenAttacked.
+            </summary>
+            <value></value>
         </member>
         <member name="M:NavalBattle.Coords.CoordsEquals(NavalBattle.Coords)">
             <summary>
@@ -96,19 +119,6 @@
             <summary>
             Cambia el estado de una coordena que fue atacada.
             </summary>
-        </member>
-        <member name="T:NavalBattle.CoordsTranslate">
-            <summary>
-            esta clase toma un string del usuario y lo convierte en otro preparado para su utilizacion
-            esto lo hace a traves del cambio de string - ascii - string
-            </summary>
-        </member>
-        <member name="M:NavalBattle.CoordsTranslate.Translate(System.String)">
-            <summary>
-            transforma un mensaje B2 a 11, A1 a 00
-            </summary>
-            <param name="aCoordsLocation"></param>
-            <returns></returns>
         </member>
         <member name="T:NavalBattle.DefenseGameboardPrinter">
             <summary>
@@ -211,6 +221,48 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:NavalBattle.GameUser">
+            <summary>
+            Clase usuario, posee atributos que luego serán utilizados por Player.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.GameUser.#ctor(System.String,System.Int64)">
+            <summary>
+            Constructor de GameUser.
+            </summary>
+            <param name="nickName"></param>
+            <param name="aChatId"></param>
+        </member>
+        <member name="P:NavalBattle.GameUser.State">
+            <summary>
+            Gets y Sets de los Usuarios.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.GameUser.Bombs">
+            <summary>
+            Gets y Sets del interruptor de bombas.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.GameUser.GameboardSide">
+            <summary>
+            Gets y Sets del lado de Gameboard que se creará en player.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.GameUser.NickName">
+            <summary>
+            Gets y Sets del nombre de usuario.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.GameUser.Player">
+            <summary>
+            Gets y Sets de Player.
+            </summary>
+            <value></value>
+        </member>
         <member name="T:NavalBattle.GameUser.UserState">
             <summary>
             Estado del usuario. Se utiliza para controlar excepciones y comandos no validos en diferentes momentos.
@@ -235,10 +287,10 @@
         </member>
         <member name="M:NavalBattle.AttackHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de AttackHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next"></param>
+            <returns></returns>
         </member>
         <member name="M:NavalBattle.AttackHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
@@ -268,6 +320,13 @@
         <member name="M:NavalBattle.AttackHandler.SendImage(Telegram.Bot.Types.Message)">
             <summary>
             Método para mandar imágenes por medio del bot.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.AttackHandler.SendVoice(Telegram.Bot.Types.Message)">
+            <summary>
+            Método para mandar audio por medio del bot.
             </summary>
             <param name="message"></param>
             <returns></returns>
@@ -353,10 +412,10 @@
         </member>
         <member name="M:NavalBattle.CancelHandler.#ctor(NavalBattle.BaseHandler)">
             <summary>
-            Inicializa una nueva instancia de la clase <see cref="!:GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-            y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+            Constructor de CancelHandler.
             </summary>
-            <param name="next">El próximo "handler".</param>
+            <param name="next"></param>
+            <returns></returns>
         </member>
         <member name="M:NavalBattle.CancelHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
             <summary>
@@ -456,7 +515,7 @@
         </member>
         <member name="T:NavalBattle.PlaceShipHandler">
             <summary>
-            Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/posicionar".
             </summary>
         </member>
         <member name="M:NavalBattle.PlaceShipHandler.#ctor(NavalBattle.BaseHandler)">
@@ -606,6 +665,37 @@
             el segundo de largo 3 y el tercero de largo 4.
             </summary>
         </member>
+        <member name="M:NavalBattle.Player.#ctor(System.Int32,System.Int64)">
+            <summary>
+            Constructor de Player.
+            </summary>
+            <param name="gameboardSide"></param>
+            <param name="id"></param>
+        </member>
+        <member name="P:NavalBattle.Player.ChatIdPlayer">
+            <summary>
+            Gets de la Id del jugador.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Player.CounterShipLength">
+            <summary>
+            Gets del contador del largo del barco.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Player.Gameboard">
+            <summary>
+            Gets del gameboard para el jugador.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Player.Turn">
+            <summary>
+            Gets del turno del jugador.
+            </summary>
+            <value></value>
+        </member>
         <member name="M:NavalBattle.Player.PlaceShip(System.String,System.String)">
             <summary>
             Metodo para posicionar barco en tablero propio.
@@ -704,7 +794,23 @@
         </member>
         <member name="T:NavalBattle.UserRegister">
             <summary>
-            Clase donde se registran y guardan los 
+            Clase donde se registran, buscan y guardan los usuarios.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.UserRegister.#ctor">
+            <summary>
+            User register llama a Setup y después es llamada por el singleton, por lo que solo se crea una vez.
+            </summary>
+        </member>
+        <member name="P:NavalBattle.UserRegister.Instance">
+            <summary>
+            Singleton de UserRegister, si no posee una instancia la crea, y si ya existe la devuelve.
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:NavalBattle.UserRegister.SetUp">
+            <summary>
+            Setup crea una nueva lista de usuarios.
             </summary>
         </member>
         <member name="M:NavalBattle.UserRegister.CreateUser(System.String,System.Int64)">
