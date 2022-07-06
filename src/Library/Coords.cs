@@ -1,5 +1,8 @@
 namespace NavalBattle
 {
+    /// <summary>
+    /// Coords representa las coordenadas, que ocupan cada una una cuadrícula del tablero.
+    /// </summary>
     public class Coords
     {
         /// <summary>
@@ -12,11 +15,19 @@ namespace NavalBattle
         /// </summary>
         private bool hasBeenAttacked = false;
 
+        /// <summary>
+        /// Constructor de Coords.
+        /// </summary>
+        /// <param name="aCoordsLocation"></param>
         public Coords(string aCoordsLocation)
         {
             this.coordsLocation = aCoordsLocation;
         }
 
+        /// <summary>
+        /// Gets de CoordsLocation.
+        /// </summary>
+        /// <value></value>
         public string CoordsLocation
         {
             get
@@ -25,6 +36,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets de HasBeenAttacked.
+        /// </summary>
+        /// <value></value>
         public bool HasBeenAttacked
         {
             get
@@ -40,7 +55,7 @@ namespace NavalBattle
         /// <returns></returns>
         public bool CoordsEquals(Coords coord)
         {
-            return (this.CoordsLocation == coord.coordsLocation);
+            return this.CoordsLocation == coord.coordsLocation;
         }
 
         /// <summary>

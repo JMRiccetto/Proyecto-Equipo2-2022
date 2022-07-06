@@ -77,6 +77,7 @@ namespace NavalBattle
 
                     return true;
                 }
+
                 response = string.Empty;
                 return false;
             }

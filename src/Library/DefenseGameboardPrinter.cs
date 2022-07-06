@@ -7,7 +7,7 @@ namespace NavalBattle
     /// Imprime el tablero de manera que se puede visualizar la posicion de los barcos y si fueron tocados o no.
     /// </summary>
     public class DefenseGameboardPrinter : IPrinter
-    { 
+    {
         public StringBuilder PrintGameboard(IGameboardContent gameboardContent)
         {
             StringBuilder s = new StringBuilder();
@@ -50,4 +50,4 @@ namespace NavalBattle
             return s;
         }
     }
-} 
+}

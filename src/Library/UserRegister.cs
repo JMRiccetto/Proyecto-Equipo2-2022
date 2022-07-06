@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using Telegram.Bot.Types;
 
 namespace NavalBattle
 {
      /// <summary>
-     /// Clase donde se registran y guardan los 
+     /// Clase donde se registran, buscan y guardan los usuarios.
      /// </summary>
      public class UserRegister
     {
@@ -24,12 +21,16 @@ namespace NavalBattle
                {
                     return this.userData;
                }
+
                set
                {
                     this.userData = value;
                }
           }
 
+          /// <summary>
+          /// User register llama a Setup y después es llamada por el singleton, por lo que solo se crea una vez.
+          /// </summary>
           private UserRegister()
           {
                SetUp();
@@ -37,6 +38,10 @@ namespace NavalBattle
 
           private static UserRegister instance;
 
+          /// <summary>
+          /// Singleton de UserRegister, si no posee una instancia la crea, y si ya existe la devuelve.
+          /// </summary>
+          /// <value></value>
           public static UserRegister Instance
           {
                get
@@ -50,6 +55,9 @@ namespace NavalBattle
                }
           }
 
+          /// <summary>
+          /// Setup crea una nueva lista de usuarios.
+          /// </summary>
           public void SetUp()
           {
                this.userData = new List<GameUser>();
@@ -74,7 +82,7 @@ namespace NavalBattle
           /// <returns></returns>
           public bool ContainsUser(GameUser user)
           {
-               if(this.userData.Contains(user))
+               if (this.userData.Contains(user))
                {
                     return true;
                }

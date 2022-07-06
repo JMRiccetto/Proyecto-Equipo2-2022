@@ -133,14 +133,6 @@ namespace NavalBattle
                 WriteIndented = true,
             };
 
-            //Console.WriteLine(UserRegister.Instance.ConvertToJson(options));
-
-            /* foreach (GameUser user in UserRegister.Instance.UserData)
-            {
-                string temp2 = JsonSerializer.Serialize(UserRegister.Instance.UserData);
-                System.IO.File.WriteAllText(@"userData.json", temp2);
-            } */
-
             Console.WriteLine($"Bot is up!");
             // Esperamos a que el usuario aprete Enter en la consola para terminar el bot.
             Console.ReadLine();

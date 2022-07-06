@@ -49,7 +49,7 @@ namespace NavalBattle
                 return this.length;
             }
         }
-        
+
         /// <summary>
         /// Añade una coordenada al barco.
         /// La coordenada a agregar se crea en Ship por creator.

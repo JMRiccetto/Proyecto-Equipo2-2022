@@ -1,7 +1,5 @@
 using System;
-using System.Text;
 using Telegram.Bot.Types;
-using Telegram.Bot;
 
 namespace NavalBattle
 {
@@ -15,12 +13,6 @@ namespace NavalBattle
 
         private GameUser user;
 
-        private int gameboardSide;
-
-        private bool bombs = false;
-
-        private bool doubleAttack = false;
-
         /// <summary>
         /// Constructor de MenuHandler.
         /// </summary>
@@ -28,7 +20,7 @@ namespace NavalBattle
         /// <returns>MenuHandler.</returns>
         public MenuHandler(BaseHandler next) : base(next)
         {
-            this.Keywords = new string[] {"/cambiartablero", "/bombas", "/ataquedoble"};
+            this.Keywords = new string[] {"/cambiartablero", "/bombas"};
             this.state = menuState.Start;
             this.user = null;
         }
@@ -42,15 +34,15 @@ namespace NavalBattle
         protected override bool InternalHandle(Message message, out string response)
         {
             try
-            {   
+            {
                 if (this.CanHandle(message))
-                {   
+                {
                     this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
                     if (this.user.State == GameUser.UserState.InGame)
                     {
                         throw new InvalidStateException("No puede acceder al menu mientras está en partida");
-                    } 
+                    }
 
                     if (this.user.State == GameUser.UserState.Waiting)
                     {
@@ -60,8 +52,8 @@ namespace NavalBattle
                     if (this.state != menuState.Start)
                     {
                         throw new InvalidStateException("Ingrese /start para ver el menu de opciones");
-                    } 
-                    
+                    }
+
                     if (message.Text.ToLower().Trim() == "/cambiartablero")
                     {
                         this.state = menuState.Gameboard;
@@ -74,16 +66,10 @@ namespace NavalBattle
                         response = "/on\n" + "/off";
                         return true;
                     }
-                    else if (message.Text.ToLower().Trim() == "/ataquedoble")
-                    {
-                        this.state = menuState.DoubleAttack;    
-                        response = "ataquedoble cambiado";
-                        return true;
-                    }
                 }
                 else if (this.state == menuState.Gameboard)
                 {
-                    //response = "Si deseas cambiar el tamaño de tu tablero, por favor introduce un número entre 6-8.";
+                    // response = "Si deseas cambiar el tamaño de tu tablero, por favor introduce un número entre 6-8.";
                     if (message.Text.Trim() == "6")
                     {
                         this.user.GameboardSide = 6;
@@ -136,16 +122,17 @@ namespace NavalBattle
                         return true;
                     }
                 }
+
                 response = string.Empty;
                 return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Cancel();
                 response = e.Message;
@@ -171,6 +158,7 @@ namespace NavalBattle
                 this.Next.Cancel();
             }
         }
+
         /// <summary>
         /// Estado del menu.
         /// </summary>
@@ -179,7 +167,6 @@ namespace NavalBattle
             Start,
             Gameboard,
             Bomb,
-            DoubleAttack,
         }
     }
 }

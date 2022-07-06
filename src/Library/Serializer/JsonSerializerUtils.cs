@@ -24,10 +24,7 @@ namespace NavalBattle
         public static void SerializeUsers()
         {
             using var fileStream = new FileStream(path, FileMode.Create);
-            /* foreach (GameUser user in UserRegister.Instance.UserData)
-            {
-                System.Text.Json.JsonSerializer.Serialize(fileStream, user, options);
-            } */
+
             foreach (GameUser user in UserRegister.Instance.UserData)
             {
                 user.Player = null;

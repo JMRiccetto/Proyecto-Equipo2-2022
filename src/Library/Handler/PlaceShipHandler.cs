@@ -8,7 +8,7 @@ using Telegram.Bot;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/posicionar".
     /// </summary>
     public class PlaceShipHandler : BaseHandler
     {
@@ -68,7 +68,7 @@ namespace NavalBattle
                         this.match.Players[1].ChangeTurn();
 
                         long idPlayer0 = this.match.Players[0].ChatIdPlayer;
-                        
+
                         long idPlayer1 = this.match.Players[1].ChatIdPlayer;
 
                         TelegramBotClient bot = ClientBot.GetBot();
@@ -81,16 +81,16 @@ namespace NavalBattle
                             bot.SendTextMessageAsync(idPlayer0, "La fase de posicionamiento terminó\n\nComienza la fase de ataque, ingrese /atacar-coordenada a atacar\n\nIngrese /rendirse para rendirse");
                         }
 
-                        if(match.Players[0].Turn)
-                        {            
+                        if (match.Players[0].Turn)
+                        {
                             bot.SendTextMessageAsync(idPlayer0, "\n\nEs su turno");
                         }
                         else
                         {
                             bot.SendTextMessageAsync(idPlayer1, "\n\nEs su turno");
                         }
-                    
-                        response = "";
+
+                        response = string.Empty;
 
                         return true;
                     }
@@ -101,17 +101,17 @@ namespace NavalBattle
                         return true;
                     }
                 }
-                
-            response = string.Empty;
-            return false;
+
+                response = string.Empty;
+                return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
                 return true;
             }
-            catch(IndexOutOfRangeException re)
+            catch (IndexOutOfRangeException re)
             {
                 response = "Comando no válido. Inténtelo de nuevo";
 
@@ -146,14 +146,14 @@ namespace NavalBattle
             {
                 throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
             }
-            
+
             string[] input = message.Text.Split("-");
-            
+
             if (this.Keywords.Contains(input[0]))
             {
                 return true;
             }
-            
+
             return false;
         }
     }

@@ -47,6 +47,7 @@ namespace NavalBattle
                     {
                         throw new InvalidStateException("No puede acceder al menu mientras está en partida");
                     }
+
                     if (this.user.State == GameUser.UserState.Waiting)
                     {
                         throw new InvalidStateException("No puede acceder al menu mientras está buscando partida\n\nIngrese /cancelar para cancelar la busqueda");

@@ -194,9 +194,9 @@ namespace NavalBattle
             else
             {
                 throw new Exception("Barcos superpuestos.");
-            }             
+            }
         }
-        
+
         /// <summary>
         /// Añade las coordenadas donde no se posicionaron barcos a water.
         /// </summary>
@@ -211,7 +211,7 @@ namespace NavalBattle
                     Coords coord = new Coords(i.ToString()+j.ToString());
 
                     foreach (Ship ship in this.ships)
-                    {        
+                    {
                         if (ship.ShipContainCoord(coord))
                         {
                             shipCoordChecker++;
@@ -236,7 +236,7 @@ namespace NavalBattle
         ///     No puede haber dos bombas a menos de dos "casilleros" de distancia.
         /// </summary>
         public void AddBombs()
-        {   
+        {
             Random rnd = new Random();
 
             int i = 0;
@@ -288,11 +288,9 @@ namespace NavalBattle
                     else
                     {}
                 }
-                    
+
                 if (nearBombChecker == 0)
                 {
-                    //Coords coord = new Coords(bombCoordStr);
-
                     Bomb bombToAdd = new Bomb(bombCoordStr);
 
                     this.bombs.Add(bombToAdd);
@@ -330,7 +328,7 @@ namespace NavalBattle
                     }
                 }
             }
-            
+
             foreach (Coords waterCoord in this.water)
             {
                 int coordX = (int)Char.GetNumericValue(waterCoord.CoordsLocation[0]);
@@ -353,12 +351,12 @@ namespace NavalBattle
         /// <param name="coord"></param>
         /// <returns></returns>
         public string RecieveAttack(Coords coord)
-        {   
+        {
             if (this.ships.Count != 3)
             {
                 throw new Exception("No estan todos los barcos posicionados.");
             }
-            
+
             if (!IsValidCoord(coord.CoordsLocation))
             {
                 throw new InvalidCoordException("Coordenada no valida");
@@ -379,9 +377,9 @@ namespace NavalBattle
                     else
                     {
                     res = "Tocado";
-                    } 
+                    }
                 }
-            }  
+            }
 
             foreach (Coords waterCoord in this.water)
             {
@@ -463,5 +461,5 @@ namespace NavalBattle
             }
             return finishMatchChecker == this.ships.Count;
         }
-    }     
+    }
 }

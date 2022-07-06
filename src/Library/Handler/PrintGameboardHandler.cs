@@ -63,7 +63,7 @@ namespace NavalBattle
                     printer = new AttackGameboardPrinter();
 
                     if (Equals(this.user.Player, this.match.Players[0]))
-                        {     
+                        {
                             res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
                         }
                         else
