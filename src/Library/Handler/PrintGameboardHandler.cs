@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/vertableros".
     /// </summary>
     public class PrintGameboardHandler : BaseHandler
     {
@@ -16,17 +16,17 @@ namespace NavalBattle
         private Match match;
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
-        /// y el mensaje "adiós" -un ejemplo de cómo un "handler" puede procesar comandos con sinónimos.
+        /// Constructor de PrintGameBoardHandler.
         /// </summary>
-        /// <param name="next">El próximo "handler".</param>
+        /// <param name="next">Próximo Handler.</param>
+        /// <returns>PrintGameboardHandler.</returns>
         public PrintGameboardHandler(BaseHandler next) : base(next)
         {
             this.Keywords = new string[] {"/vertableros"};
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/vertableros" y le muestra al usuario el tablero con sus barcos y el tablero donde ha atacado.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
@@ -39,7 +39,7 @@ namespace NavalBattle
                 {
                     this.user = UserRegister.Instance.GetUserByNickName(message.From.FirstName.ToString());
 
-                    if(this.user.State != GameUser.UserState.InGame)
+                    if (this.user.State != GameUser.UserState.InGame)
                     {
                         throw new InvalidStateException("No puede realizar esta acción en este momento");
                     }
@@ -57,12 +57,12 @@ namespace NavalBattle
                     printer = new DefenseGameboardPrinter();
 
                     StringBuilder res = printer.PrintGameboard(this.user.Player.Gameboard);
-                    
+
                     res.Append("\n");
 
                     printer = new AttackGameboardPrinter();
 
-                    if(Equals(this.user.Player, this.match.Players[0]))
+                    if (Equals(this.user.Player, this.match.Players[0]))
                         {     
                             res.Append(printer.PrintGameboard(this.match.Players[1].Gameboard));          
                         }
@@ -70,15 +70,15 @@ namespace NavalBattle
                         {
                             res.Append(printer.PrintGameboard(this.match.Players[0].Gameboard));
                         }
-                    
+
                     response = res.ToString();
                     return true;
                 }
-                
-            response = string.Empty;
-            return false;
+
+                response = string.Empty;
+                return false;
             }
-            catch(NullReferenceException ne)
+            catch (NullReferenceException ne)
             {
                 response = "Ingrese /start para acceder al menu de opciones.";
 
@@ -113,14 +113,14 @@ namespace NavalBattle
             {
                 throw new InvalidOperationException("No hay palabras clave que puedan ser procesadas");
             }
-            
+
             string[] input = message.Text.Split(" ");
-            
+
             if (this.Keywords.Contains(input[0]))
             {
                 return true;
             }
-            
+
             return false;
         }
     }

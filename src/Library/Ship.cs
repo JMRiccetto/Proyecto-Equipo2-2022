@@ -4,6 +4,9 @@ using System.IO;
 
 namespace NavalBattle
 {
+    /// <summary>
+    /// Clase que representa a los barcos que van dentro del tablero.
+    /// </summary>
     public class Ship
     {
         private string direction;
@@ -14,8 +17,12 @@ namespace NavalBattle
 
         private List<Coords> coords;
 
-        
-        public Ship (int length, string direction)
+        /// <summary>
+        /// Constructor del barco.
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="direction"></param>
+        public Ship(int length, string direction)
         {
             this.length = length;
             this.direction = direction;
@@ -31,6 +38,10 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Gets del largo del barco.
+        /// </summary>
+        /// <value></value>
         public int Length
         {
             get
@@ -91,7 +102,7 @@ namespace NavalBattle
         /// <param name="coord"></param>
         public void RecieveDamage(Coords coord)
         {
-            foreach(Coords shipCoord in this.coords)
+            foreach (Coords shipCoord in this.coords)
             {
                 if (shipCoord.CoordsEquals(coord))
                 {

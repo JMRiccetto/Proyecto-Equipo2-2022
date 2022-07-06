@@ -1,0 +1,38 @@
+[
+  {
+    "ChatId": 0,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 6,
+    "NickName": "Luis",
+    "Player": null
+  },
+  {
+    "ChatId": 2056092446,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 6,
+    "NickName": "Mart\u00EDn",
+    "Player": null
+  },
+  {
+    "ChatId": 5395884652,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 6,
+    "NickName": "Juan",
+    "Player": null
+  },
+  {
+    "ChatId": 5574644657,
+    "State": 0,
+    "Bombs": false,
+    "DoubleAttack": false,
+    "GameboardSide": 6,
+    "NickName": "Pablo",
+    "Player": null
+  }
+]

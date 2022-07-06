@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -95,6 +96,11 @@ namespace NavalBattle
 
             ClientBot.GetBot();
 
+            if (System.IO.File.Exists(@".\..\..\Memory\memory.json"))
+            {
+                JsonSerializerUtils.DeserializeUsers();
+            }
+
             firstHandler =
                 new UserRegisterHandler(
                 new MenuHandler(
@@ -116,15 +122,30 @@ namespace NavalBattle
                 HandleErrorAsync,
                 new ReceiverOptions()
                 {
-                    AllowedUpdates = Array.Empty<UpdateType>()
+                    AllowedUpdates = Array.Empty<UpdateType>(),
                 },
                 cts.Token
             );
 
-            Console.WriteLine($"Bot is up!");
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = MyReferenceHandler.Instance,
+                WriteIndented = true,
+            };
 
+            //Console.WriteLine(UserRegister.Instance.ConvertToJson(options));
+
+            /* foreach (GameUser user in UserRegister.Instance.UserData)
+            {
+                string temp2 = JsonSerializer.Serialize(UserRegister.Instance.UserData);
+                System.IO.File.WriteAllText(@"userData.json", temp2);
+            } */
+
+            Console.WriteLine($"Bot is up!");
             // Esperamos a que el usuario aprete Enter en la consola para terminar el bot.
             Console.ReadLine();
+
+            JsonSerializerUtils.SerializeUsers();
 
             // Terminamos el bot.
             cts.Cancel();
@@ -144,7 +165,7 @@ namespace NavalBattle
                     await HandleMessageReceived(botClient, update.Message);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await HandleErrorAsync(botClient, e, cancellationToken);
             }

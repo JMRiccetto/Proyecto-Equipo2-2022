@@ -1,8 +1,11 @@
 using System;
 using System.Text;
+using System.IO;
 using Telegram.Bot.Types;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using Nito.AsyncEx;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types.Enums;
@@ -11,7 +14,7 @@ using Telegram.Bot.Types.InputFiles;
 namespace NavalBattle
 {
     /// <summary>
-    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "chau".
+    /// Un "handler" del patrón Chain of Responsibility que implementa el comando "/atacar".
     /// </summary>
     public class AttackHandler : BaseHandler
     {
@@ -19,6 +22,7 @@ namespace NavalBattle
 
         private Match match;
 
+        TelegramBotClient bot = ClientBot.GetBot();
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GoodByeHandler"/>. Esta clase procesa el mensaje "chau"
@@ -31,7 +35,7 @@ namespace NavalBattle
         }
 
         /// <summary>
-        /// Procesa el mensaje "chau" y retorna true; retorna false en caso contrario.
+        /// Procesa el mensaje "/atacar" y ataca el tablero del rival en la coordenada indicada.
         /// </summary>
         /// <param name="message">El mensaje a procesar.</param>
         /// <param name="response">La respuesta al mensaje procesado.</param>
@@ -60,30 +64,32 @@ namespace NavalBattle
                     {
                         string[] input = message.Text.Split("-");
 
-                        string AttackCoordStr = input[1].ToUpper();
+                        string attackCoordStr = input[1].ToUpper();
 
                         string res = "hola";
 
-                        if(Equals(this.user.Player, this.match.Players[0]))
+                        
+
+                        long idPlayer0 = this.match.Players[0].ChatIdPlayer;
+
+                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
+
+                        if (Equals(this.user.Player, this.match.Players[0]))
                         {
-                            res = this.user.Player.Attack(AttackCoordStr, this.match.Players[1].Gameboard);
+                            res = this.user.Player.Attack(attackCoordStr, this.match.Players[1].Gameboard);
+                            AsyncContext.Run(() => SendImage(message));
                         }
                         else
                         {
-                            res = this.user.Player.Attack(AttackCoordStr, this.match.Players[0].Gameboard);
+                            res = this.user.Player.Attack(attackCoordStr, this.match.Players[0].Gameboard);
+                            AsyncContext.Run(() => SendImage(message));
                         }
 
                         this.match.Players[0].ChangeTurn();
 
                         this.match.Players[1].ChangeTurn();
 
-                        TelegramBotClient bot = ClientBot.GetBot();
-
-                        long idPlayer0 = this.match.Players[0].ChatIdPlayer;
-                        
-                        long idPlayer1 = this.match.Players[1].ChatIdPlayer;
-
-                        if(res == "Fin")
+                        if (res == "Fin")
                         {
                             bot.SendTextMessageAsync(idPlayer0, $"La partida finalizó. {this.user.NickName} es el/la ganador/a");
 
@@ -143,7 +149,7 @@ namespace NavalBattle
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
                 Cancel();
                 response = e.Message;
                 return true;
@@ -164,6 +170,14 @@ namespace NavalBattle
             }
         }
 
+        /// <summary>
+        /// Determina si este "handler" puede procesar el mensaje. En la clase base se utiliza el array
+        /// <see cref="BaseHandler.Keywords"/> para buscar el texto en el mensaje ignorando mayúsculas y minúsculas. Las
+        /// clases sucesores pueden sobreescribir este método para proveer otro mecanismo para determina si procesan o no
+        /// un mensaje.
+        /// </summary>
+        /// <param name="message">El mensaje a procesar.</param>
+        /// <returns>true si el mensaje puede ser pocesado; false en caso contrario.</returns>
         protected override bool CanHandle(Message message)
         {
             if (this.Keywords == null || this.Keywords.Length == 0)
@@ -180,5 +194,18 @@ namespace NavalBattle
             
             return false;
         }
+
+        public async Task SendImage(Message message)
+        {
+            await this.bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);
+            string path = @"..\..\Assets\barco.jpg";
+            this.bot.SendPhotoAsync(message.Chat.Id, path);
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var fileName = path.Split(Path.DirectorySeparatorChar).Last();
+            await this.bot.SendPhotoAsync(
+            chatId: message.Chat.Id,
+            photo: new InputOnlineFile(fileStream, fileName));
+        }
+        
     }
 }
