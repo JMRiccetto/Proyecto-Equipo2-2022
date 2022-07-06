@@ -1,8 +1,3 @@
-/* 
-
-No pudimos testear los printer ya que es un void
-
-
 using NUnit.Framework;
 using NavalBattle;
 using System.Text;
@@ -19,7 +14,6 @@ namespace Test.Library
         public void Setup()
         {
         }
-
 
         [Test]
         public void DefenseGameboardPrinter()
@@ -40,27 +34,29 @@ namespace Test.Library
 
             StringBuilder s = new StringBuilder();
 
-            s.Append("  0  1  2  3");
+            s.Append("TABLEROS \n");
+
+            s.Append("     0     1     2     3");
 
             s.Append("\n");
 
-            s.Append("0|o||x||o||~|");
+            s.Append("0 | o || x || o || ~ |");
 
             s.Append("\n");
 
-            s.Append("1|o||o||o||~|");
+            s.Append("1 | o || o || o || ~ |");
 
             s.Append("\n");
 
-            s.Append("2|~||~||~||~|");
+            s.Append("2 | ~ || ~ || ~ || ~ |");
 
             s.Append("\n");
 
-            s.Append("3|~||~||~||~|");
+            s.Append("3 | ~ || ~ || ~ || ~ |");
 
             s.Append("\n");
 
-            Assert.AreEqual(Console.WriteLine(s), printer.PrintGameboard(gameboard))
+            Assert.AreEqual(printer.PrintGameboard(gameboard).ToString(), s.ToString());
         }
 
         /// <summary>
@@ -69,7 +65,43 @@ namespace Test.Library
         [Test]
         public void AttackGameboardPrinter()
         {
+            IPrinter printer = new AttackGameboardPrinter();
             
+            Gameboard gameboard = new Gameboard(4);
+
+            gameboard.AddShip(2, "00", "S");
+
+            gameboard.AddShip(2, "01", "S");
+
+            gameboard.AddShip(2, "02", "S");
+
+            Coords coord = new Coords("01");
+
+            gameboard.RecieveAttack(coord);
+
+            StringBuilder s = new StringBuilder();
+
+            s.Append("   0   1   2   3");
+
+            s.Append("\n");
+
+            s.Append("0 |   || T ||   ||   |");
+
+            s.Append("\n");
+
+            s.Append("1 |   ||   ||   ||   |");
+
+            s.Append("\n");
+
+            s.Append("2 |   ||   ||   ||   |");
+
+            s.Append("\n");
+
+            s.Append("3 |   ||   ||   ||   |");
+
+            s.Append("\n");
+
+            Assert.AreEqual(printer.PrintGameboard(gameboard).ToString(), s.ToString());
         }
     }
-} */
+}

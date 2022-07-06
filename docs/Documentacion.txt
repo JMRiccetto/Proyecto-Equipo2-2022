@@ -12,12 +12,11 @@ Bombas:
 
     Las bombas no pueden estar juntas entre ellas, es decir, no puede haber 2 bombas menos de dos casilleros de distancia.
 
-2 tiros por turno: 
-    
-    Si un usuario falla varios tiros consecutivos (no le acierta ningún barco enemigo en una cantidad de turnos) se le otorgara 
-    2 tiros en el mismo turno.
+Registro de usuarios con configuración:
 
-tamaño adaptable: 
+    Se registran los usuarios y se guarda la última configuración del tablero.
+
+Tamaño adaptable: 
 
     El usuario podrá elegir un tamaño de tablero (6x6, 7x7 y 8x8)
 
@@ -26,132 +25,91 @@ Menu:
     La última funcionalidad se encarga de administrar las otras tres existentes, para las bombas y los dos tiros por turno se activan y desactivan por medio de booleanos y el tamaño del tablero se decide por el mensaje que pasa el usuario en un handler específico.
 
 
-Roles de las clases:
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Roles de las clases
+
+
+AttackHandler: Coordinator
+
+    Procesa el comando "/atacar" y se encarga de atacar el tablero rival en la coordenada indicada.
+
+BaseHandler: Coordinator
+
+    Es la clase base para implementar el patrón Chain of Responsibility. Se encarga de manejar una cadena de "Handlers", o sea si una clase puede manejar o no un mensaje.
+
+CancelHandler: Coordinator
+
+    Procesa el comando "/cancelar" y se encarga de remover a un usuario de la lista de espera.
+
+GameStartHandler: Coordinator
+
+    Procesa el comando "/buscarpartida" y se encarga de colocar a los jugadores en la lista de espera. 
+
+IHandler: Interfacer
+
+    Interfaz para implementar el patrón Chain of Responsibility.
+
+MenuHandler: Structurer, Coordinator
+
+    Procesa el comando "/cambiartablero", "/bombas" y despliega las opciones para prenderlos y apagarlos. 
+
+PlaceShipHandler: Coordinator
+
+    Procesa el comando "/posicionar" y se encarga de colocar los barcos en las coordenadas indicadas por el jugador.
+
+PrintGameboardHandler: Coordinator
+
+    Procesa el comando "/vertableros" y le muestra al usuario el tablero con sus barcos y el tablero donde ha atacado.
+
+SurrenderHandler: Coordinator
+
+    Procesa el comando "/rendirse", termina la partida dándole la victoria al oponente.
+
+UserRegisterHandler: Coordinator
+
+    Procesa el comando "/start", si el usuario no se encuentra registrado lo registra y despliega el menú de opciones.
+
+IJsonSerializerUtils: Structurer, Service Provider
+
+    Es la clase que serializa y deserializa los strings en formato JSon.
+
+IJsonConvertible: Interfacer
+
+    Se implementa en clases para transformar información a formato Json.
+
+MyReferenceHandler: Service Provider
+
+    Se utiliza en la serialización a Json.
+
+Admin: Service provider, Controller
+
+    Controla los objetos de GameUser, colocándolos en listas y emparejándolos con otros usuarios si tienen la misma configuración.
+
+AttackGameboardPrinter: Service provider
+
+    Imprime el tablero de manera que se puedan visualizar los ataques que realizo el usuario y sus estados (agua, tocado o hundido).
+
+Bomb: Information holder
+
+    Contiene información sobre sus objetos, utiliza los objetos de Coords, y proporciona información a otras clases. Bomb posee una única coordenada donde está situada. Su método “Kaboom” ataca las 8 casillas a su alrededor.
+
+ClientBot: Service Provider
+
+        Se realiza un singleton para utilizar la instancia del bot desde los handlers para poder llamar a los métodos de este desde telegram (SendTextMessageAsync). Este método sirve para mandarle mensajes al otro usuario que está jugando que no ejecutó los comandos.
 
 Coords: Information holder, Coordinator
 
     Contiene información de las coordenadas del tablero, cambia de estado de estas, sabe si estas fueron atacadas, efectúa cambios
     dependiendo del resto de cambios, además proporciona esta información a las mismas.
 
-Ship: Information holder, Structurer
+DefenseGameboardPrinter: Service provider
 
-    Contiene información sobre sus objetos, utiliza los objetos de Coords, realizando acciones en consecuencia,
-    y proporciona su información a otras clases.
-
-Bomb: Information holder
-
-    Contiene información sobre sus objetos, utiliza los objetos de Coords, y proporciona información a otras clases.
+    Se encarga de imprimir el gameboard del usuario (defensa).
 
 Gameboard: Information holder, Controller
 
-    Contiene información sobre sus objetos, utiliza los objetos de Coords, bomb y ships, controla la creación de estos y su uso, y proporciona su información a otras clases.
-
-IPrinter: Interfacer
-
-    Se implementa en clases de impresión, transformando los datos a una impresión.
-
-IGameboardContent: Interfacer
-
-    Se implementa en clases que van a imprimirse, es un colaborador de la interfaz de IPrinter.
-
-Menu: Service provider
-
-    Redirige los "comandos" del usuario hasta una funcionalidad
-
-User: Information holder
-
-    Contiene la información del usuario (nickName y Gameboard) y la proporciona al resto de clases.
-
-CoordsTranslate: Service provider
-
-    Traduce las coordenadas que ingresa el usuario, para ser utilizables por el programa
-
-DefenseGameboardPrinter & AttackGameboardPrinter: Service provider
-
-    Se encarga de imprimir el gameboard del usuario (ataque y defensa)
-
-UserRegister: Structurer, Controller, Coordinator
-
-    Realiza acciones tomando en cuenta las decisiones del usuario, modifica y crea instancias de otras clases y delega acciones.
-
-IJsonConvertible: Interfacer, Service provider
-
-    Se implementa en clases para transformar información a formato Json
-
-Match:  Controller, Structurer
-
-    Tiene la información de player, y a partir de ella toma decisiones y dirige estas al resto de clases relacionadas
-
-Player:  Information holder
-
-    Contiene la información del gameboard del jugador
-
-WaitingList: Service Provider
-
-    Es una lista donde se agregan los usuarios que están esperando para jugar
-
-InvalidCoordExeption: Service Provider
-
-    Toma una coordenada, si es invalida realiza el “servicio”, manda una excepción.
-
-IHandler: interfacer
-
-    Interfaz para implementar el patrón Chain of Responsibility.
-
-
-BaseHandler: Service Provider 
-
-    A confirmar
-
-MatchLogic: a confirmar
-
-    A confirmar
-
-MenuHandler: a confirmar
-
-    A confirmar
-
-UserRegister: a confirmar
-
-    A confirmar
-
-MyReferenceHandler: a resolver
-
-    A resolver
-
-
----------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-Informe del UML
-
-AttackGameboardPrinter:
-
-    Imprime el tablero de manera que se puedan visualizar los ataques que realizo el usuario y sus estados (agua, tocado o hundido).
-
-Bomb: 
-    
-    Bomb posee una única coordenada donde está situada. 
-    Su método “Kaboom” ataca las 8 casillas a su alrededor.
-
-Admin: 
-
-    Toma el Rol de Bot, ya que realiza todas las funcionalidades esenciales para el funcionamiento del programa. - Registra Users - Crea partidas en base a las opciones dadas por el usuario en el menú - “AttackInfo” recibe la instrucción de atacar de un jugador y se la pasa a otra clase para que la ejecute - “EndGame” termina el juego una vez que todos los barcos de un jugador hayan sido hundidos
-
-Coords:
-
-    La clase Coords tiene un string "coordsLocation" el cual representa la coordenada en sí y un bool "hasBeenAttacked" el cual indica el estado de la coordenada (si fue atacada o no).
-
-CoordsTranslate:
-
-    Traduce las coordenadas ingresadas por el usuario para poder ser utilizadas por el programa. Por ejemplo, si ingresamos una coordenada "A1" la convierte en "00".
-
-DefenseGameboardPrinter:
-
-    Imprime el tablero de manera que se puedan visualizar los barcos del usuario.
-
-Gameboard: 
-    
     Cada Jugador tiene su propio Gameboard, el cual siempre es cuadrado por eso tiene un lado y no un ancho y largo,
     contiene los barcos, el agua y las bombas en caso de que el jugador elija este modo de juego.
 
@@ -162,44 +120,48 @@ Gameboard:
     -Genera la matriz a imprimir.
     -Devuelve el resultado de un ataque.
 
-IGameboardContent:
+IGameboardContent: Interfacer
 
     Interfaz que utiliza la clase Gameboard con el objetivo de aplicar DIP. Básicamente prepara el tablero para luego ser impreso.
 
-invalidCoordsException:
+InvalidCoordExeption: Service Provider
 
     Toma una coordenada, si es invalida realiza el “servicio”, manda una excepción.
 
-IPrinter: 
-  
+InvalidStateExeption: Service Provider
+
+    Excepción que se lanza cuando se quiere ingresar un comando en un momento en el que no se debe lanzar. Por ejemplo, el estado del usuario es "Waiting" no se va a poder buscar partida porque ya se está buscando.
+
+IPrinter: Interfacer
+
     Imprime los tableros de 2 modos distintos. 
     “PrintDefenseGameboard” imprime el tablero de forma que, se dibujen los barcos del jugador que lo llamo. 
     “PrintAttackGameboard” imprime el tablero con el registro de ataque que el jugador ha realizado sin revelar los barcos de su oponente.
 
-Match: 
-    
-    Representa la partida en juego.
+Match:  Controller, Structurer
 
-Ship: 
-    
+        Representa la partida en juego. Tiene la información de player, y a partir de ella toma decisiones y dirige estas al resto de clases relacionadas
+
+Player:  Information holder
+
+    El player se crea cuando ocurre un match con otro jugador y se genera la partida, este únicamente contiene el gamboard y un chatId.
+
+Ship: Information holder, Structurer
+
     Para crear un ship se decide una coordenada inicial, un largo y la dirección a la que se va a extender el barco. 
-    Los largos posibles son de 2, 3 y 4 casillas. 
+    Los largos posibles son de 2, 3 y 4 casillas.
 
-User:
-    
-    El user va a tener un nickname por el cual se va a diferenciar del resto. Además se le va a asignar el gamboard.
+GameUser: Information holder
 
-UserRegister:
-    
+    Contiene la información del usuario (nickName y chatId), también posee las configuraciones de la partida que son elegidas por el usuario. Posee un atributo Player que se crea al momento de crear un Match y finalmente posee un estado que indica si el usuario no está en partida, está en cola de espera o está en partida.
+
+UserRegister: Structurer, Controller, Coordinator
+
     Se crea el user. Básicamente se configura el user, se le asigna el nickname pero también se puede eliminar. A partir de que se genera un nuevo usuario, los datos de este quedarían guardados. Esto lo hacemos con la clase IJsonConvertible que sirve para serializar información del bot, pero todavía no se implementa.
 
-WaitingList: 
+WaitingList: Service Provider
 
-    Es una lista que contiene todos los usuarios que están prontos para jugar una partida. Dependiendo las características que hayan seleccionado (tamaño del tablero, bombas, doble ataque), si hay otro jugador en la lista con la misma configuración de la partida se va a iniciar la partida.
-
-Player:
-
-    El player se crea cuando ocurre un match con otro jugador y se genera la partida, este únicamente contiene el gamboard.
+    Es una lista que contiene todos los usuarios que están prontos para jugar una partida. Dependiendo las características que hayan seleccionado (tamaño del tablero, bombas), si hay otro jugador en la lista con la misma configuración de la partida se va a iniciar la partida.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -209,27 +171,38 @@ Clases de las que se encargó cada integrante:
 
 Franco Robotti:
 
-    - MatchLogicHandler
+    - CancelHandler
+    -SurrenderHandler
     - MenuHandler
     - GameStartHandler
-    - ShipTest
+    - PlayerTest
     - CoordsTest
+    -ClientBot
+    -UserRegisterTest
 
 Lucas Benítez:
 
+    -SurrenderHandler
+    -GameUser
     - IHandler
     - BaseHandler
-    - UserRegisterHandler
+    - PrintGameboardHandler
     - GameboardTest
+    -PrintTests
+    -InvalidStateException
 
 Juan Riccetto:
 
+    -GameStartHandler
+    -MenuHandler
+    -UserRegisterHandler
     - Admin
     - Match
     - WaitingList
     - UserRegister
     - IJsonConvertible
     - MyReferenceHandler
+    -JsonSerializerUtils
 
 Juan Tabarez:
 
@@ -243,3 +216,5 @@ Juan Tabarez:
     - invalidCoordsException
     - Coords
     - SearchGameTest
+    -PlaceShipHandler
+    -AttackHandler
