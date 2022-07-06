@@ -56,7 +56,6 @@ namespace NavalBattle
                     start.Append("¿Qué deseas hacer?\n")
                         .Append("/cambiartablero\n")
                         .Append("/bombas\n")
-                        .Append("/ataquedoble\n")
                         .Append("/buscarpartida");
                     response = start.ToString();
                     return true;
