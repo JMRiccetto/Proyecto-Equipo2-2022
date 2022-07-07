@@ -567,6 +567,34 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.ShootsHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/cancelar".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.ShootsHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Constructor de ShootsHandler.
+            </summary>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.ShootsHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "/disparosagua" o "/disparosbarcos" y en devuelve la cantidad de disparos
+            realizados al agua o a los barcos dependiendo del comando respectivamente.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.ShootsHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
         <member name="T:NavalBattle.SurrenderHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "/rendirse".
@@ -706,6 +734,8 @@
         <member name="M:NavalBattle.Player.Attack(System.String,NavalBattle.Gameboard)">
             <summary>
             Metodo para atacar tablero de otro jugador.
+            Si el resultado del ataque es Agua incrementa los disparos al agua.
+            Si el resultado del ataque es Tocado incrementa los disparos a barcos.
             </summary>
             <param name="coordStr"></param>
             <param name="gameboard"></param>
@@ -791,6 +821,28 @@
             Cambia el estado de la coordenada del barco que fue atacada.
             </summary>
             <param name="coord"></param>
+        </member>
+        <member name="T:NavalBattle.Disparos">
+            <summary>
+            Cuenta la cantidad de disparos cuyo resultado es Agua o Tocado.
+            La clase Player cuenta con un atributo de tipo Disparos. Esto es porque Player posee la información
+            de cual fue el resultado de su ataque.  
+            El atributo de tipo Disparos podría tenerlo Gameboard también, pero si así fuera Gameboard 
+            tendría demasiadas responsabilidades.
+            También estos dos atributos podrían esta en Player y no en una clase aparte pero si esto fuera así,
+            cada vez que se quiera agregar otro atributo que cuente por ejemplo la cantidad de bomas a las que se
+            atacaron, Player quedaría con muchos atributos. 
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Disparos.IncWaterShoots">
+            <summary>
+            Incrementa la cantidad de disparos al agua.
+            </summary>
+        </member>
+        <member name="M:NavalBattle.Disparos.IncShipShoots">
+            <summary>
+            Incrementa la cantidad de disparos a barcos.
+            </summary>
         </member>
         <member name="T:NavalBattle.UserRegister">
             <summary>

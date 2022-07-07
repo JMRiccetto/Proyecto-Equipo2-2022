@@ -12,6 +12,8 @@ namespace NavalBattle
     /// </summary>
     public class Player
     {
+        private Disparos disparos = new Disparos();
+
         private Gameboard gameboard;
 
         private bool turn = false;
@@ -82,7 +84,14 @@ namespace NavalBattle
                 return turn;
             }
         }
-
+        
+        public Disparos Disparos
+        {
+            get
+            {
+                return disparos;
+            }
+        }
         /// <summary>
         /// Metodo para posicionar barco en tablero propio.
         /// </summary>
@@ -97,6 +106,8 @@ namespace NavalBattle
 
         /// <summary>
         /// Metodo para atacar tablero de otro jugador.
+        /// Si el resultado del ataque es Agua incrementa los disparos al agua.
+        /// Si el resultado del ataque es Tocado incrementa los disparos a barcos.
         /// </summary>
         /// <param name="coordStr"></param>
         /// <param name="gameboard"></param>
@@ -107,6 +118,14 @@ namespace NavalBattle
 
             string res = gameboard.RecieveAttack(coord);
 
+            if(res == "Agua")
+            {
+                disparos.IncWaterShoots();
+            }
+            if (res == "Tocado" || res == "Hundido")
+            {
+                disparos.IncShipShoots();
+            }
             return res;
         }
 
