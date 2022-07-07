@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace NavalBattle
-{
+{ // hola
     public class MyReferenceHandler : ReferenceHandler
     {
         private static MyReferenceHandler instance;
