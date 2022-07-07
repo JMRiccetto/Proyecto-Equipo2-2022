@@ -10,6 +10,8 @@ namespace NavalBattle
     /// </summary>
     public class Gameboard : IGameboardContent
     {   
+        public int Tcount {get; set;}
+        public int Xcount {get; set;}
         private int side;
 
         private List<Ship> ships = new List<Ship>();
@@ -321,6 +323,7 @@ namespace NavalBattle
                     if (shipCoord.HasBeenAttacked == true)
                     {
                         res[coordX,coordY] = "t";
+                        Tcount = Tcount + 1;
                     }
                     else
                     {
@@ -338,6 +341,7 @@ namespace NavalBattle
                 if (waterCoord.HasBeenAttacked == true)
                 {
                     res[coordX,coordY] = "x";
+                    Xcount = Xcount + 1;
                 }
             }
             return res;
