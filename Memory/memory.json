@@ -10,8 +10,8 @@
   {
     "ChatId": 2056092446,
     "State": 0,
-    "Bombs": false,
-    "GameboardSide": 6,
+    "Bombs": true,
+    "GameboardSide": 7,
     "NickName": "Mart\u00EDn",
     "Player": null
   },
@@ -29,6 +29,14 @@
     "Bombs": false,
     "GameboardSide": 6,
     "NickName": "Pablo",
+    "Player": null
+  },
+  {
+    "ChatId": 5467506015,
+    "State": 0,
+    "Bombs": true,
+    "GameboardSide": 7,
+    "NickName": "Martin",
     "Player": null
   }
 ]
