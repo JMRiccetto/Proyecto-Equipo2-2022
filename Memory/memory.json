@@ -30,5 +30,21 @@
     "GameboardSide": 6,
     "NickName": "Pablo",
     "Player": null
+  },
+  {
+    "ChatId": 1416576158,
+    "State": 0,
+    "Bombs": false,
+    "GameboardSide": 6,
+    "NickName": "Fran",
+    "Player": null
+  },
+  {
+    "ChatId": 5432575962,
+    "State": 0,
+    "Bombs": false,
+    "GameboardSide": 6,
+    "NickName": "H",
+    "Player": null
   }
 ]
