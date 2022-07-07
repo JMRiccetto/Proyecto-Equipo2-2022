@@ -71,9 +71,9 @@ namespace NavalBattle
  
                         long idPlayer1 = this.match.Players[1].ChatIdPlayer;
 
-                        bot.SendTextMessageAsync(idPlayer1, "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse");
+                        bot.SendTextMessageAsync(idPlayer1, "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse \n\n /verDisparosTocados y /verDisparosAgua para ver los disparos dados \n\nE");
 
-                        response = "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse\n\nEs su truno";
+                        response = "Partida creada\n\nPara posicionar un barco ingrese:\n/posicionar-coordenada inicial-dirección\n\nLas direcciones puede ser N S E W\nEl primer barco que coloque será de largo 2 el segundo de largo 3 y el tercero de largo 4\n\nIngrese /rendirse para rendirse\n\n /verDisparosTocados y /verDisparosAgua para ver los disparos dados \n\nEs su truno";
 
                         return true;
                     }

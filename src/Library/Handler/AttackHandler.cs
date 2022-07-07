@@ -121,7 +121,7 @@ namespace NavalBattle
                             this.bot.SendTextMessageAsync(idPlayer1, "Es su turno");
                         }
 
-                        response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse";
+                        response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse \n\n /verDisparosTocados y /verDisparosAgua para ver los disparos dados \n\nE";
 
                         return true;
                     }
