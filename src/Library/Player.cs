@@ -125,5 +125,25 @@ namespace NavalBattle
                 this.turn = true;
             }
         }
+
+        /// <summary>
+        /// Método que devuelve los disparos al agua que han ocurrido dentro del tablero del jugador.
+        /// Utiliza el patrón de Demeter para que evitar que se tenga que conocer al tablero completo cuando solo se requiere este dato.
+        /// </summary>
+        /// <returns></returns>
+        public int WaterShoots()
+        {
+            return this.gameboard.WaterShoots;
+        }
+
+        /// <summary>
+        /// Método que devuelve los disparos a barcos que han ocurrido dentro del tablero del jugador.
+        /// Utiliza el patrón de Demeter para que evitar que se tenga que conocer al tablero completo cuando solo se requiere este dato.
+        /// </summary>
+        /// <returns></returns>
+        public int BoatShoots()
+        {
+            return this.gameboard.BoatShoots;
+        }
     }
 }

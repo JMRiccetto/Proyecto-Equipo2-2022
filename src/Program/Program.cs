@@ -109,8 +109,10 @@ namespace NavalBattle
                 new PlaceShipHandler(
                 new AttackHandler(
                 new SurrenderHandler(
-                new PrintGameboardHandler(null) 
-                )))))));
+                new PrintGameboardHandler(
+                new WaterShootsCounterHandler(
+                new BoatShootsCounterHandler(null)
+                )))))))));
 
             var cts = new CancellationTokenSource();
 

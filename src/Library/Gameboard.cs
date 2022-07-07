@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 
-
 namespace NavalBattle
 {
     /// <summary>
@@ -17,6 +16,10 @@ namespace NavalBattle
         private List<Bomb> bombs = new List<Bomb>();
 
         private List<Coords> water = new List<Coords>();
+
+        private int waterShoots;
+
+        private int boatShoots;
 
         /// <summary>
         /// Constructor del tablero.
@@ -72,6 +75,40 @@ namespace NavalBattle
             get
             {
                 return this.bombs;
+            }
+        }
+
+        /// <summary>
+        /// Gets y Sets de los disparos al agua que fueron recibidos por este tablero.
+        /// </summary>
+        /// <value></value>
+        public int WaterShoots
+        {
+            get
+            {
+                return this.waterShoots;
+            }
+
+            set
+            {
+                this.waterShoots = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets y Sets de los disparos a barcos que fueron recibidos por este tablero.
+        /// </summary>
+        /// <value></value>
+        public int BoatShoots
+        {
+            get
+            {
+                return this.boatShoots;
+            }
+
+            set
+            {
+                this.boatShoots = value;
             }
         }
 
@@ -200,7 +237,7 @@ namespace NavalBattle
         /// <summary>
         /// Añade las coordenadas donde no se posicionaron barcos a water.
         /// </summary>
-        private void AddWater()
+        public void AddWater()
         {
             int shipCoordChecker = 0;
 
@@ -372,11 +409,13 @@ namespace NavalBattle
 
                     if (placedShip.IsSunk())
                     {
-                    res = "Hundido";
+                        res = "Hundido";
+                        this.boatShoots++;
                     }
                     else
                     {
-                    res = "Tocado";
+                        res = "Tocado";
+                        this.boatShoots++;
                     }
                 }
             }
@@ -386,6 +425,7 @@ namespace NavalBattle
                 if (waterCoord.CoordsEquals(coord))
                 {
                     waterCoord.ChangeCoordState();
+                    this.waterShoots++;
                 }
             }
 

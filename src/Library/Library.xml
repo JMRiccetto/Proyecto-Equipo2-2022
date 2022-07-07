@@ -160,6 +160,18 @@
             </summary>
             <value></value>
         </member>
+        <member name="P:NavalBattle.Gameboard.WaterShoots">
+            <summary>
+            Gets y Sets de los disparos al agua que fueron recibidos por este tablero.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NavalBattle.Gameboard.BoatShoots">
+            <summary>
+            Gets y Sets de los disparos a barcos que fueron recibidos por este tablero.
+            </summary>
+            <value></value>
+        </member>
         <member name="M:NavalBattle.Gameboard.IsValidCoord(System.String)">
             <summary>
             Devuelve true si la coordenada se encuentra en el tablero.
@@ -405,6 +417,33 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.BoatShootsCounterHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/disparosbarcos".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.BoatShootsCounterHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Constructor de BoatShootsCounterHandler.
+            </summary>
+            <param name="next">El próximo handler.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.BoatShootsCounterHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "/disparosbarcos", terminando la partida y dándole la victoria al otro jugador.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.BoatShootsCounterHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
         <member name="T:NavalBattle.CancelHandler">
             <summary>
             Un "handler" del patrón Chain of Responsibility que implementa el comando "/cancelar".
@@ -621,6 +660,33 @@
             estado inicial.
             </summary>
         </member>
+        <member name="T:NavalBattle.WaterShootsCounterHandler">
+            <summary>
+            Un "handler" del patrón Chain of Responsibility que implementa el comando "/disparosagua".
+            </summary>
+        </member>
+        <member name="M:NavalBattle.WaterShootsCounterHandler.#ctor(NavalBattle.BaseHandler)">
+            <summary>
+            Constructor de WaterShootsHandler.
+            </summary>
+            <param name="next">El próximo handler.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.WaterShootsCounterHandler.InternalHandle(Telegram.Bot.Types.Message,System.String@)">
+            <summary>
+            Procesa el mensaje "/disparosagua", terminando la partida y dándole la victoria al otro jugador.
+            </summary>
+            <param name="message">El mensaje a procesar.</param>
+            <param name="response">La respuesta al mensaje procesado.</param>
+            <returns>true si el mensaje fue procesado; false en caso contrario.</returns>
+        </member>
+        <member name="M:NavalBattle.WaterShootsCounterHandler.Cancel">
+            <summary>
+            Retorna este "handler" al estado inicial. En los "handler" sin estado no hace nada. Los "handlers" que
+            procesan varios mensajes cambiando de estado entre mensajes deben sobreescribir este método para volver al
+            estado inicial.
+            </summary>
+        </member>
         <member name="T:NavalBattle.IGameboardContent">
             <summary>
             Interfaz que implementa la clase Gameboard con el objetivo de aplicar DIP.
@@ -715,6 +781,20 @@
             <summary>
             Cambia el turno del jugador.
             </summary>
+        </member>
+        <member name="M:NavalBattle.Player.WaterShoots">
+            <summary>
+            Método que devuelve los disparos al agua que han ocurrido dentro del tablero del jugador.
+            Utiliza el patrón de Demeter para que evitar que se tenga que conocer al tablero completo cuando solo se requiere este dato.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NavalBattle.Player.BoatShoots">
+            <summary>
+            Método que devuelve los disparos a barcos que han ocurrido dentro del tablero del jugador.
+            Utiliza el patrón de Demeter para que evitar que se tenga que conocer al tablero completo cuando solo se requiere este dato.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:NavalBattle.IJsonConvertible">
             <summary>
