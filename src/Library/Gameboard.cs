@@ -361,7 +361,8 @@ namespace NavalBattle
             {
                 throw new InvalidCoordException("Coordenada no valida");
             }
- 
+
+            Count count = new Count();
             string res = "Agua";
 
             foreach (Ship placedShip in ships)
@@ -373,10 +374,12 @@ namespace NavalBattle
                     if (placedShip.IsSunk())
                     {
                     res = "Hundido";
+                    count.AddShipCounter();
                     }
                     else
                     {
                     res = "Tocado";
+                    count.AddShipCounter();
                     }
                 }
             }
@@ -386,6 +389,7 @@ namespace NavalBattle
                 if (waterCoord.CoordsEquals(coord))
                 {
                     waterCoord.ChangeCoordState();
+                    count.AddWaterCounter();
                 }
             }
 
@@ -393,8 +397,9 @@ namespace NavalBattle
             {
                 if (coord.CoordsEquals(bomb.Coord))
                 {
-                   this.Kaboom(coord);
-                   res = "Bomba";
+                    this.Kaboom(coord);
+                    res = "Bomba";
+                    count.AddBombCounter();
                 }
             }
 

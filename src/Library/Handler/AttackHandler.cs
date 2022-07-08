@@ -20,6 +20,8 @@ namespace NavalBattle
     {
         private GameUser user;
 
+        private Count counter;
+
         private Match match;
 
         TelegramBotClient bot = ClientBot.GetBot();
@@ -121,7 +123,7 @@ namespace NavalBattle
                             this.bot.SendTextMessageAsync(idPlayer1, "Es su turno");
                         }
 
-                        response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse";
+                        response = res+"\n\nIngrese /vertableros para ver sus tableros\n\nIngrese /rendirse para rendirse\n\nIngrese /contador para rendirse";
 
                         return true;
                     }

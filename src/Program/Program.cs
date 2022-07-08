@@ -108,9 +108,10 @@ namespace NavalBattle
                 new CancelHandler(
                 new PlaceShipHandler(
                 new AttackHandler(
+                new CountHandler(
                 new SurrenderHandler(
                 new PrintGameboardHandler(null) 
-                )))))));
+                ))))))));
 
             var cts = new CancellationTokenSource();
 
